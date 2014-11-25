@@ -8,6 +8,12 @@ var gateway = require('./adapter').addGateway('HTTP', {
 // Adapter Responder
 gateway.addResponder('HTTP Server', {
 
+  addresses: function(gateway) {
+    return Promise.resolve({
+      'default': 'HTTP Server' 
+    });
+  },
+
   message: function(command, address) {
     return "/" + command;
   }

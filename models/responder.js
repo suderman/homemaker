@@ -50,6 +50,11 @@ module.exports = function(app) {
       }
     },
 
+    commands: function() {
+      var gateway = this.related('gateway');
+      return this.adapter().commands(gateway, this.get('address'));
+    },
+
     message: function(code) {
       return this.adapter().message(code, this.get('address'));
     },

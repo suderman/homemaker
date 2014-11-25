@@ -12,16 +12,23 @@ var gateway = require('./adapter').addGateway('OS X Keyboard Maestro', {
 // Adapter Responder
 gateway.addResponder('OS X Keyboard Maestro Server', {
 
+  addresses: function(gateway) {
+    return Promise.resolve({
+      'default': 'OS X Keyboard Maestro Server' 
+    });
+  },
+
   commands: function(gateway) {
     var message = "/authenticated.html";
+
     return gateway.send(message).then(function(res) {
       return jsdom(res.body);
+
     }).then(function(window) {
-      var commands = {};
-      [].forEach.call(window.document.querySelectorAll('option'), function(option) {
-        commands[option.getAttribute('label')] = option.getAttribute('value');
-      });
-      return commands;
+      return _.object(_.map(window.document.querySelectorAll('option'), function (option) {
+        return [option.getAttribute('value'), option.getAttribute('label')];
+      })); 
+
     }).catch(function(error) {
       return {};
     });
@@ -30,17 +37,6 @@ gateway.addResponder('OS X Keyboard Maestro Server', {
   message: function(command, address) {
     return "/authenticatedaction.html?macro=" + command;
   }
-});
-
-
-// Adapter Responder
-gateway.addResponder('Fake Responder', {
-
-  addresses: function(gateway) { 
-    return Promise.resolve({}); 
-  },
-
-  message: function(command, address) { return "" }
 });
 
 

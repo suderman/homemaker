@@ -20,13 +20,20 @@ module.exports = function(app) {
     });
   })
 
-  // GET available addresses
-  .get('/:id/addresses', function(req, res) {
-    res.send('list available addresses'); 
-  })
+  // // GET available addresses
+  // .get('/:id/addresses', function(req, res) {
+  //   res.send('list available addresses'); 
+  // })
 
   // GET available commands
   .get('/:id/commands', function(req, res) {
-    res.send('list available commands'); 
+    Responder.find(req.params.id).then(function(model){ 
+      return model.commands();
+    }).then(function(commands){
+      res.send(commands);
+    }).catch(function(err){ 
+      router.handleError(err, res); 
+    });
+    // res.send('list available commands'); 
   })
 };
