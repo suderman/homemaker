@@ -37,19 +37,21 @@ gateway.addResponder('ISY-994i Insteon Scene', {
 
   commands: function(gateway) {
     return Promise.resolve({
-      '[off] DOF': '0', 
-      '[on] DON': '255', 
-      '[fast on] DFON': '255', 
-      '[fast off] DFOF': '0', 
-      '[brighten] BRT': null, 
-      '[dim] DIM': null, 
-      '[begin manual dimming] BMAN': null, 
-      '[stop manual dimming] SMAN': null, 
-      '[1%] DON/3': '3', 
-      '[10%] DON/25': '25', 
-      '[50%] DON/50': '128', 
-      '[75%] DON/192': '192', 
-      '[100%] DON/255': '255' 
+      'ISY-994i Insteon': {
+        '[off] DOF': '0', 
+        '[on] DON': '255', 
+        '[fast on] DFON': '255', 
+        '[fast off] DFOF': '0', 
+        '[brighten] BRT': null, 
+        '[dim] DIM': null, 
+        '[begin manual dimming] BMAN': null, 
+        '[stop manual dimming] SMAN': null, 
+        '[1%] DON/3': '3', 
+        '[10%] DON/25': '25', 
+        '[50%] DON/50': '128', 
+        '[75%] DON/192': '192', 
+        '[100%] DON/255': '255' 
+      }
     });
   },
 
@@ -81,19 +83,21 @@ gateway.addResponder('ISY-994i Insteon Device', {
 
   commands: function(gateway) {
     return Promise.resolve({
-      '[off] DOF': '0', 
-      '[on] DON': '255', 
-      '[fast on] DFON': '255', 
-      '[fast off] DFOF': '0', 
-      '[brighten] BRT': null, 
-      '[dim] DIM': null, 
-      '[begin manual dimming] BMAN': null, 
-      '[stop manual dimming] SMAN': null, 
-      '[1%] DON/3': '3', 
-      '[10%] DON/25': '25', 
-      '[50%] DON/50': '128', 
-      '[75%] DON/192': '192', 
-      '[100%] DON/255': '255' 
+      'ISY-994i Insteon': {
+        '[off] DOF': '0', 
+        '[on] DON': '255', 
+        '[fast on] DFON': '255', 
+        '[fast off] DFOF': '0', 
+        '[brighten] BRT': null, 
+        '[dim] DIM': null, 
+        '[begin manual dimming] BMAN': null, 
+        '[stop manual dimming] SMAN': null, 
+        '[1%] DON/3': '3', 
+        '[10%] DON/25': '25', 
+        '[50%] DON/50': '128', 
+        '[75%] DON/192': '192', 
+        '[100%] DON/255': '255' 
+      }
     });
   },
 
@@ -125,13 +129,15 @@ gateway.addResponder('ISY-994i Program', {
 
   commands: function(gateway) {
     return Promise.resolve({
-      'run': 'Run', 
-      'runThen': 'Run Then', 
-      'runElse': 'Run Else', 
-      'stop': 'Stop', 
-      'enable': 'Enable', 
-      'enableRunAtStartup': 'Enable Run at Startup', 
-      'disableRunAtStartup': 'Disable Run at Startup'
+      'ISY-994i Program': {
+        'run': 'Run', 
+        'runThen': 'Run Then', 
+        'runElse': 'Run Else', 
+        'stop': 'Stop', 
+        'enable': 'Enable', 
+        'enableRunAtStartup': 'Enable Run at Startup', 
+        'disableRunAtStartup': 'Disable Run at Startup'
+      }
     });
   },
 
@@ -157,9 +163,13 @@ gateway.addResponder('ISY-994i Networking', {
       return jsdom(res.body)
 
     }).then(function(window) {
-      return _.object(_.map(window.document.querySelectorAll('NetRule'), function (netrule) {
-        return [netrule.querySelector('id').innerHTML, netrule.querySelector('name').innerHTML]
+      return _.object(_.map(window.document.querySelectorAll('NetRule'), function (rule) {
+        return [rule.querySelector('id').innerHTML, rule.querySelector('name').innerHTML]
       })); 
+
+    }).then(function(commands) {
+      var group = {};
+      return group[gateway.get('name') + ' Networking ' + address] = commands, group;
 
     }).catch(function(error) {
       return {};

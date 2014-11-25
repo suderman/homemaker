@@ -25,9 +25,14 @@ gateway.addResponder('OS X Keyboard Maestro Server', {
       return jsdom(res.body);
 
     }).then(function(window) {
-      return _.object(_.map(window.document.querySelectorAll('option'), function (option) {
-        return [option.getAttribute('value'), option.getAttribute('label')];
-      })); 
+      var commandGroups = {};
+      _(window.document.querySelectorAll('optgroup')).each(function (optgroup) {
+        var key = gateway.get('name') + ' ' + optgroup.getAttribute('label');
+        commandGroups[key] = _.object(_.map(optgroup.querySelectorAll('option'), function (option) {
+          return [option.getAttribute('value'), option.getAttribute('label')];
+        }));
+      }); 
+      return commandGroups;
 
     }).catch(function(error) {
       return {};
