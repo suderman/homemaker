@@ -16,9 +16,9 @@ gateway.addResponder('iTach Infrared Port', {
 
   addresses: function(gateway) {
     return Promise.resolve({
-      'Port 1:1': '1',
-      'Port 1:2': '2',
-      'Port 1:3': '3'
+      '1:1': '1',
+      '1:2': '2',
+      '1:3': '3'
     });
   },
 

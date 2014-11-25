@@ -35,6 +35,24 @@ gateway.addResponder('ISY-994i Insteon Scene', {
     });
   },
 
+  commands: function(gateway) {
+    return Promise.resolve({
+      '[off] DOF': '0', 
+      '[on] DON': '255', 
+      '[fast on] DFON': '255', 
+      '[fast off] DFOF': '0', 
+      '[brighten] BRT': null, 
+      '[dim] DIM': null, 
+      '[begin manual dimming] BMAN': null, 
+      '[stop manual dimming] SMAN': null, 
+      '[1%] DON/3': '3', 
+      '[10%] DON/25': '25', 
+      '[50%] DON/50': '128', 
+      '[75%] DON/192': '192', 
+      '[100%] DON/255': '255' 
+    });
+  },
+
   message: function(command, address) {
     return "/rest/nodes/" + address.replace(/\./g, '%20') + "/cmd/" + command;
   }
@@ -58,6 +76,24 @@ gateway.addResponder('ISY-994i Insteon Device', {
 
     }).catch(function(error) {
       return {};
+    });
+  },
+
+  commands: function(gateway) {
+    return Promise.resolve({
+      '[off] DOF': '0', 
+      '[on] DON': '255', 
+      '[fast on] DFON': '255', 
+      '[fast off] DFOF': '0', 
+      '[brighten] BRT': null, 
+      '[dim] DIM': null, 
+      '[begin manual dimming] BMAN': null, 
+      '[stop manual dimming] SMAN': null, 
+      '[1%] DON/3': '3', 
+      '[10%] DON/25': '25', 
+      '[50%] DON/50': '128', 
+      '[75%] DON/192': '192', 
+      '[100%] DON/255': '255' 
     });
   },
 

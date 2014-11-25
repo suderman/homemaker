@@ -51,7 +51,9 @@ GatewayType.prototype.addResponder = function(name, options) {
 
 // Responder addresses lookup stub
 ResponderType.prototype.addresses = function(gateway) {
-  return Promise.resolve({});
+  return Promise.resolve({
+    'default': 'default'
+  });
 }
 
 // Responder commands lookup stub
