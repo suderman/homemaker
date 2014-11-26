@@ -12,6 +12,17 @@ module.exports = function(app) {
     res.send(Gateway.availableTypes()); 
   })
 
+  // GET all possible responders
+  .get('/:id/all-responders', function(req, res) {
+    Gateway.find(req.params.id, ['responders']).then(function(model){ 
+      return model.related('responders'); 
+    }).then(function(responders){
+      res.send(responders);
+    }).catch(function(err){ 
+      router.handleError(err, res); 
+    });
+  })
+
   // GET responder addresses (grouped by type)
   .get('/:id/responder-addresses', function(req, res) {
     Gateway.find(req.params.id).then(function(model){ 

@@ -47,43 +47,19 @@ app.set('db', require('bookshelf')(require('knex')({
 .plugin('virtuals')
 .plugin('visibility'));
 
+// Ensure database is set up
+require('./db/schema')(app);
 
 // Define models
 require('./models')(app);
 
+// Connect to active gateways
 var Gateway = app.get('db').model('Gateway');
 Gateway.findAll().then(function(gateways) {
   gateways.each(function(gateway) {
     gateway.connect();
   });
 });
-
-// var Gateway = app.get('db').model('Gateway');
-// var connections = {};
-// Gateway.findAll().then(function(gateways) {
-//   gateways.each(function(gateway) {
-//     gateway.createConnection().then(function(connection) {
-//       connections[gateway.get('id')] = connection;     
-//     }).catch(function(error) { 
-//       console.log(error); 
-//     });
-//   });
-// });
-
-// app.get('db').model('Responder').findAll().then(function(responders) {
-//   responders.each(function(r) {
-//     console.log(r.get('name') + ' -> ' + r.availableTypes());
-//   });
-// });
-
-// setTimeout(function() {
-//   var Action = app.get('db').model('Action');
-//   Action.find(8).then(function(action) { 
-//     action.run(); 
-//   }).catch(function(err) {
-//     console.log('Caught errorz' + err)
-//   });
-// }, 3000);
 
 // Define base route
 app.set('router', require('./routes/router'));

@@ -3,9 +3,14 @@ var Promise = require('bluebird');
 
 // GatewayTypes have many ResponderTypes
 var GatewayType = function(name, options) {
+  this.protocol = undefined;
+  this.port = undefined;
+  this.path = '/';
+
   _(this).extend(options);
   this.name = name;
   this.responders = {};
+
   return this;
 }
 

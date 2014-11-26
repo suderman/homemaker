@@ -18,11 +18,9 @@ module.exports = function(app) {
     virtuals: {
       gatewayType: function() {
         var type = this.related('gateway').get('type');
-        if (type) { 
-          return type;
-        } else {
-          throw new Error("Responder hasn't loaded Gateway");
-        }
+        return (type) ? type : undefined;
+        // console.log("Responder " + this.get('id') + " hasn't loaded Gateway " + this.get('gateway_id'));
+        // throw new Error("Responder hasn't loaded Gateway");
       }
     },
 
