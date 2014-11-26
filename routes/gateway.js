@@ -1,7 +1,9 @@
+var Promise = require('bluebird');
 module.exports = function(app) {
 
   // Models used
-  var Gateway = app.get('db').model('Gateway');
+  var Gateway = app.get('db').model('Gateway'),
+      Responder = app.get('db').model('Responder');
 
   // Define routes
   var router = app.get('router')(Gateway);
@@ -14,10 +16,18 @@ module.exports = function(app) {
 
   // GET all possible responders
   .get('/:id/all-responders', function(req, res) {
-    Gateway.find(req.params.id, ['responders']).then(function(model){ 
-      return model.related('responders'); 
+    Gateway.find(req.params.id, ['responders']).then(function(gateway){ 
+      return Promise.props({
+        valid: Responder.findValid(gateway),
+        saved: gateway.related('responders') 
+      });
+
+    }).then(function(responders) {
+      return Responder.combine(responders.valid, responders.saved)
+
     }).then(function(responders){
       res.send(responders);
+
     }).catch(function(err){ 
       router.handleError(err, res); 
     });

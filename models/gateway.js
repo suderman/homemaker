@@ -25,6 +25,7 @@ module.exports = function(app) {
       var adapter = (res.type) ? app.get('adapters')(res.type) : false;
       if (adapter) {
         res.name = res.name || adapter.name;
+        res.host = res.host || adapter.host;
         res.port = res.port || adapter.port;
       }
       return res;

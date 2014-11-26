@@ -1,5 +1,6 @@
 module.exports = function(app) {
   var db = app.get('db');
+  var _statuses = [];
 
   var _ = require('underscore');
   var Promise = require('bluebird');
@@ -16,11 +17,31 @@ module.exports = function(app) {
     },
 
     virtuals: {
+
       gatewayType: function() {
         var type = this.related('gateway').get('type');
         return (type) ? type : undefined;
         // console.log("Responder " + this.get('id') + " hasn't loaded Gateway " + this.get('gateway_id'));
         // throw new Error("Responder hasn't loaded Gateway");
+      },
+
+      identity: function() {
+        return [
+          this.get('gateway_id'), 
+          this.get('type').toLowerCase().replace(/ /g, '-'),
+          this.get('address')
+        ].join('.');
+      },
+
+      status: {
+        get: function() {
+          var status = Responder.statuses(this.get('identity'));
+          return ((status === 'valid') || (status === 'invalid')) ? status : 'unknown';
+        },
+        set: function(value) {
+          var status = ((value === 'valid') || (value === 'invalid')) ? value : 'unknown';
+          Responder.statuses(this.get('identity'), status);
+        }
       }
     },
 
@@ -63,7 +84,64 @@ module.exports = function(app) {
 
   },{
     related: ['gateway'],
-    nested: []
+    nested: [],
+
+    statuses: function(key, value) {
+      if (!key) { return false; } 
+      if (value) { return _statuses[key] = value; } 
+      if (_statuses[key]) { return _statuses[key]; }
+      return false;
+    },
+
+    // returns a promise
+    findValid: function(gateway){
+      var Responder = this,
+          gatewayId = gateway.get('id')
+
+      return gateway.responderAddresses().then(function(responderTypes) {
+
+        var responders = [];
+        _(responderTypes).each(function(responderAddresses, responderType) {
+          _(responderAddresses).each(function(responderName, responderAddress) {
+
+            responders.push(new Responder({
+              id: null,
+              gateway_id: gatewayId,
+              name: responderName,
+              address: responderAddress,
+              type: responderType
+            }));
+
+          });
+        });
+        return responders;
+
+      });
+    },
+
+    // returns a promise
+    combine: function(validCollection, savedCollection) {
+      var collection = this.collection();
+
+      _(validCollection).each(function(valid) {
+
+        var matched = savedCollection.findWhere({ 
+          identity: valid.get('identity') 
+        }) || valid;
+        savedCollection.remove(matched);
+
+        matched.set('status', 'valid');
+        collection.add(matched);
+      });
+
+      savedCollection.each(function(saved) {
+        saved.set('status', 'invalid');
+        collection.add(saved);
+      });
+
+      return Promise.resolve(collection);
+    }
+
   });
 
   return db.model('Responder', Responder);

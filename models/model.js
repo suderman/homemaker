@@ -52,8 +52,8 @@ module.exports = function(app) {
       return this._find.call(this, 'fetchAll', args);
     }),
 
-    new: Promise.method(function() {
-      return new this();
+    new: Promise.method(function(attributes) {
+      return new this(attributes);
     })
       
   });

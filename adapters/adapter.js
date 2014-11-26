@@ -5,6 +5,7 @@ var Promise = require('bluebird');
 var GatewayType = function(name, options) {
   this.protocol = undefined;
   this.port = undefined;
+  this.host = 'localhost'
   this.path = '/';
 
   _(this).extend(options);
