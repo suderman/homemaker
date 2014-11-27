@@ -21,10 +21,12 @@ module.exports = function(app) {
   .get(/^\/(.+)/, function(req, res) {
     var args = { path: req.params[0] };
     URL.find(args).then(function (url){ 
+      if (!url) throw new Error('Path not found: /' + args.path);
       url.run();
       res.send(url.toJSON()); 
+
     }).catch(function (err){ 
-      router.handleError(err, res); 
+      router.fourOhFour(err, res); 
     });
   })
 

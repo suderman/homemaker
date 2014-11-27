@@ -2,9 +2,15 @@ module.exports = function(Model) {
 
   var router = require('express').Router();
 
-  router.handleError = function(error, res) {
-    console.log(error)
+  router.handleError = function(err, res) {
+    console.log(err)
     res.send({});
+  };
+
+  router.fourOhFour = function(err, res) {
+    console.log(err)
+    res.status(404);
+    res.type('txt').send('Not found');
   };
 
   if (!Model) { return router; }
