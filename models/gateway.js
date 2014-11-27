@@ -31,6 +31,7 @@ module.exports = function(app) {
       return res;
     },
 
+    hidden: ['auth', 'address', 'url', 'title'],
     virtuals: {
 
       protocol: function() {

@@ -72,12 +72,12 @@ module.exports = function(app) {
       return this.adapter().commands(gateway, this.get('address'));
     },
 
-    message: function(code) {
-      return this.adapter().message(code, this.get('address'));
+    message: function(command) {
+      return this.adapter().message(command, this.get('address'));
     },
 
-    send: function(code) {
-      return this.related('gateway').send(this.message(code));
+    send: function(command) {
+      return this.related('gateway').send(this.message(command));
     }
 
   },{
@@ -89,6 +89,16 @@ module.exports = function(app) {
       if (value) { return _statuses[key] = value; } 
       if (_statuses[key]) { return _statuses[key]; }
       return false;
+    },
+
+    types: function() {
+      var responders = [];
+      _(app.get('adapters')()).each(function(gateway) {
+        _(app.get('adapters')(gateway, null)).each(function(responder) {
+          responders.push([gateway, responder].join(' '));
+        }); 
+      });
+      return responders;
     },
 
     // Return a promise resolving to all possible responders for a given gateway

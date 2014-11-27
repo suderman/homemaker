@@ -25,13 +25,13 @@ module.exports = function(app) {
     },
 
     virtuals: {
-      code: function() {
-        return this.get('custom_code') || this.related('command').get('code');
+      command: function() {
+        return this.get('custom_command') || this.related('command').get('command');
       }
     },
 
     run: function() {
-      this.related('responder').send(this.get('code')).then(function(response) {
+      this.related('responder').send(this.get('command')).then(function(response) {
         console.log("PROMISE RESPONSE " + response)
       }).catch(function(err){ });
     }

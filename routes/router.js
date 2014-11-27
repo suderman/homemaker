@@ -2,28 +2,36 @@ module.exports = function(Model) {
 
   var router = require('express').Router();
 
-  router.handleError = function(err, res) {
+  // API typically errors out with an empty object
+  router.error = function(res, err) {
     console.log(err)
     res.send({});
   };
 
-  router.fourOhFour = function(err, res) {
+  // Normal 404 error page
+  router.fourOhFour = function(res, err) {
     console.log(err)
     res.status(404);
     res.type('txt').send('Not found');
   };
 
+  // Without a passed Model, return here
   if (!Model) { return router; }
 
   // Define nested routes from passed Model argument
   Model.nested.forEach(function(name){
-  
     router.get('/:id/' + name, function(req, res) {
+
       Model.find(req.params.id, [name]).then(function(model){ 
-        res.send(model.related(name).toJSON()); 
-      }).catch(function(err){ 
-        router.handleError(err, res); 
-      });
+        return model.related(name); 
+
+      }).then(function(collection) {
+        return collection.load([collection.relatedData.parentTableName]);
+
+      }).then(function(collection) {
+        res.send(collection.toJSON()); 
+
+      }).catch(router.error.bind(router, res));
     });
 
   });
@@ -35,18 +43,14 @@ module.exports = function(Model) {
   .get('/', function(req, res) {
     Model.findAll().then(function(collection){ 
       res.send(collection.toJSON()); 
-    }).catch(function(err){ 
-      router.handleError(err, res); 
-    });
+    }).catch(router.error.bind(router, res));
   })
 
   // GET one
   .get('/:id(\\d+)/', function(req, res) {
     Model.find(req.params.id).then(function(model){ 
       res.send(model.toJSON()); 
-    }).catch(function(err){ 
-      router.handleError(err, res); 
-    });
+    }).catch(router.error.bind(router, res));
   })
 
   // POST one
@@ -55,9 +59,7 @@ module.exports = function(Model) {
       return model.save(req.body, { patch: false }); 
     }).then(function(model){ 
       res.send(model.toJSON()); 
-    }).catch(function(err){ 
-      router.handleError(err, res); 
-    });
+    }).catch(router.error.bind(router, res));
   })
 
   // PUT one
@@ -66,9 +68,7 @@ module.exports = function(Model) {
       return model.save(req.body, { patch: true }); 
     }).then(function(model){ 
       res.send(model.toJSON()); 
-    }).catch(function(err){ 
-      router.handleError(err, res); 
-    });
+    }).catch(router.error.bind(router, res));
   })
 
   // DELETE one
@@ -77,9 +77,7 @@ module.exports = function(Model) {
       return model.destroy(); 
     }).then(function(model){ 
       res.send(model.toJSON()); 
-    }).catch(function(err){ 
-      router.handleError(err, res); 
-    });
+    }).catch(router.error.bind(router, res));
   })
 
 };

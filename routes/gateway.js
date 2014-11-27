@@ -24,9 +24,7 @@ module.exports = function(app) {
   .get('/all', function(req, res) {
     Gateway.findAll(null).then(function(collection){ 
       res.send(collection.toJSON()); 
-    }).catch(function(err){ 
-      router.handleError(err, res); 
-    });
+    }).catch(router.error.bind(router, res));
   })
 
   // GET valid gateway types
@@ -38,9 +36,7 @@ module.exports = function(app) {
   .get('/:id/types', function(req, res) {
     Gateway.find(req.params.id).then(function(gateway){ 
       res.send(gateway.types());
-    }).catch(function(err){ 
-      router.handleError(err, res); 
-    });
+    }).catch(router.error.bind(router, res));
   })
 
   // GET responder addresses (grouped by type)
@@ -49,9 +45,7 @@ module.exports = function(app) {
       return model.addresses();
     }).then(function(addresses){
       res.send(addresses);
-    }).catch(function(err){ 
-      router.handleError(err, res); 
-    });
+    }).catch(router.error.bind(router, res));
   })
 
   // GET all possible responders
@@ -70,9 +64,7 @@ module.exports = function(app) {
     }).then(function(responders){
       res.send(responders);
 
-    }).catch(function(err){ 
-      router.handleError(err, res); 
-    });
+    }).catch(router.error.bind(router, res));
   })
 
 };

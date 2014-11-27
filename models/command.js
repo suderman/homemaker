@@ -12,12 +12,8 @@ module.exports = function(app) {
       return this.hasMany('Action');
     }, 
       
-    responder: function() {
-      return this.belongsTo('Responder').through('Device');
-    }
-
   },{
-    related: ['device', 'responder'],
+    related: ['device'],
     nested: ['actions']
   });
 

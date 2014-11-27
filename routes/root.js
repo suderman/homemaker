@@ -25,9 +25,7 @@ module.exports = function(app) {
       url.run();
       res.send(url.toJSON()); 
 
-    }).catch(function (err){ 
-      router.fourOhFour(err, res); 
-    });
+    }).catch(router.fourOhFour.bind(router, res));
   })
 
 };

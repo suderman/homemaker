@@ -6,14 +6,10 @@ module.exports = function(app) {
 
     commands: function() {
       return this.hasMany('Command');
-    },
-
-    responder: function() {
-      return this.belongsTo('Responder');
     }
 
   },{
-    related: ['responder'],
+    related: [],
     nested: ['commands']
   });
 
