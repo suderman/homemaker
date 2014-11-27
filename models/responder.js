@@ -8,27 +8,34 @@ module.exports = function(app) {
   var Responder = db.model('Model').extend({
     tableName: 'responder',
 
-    type: function() {
-      return db.model('Responder').types[this.get('type')];
-    },
-
     gateway: function() {
       return this.belongsTo('Gateway');
     },
 
+    // Don't save this attribute--it's only temporarily used by valid unsaved responders
+    hidden: ['gatewayName'],
+    format: function(attributes) {
+      return _(attributes).omit('gatewayName');
+    },
+
     virtuals: {
+      title: function() {
+        return [
+          this.get('gatewayName') || this.related('gateway').get('name'), ' ',
+          this.get('type'),
+          this.get('name') != 'default' ? ': ' + this.get('name') : ''
+        ].join('');
+      },
 
       gatewayType: function() {
         var type = this.related('gateway').get('type');
         return (type) ? type : undefined;
-        // console.log("Responder " + this.get('id') + " hasn't loaded Gateway " + this.get('gateway_id'));
-        // throw new Error("Responder hasn't loaded Gateway");
       },
 
       identity: function() {
         return [
           this.get('gateway_id'), 
-          this.get('type').toLowerCase().replace(/ /g, '-'),
+          String(this.get('type')).toLowerCase().replace(/ /g, '-'),
           this.get('address')
         ].join('.');
       },
@@ -60,15 +67,6 @@ module.exports = function(app) {
       }
     },
 
-    availableTypes: function() {
-      var gatewayType = this.get('gatewayType');
-      if (!gatewayType) {
-        throw new Error("Attempted to call responder adapter without gateway type")
-      } else {
-        return app.get('adapters')(gatewayType, null);
-      }
-    },
-
     commands: function() {
       var gateway = this.related('gateway');
       return this.adapter().commands(gateway, this.get('address'));
@@ -93,33 +91,38 @@ module.exports = function(app) {
       return false;
     },
 
-    // returns a promise
-    findValid: function(gateway){
+    // Return a promise resolving to all possible responders for a given gateway
+    findAllValid: function(gateway){
       var Responder = this,
-          gatewayId = gateway.get('id')
+          gatewayId = gateway.get('id'),
+          gatewayName = gateway.get('name');
 
-      return gateway.responderAddresses().then(function(responderTypes) {
-
+      return gateway.addresses().then(function(responderTypes) {
         var responders = [];
+
         _(responderTypes).each(function(responderAddresses, responderType) {
           _(responderAddresses).each(function(responderName, responderAddress) {
 
             responders.push(new Responder({
-              id: null,
-              gateway_id: gatewayId,
-              name: responderName,
-              address: responderAddress,
-              type: responderType
+              id:           null,
+              gateway_id:   gatewayId,
+              gatewayName:  gatewayName,
+              type:         responderType,
+              address:      responderAddress,
+              name:         responderName
             }));
 
           });
         });
-        return responders;
 
+        return responders;
       });
     },
 
-    // returns a promise
+    // Return a promise, accepts two passed arguments:
+    //  - The first is an array of valid/potentially-unsaved responders for a particular gateway
+    //  - The second is a fetched collection of responders for the same gateway
+    //  Promise resolves to a combined collection, without duplicates, each model flagged as valid or invalid
     combine: function(validCollection, savedCollection) {
       var collection = this.collection();
 

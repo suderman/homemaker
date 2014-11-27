@@ -12,7 +12,7 @@ var gateway = require('./adapter').addGateway('iTach', {
 }); 
 
 // Adapter Responder
-gateway.addResponder('iTach Infrared Port', {
+gateway.addResponder('Infrared Port', {
 
   addresses: function(gateway) {
     return Promise.resolve({

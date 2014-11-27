@@ -12,13 +12,7 @@ var gateway = require('./adapter').addGateway('OS X Remote Mapper', {
 }); 
 
 // Adapter Responder
-gateway.addResponder('OS X Remote Mapper Server', {
-
-  addresses: function(gateway) {
-    return Promise.resolve({
-      'default': 'OS X Remote Mapper Server' 
-    });
-  },
+gateway.addResponder('Server', {
 
   message: function(command, address) {
     return command;

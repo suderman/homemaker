@@ -1,3 +1,9 @@
+/* Commands Routes
+ * -----------------------------
+   /api/commands
+   /api/commands/1
+   /api/commands/1/actions
+*/
 module.exports = function(app) {
 
   // Models

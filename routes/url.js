@@ -1,3 +1,8 @@
+/* URLs Routes
+ * -----------------------------
+   /api/urls
+   /api/urls/1
+*/
 module.exports = function(app) {
 
   // Models used

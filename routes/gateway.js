@@ -1,3 +1,14 @@
+/* Gateways Routes
+ * -----------------------------
+   /api/gateways
+   /api/gateways/all
+   /api/gateways/types
+   /api/gateways/1
+   /api/gateways/1/types
+   /api/gateways/1/addresses
+   /api/gateways/1/responders
+   /api/gateways/1/responders/all
+*/
 var Promise = require('bluebird');
 module.exports = function(app) {
 
@@ -9,17 +20,48 @@ module.exports = function(app) {
   var router = app.get('router')(Gateway);
   return router
   
+  // GET all without filters
+  .get('/all', function(req, res) {
+    Gateway.findAll(null).then(function(collection){ 
+      res.send(collection.toJSON()); 
+    }).catch(function(err){ 
+      router.handleError(err, res); 
+    });
+  })
+
   // GET valid gateway types
   .get('/types', function(req, res) {
-    res.send(Gateway.availableTypes()); 
+    res.send(Gateway.types()); 
+  })
+
+  // GET valid responder types
+  .get('/:id/types', function(req, res) {
+    Gateway.find(req.params.id).then(function(gateway){ 
+      res.send(gateway.types());
+    }).catch(function(err){ 
+      router.handleError(err, res); 
+    });
+  })
+
+  // GET responder addresses (grouped by type)
+  .get('/:id/addresses', function(req, res) {
+    Gateway.find(req.params.id).then(function(model){ 
+      return model.addresses();
+    }).then(function(addresses){
+      res.send(addresses);
+    }).catch(function(err){ 
+      router.handleError(err, res); 
+    });
   })
 
   // GET all possible responders
-  .get('/:id/all-responders', function(req, res) {
-    Gateway.find(req.params.id, ['responders']).then(function(gateway){ 
+  .get('/:id/responders/all', function(req, res) {
+    var gatewayId = parseInt(req.params.id, 10);
+
+    Gateway.find(gatewayId).then(function(gateway){ 
       return Promise.props({
-        valid: Responder.findValid(gateway),
-        saved: gateway.related('responders') 
+        valid: Responder.findAllValid(gateway),
+        saved: Responder.findAll({ gateway_id: gatewayId }) 
       });
 
     }).then(function(responders) {
@@ -33,23 +75,4 @@ module.exports = function(app) {
     });
   })
 
-  // GET responder addresses (grouped by type)
-  .get('/:id/responder-addresses', function(req, res) {
-    Gateway.find(req.params.id).then(function(model){ 
-      return model.responderAddresses();
-    }).then(function(addresses){
-      res.send(addresses);
-    }).catch(function(err){ 
-      router.handleError(err, res); 
-    });
-  })
-  
-  // GET responder types
-  .get('/:id/responder-types', function(req, res) {
-    Gateway.find(req.params.id).then(function(model){ 
-      res.send(model.responderTypes());
-    }).catch(function(err){ 
-      router.handleError(err, res); 
-    });
-  })
 };

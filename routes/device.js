@@ -1,3 +1,9 @@
+/* Devices Routes
+ * -----------------------------
+   /api/devices
+   /api/devices/1
+   /api/devices/1/commands
+*/
 module.exports = function(app) {
 
   // Models

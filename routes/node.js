@@ -1,3 +1,11 @@
+/* Nodes Routes
+ * -----------------------------
+   /api/nodes
+   /api/nodes/1
+   /api/nodes/1/nodes
+   /api/nodes/1/actions
+   /api/nodes/1/urls
+*/
 module.exports = function(app) {
 
   // Models used

@@ -34,7 +34,7 @@ module.exports = function(app) {
     virtuals: {
 
       protocol: function() {
-        return this.adapter().protocol;
+        return String(this.adapter().protocol);
       },
 
       auth: function() {
@@ -70,7 +70,7 @@ module.exports = function(app) {
       if (this.get('type')) {
         return app.get('adapters')(this.get('type'));
       } else {
-        return undefined;
+        return { protocol: 'null', port: 'null', host: 'localhost', path: '/' };
       }
     },
 
@@ -98,12 +98,13 @@ module.exports = function(app) {
       return this.connection().send(message);
     },
 
-    responderTypes: function() {
+    // All responder types for this gateway
+    types: function() {
       return this.adapter().responderTypes(this);
     },
-
-    // returns a promise
-    responderAddresses: function(){
+    
+    // All responder addresses for this gateway
+    addresses: function(){
       return this.adapter().responderAddresses(this);
     }
 
@@ -119,7 +120,8 @@ module.exports = function(app) {
       return false;
     },
 
-    availableTypes: function() {
+    // All Gateway types
+    types: function() {
       return app.get('adapters')();
     }
 

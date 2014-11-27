@@ -15,7 +15,7 @@ var gateway = require('./adapter').addGateway('ISY-994i', {
 }); 
 
 // Adapter Responder
-gateway.addResponder('ISY-994i Insteon Scene', {
+gateway.addResponder('Insteon Scene', {
 
   status_lookup: '/rest/status/ADDRESS',
 
@@ -61,7 +61,7 @@ gateway.addResponder('ISY-994i Insteon Scene', {
 });
 
 // Adapter Responder
-gateway.addResponder('ISY-994i Insteon Device', {
+gateway.addResponder('Insteon Device', {
 
   status_lookup: '/rest/status/ADDRESS',
 
@@ -107,7 +107,7 @@ gateway.addResponder('ISY-994i Insteon Device', {
 });
 
 // Adapter Responder
-gateway.addResponder('ISY-994i Program', {
+gateway.addResponder('Program', {
 
   status_lookup: '/rest/programs/ADDRESS',
 
@@ -147,7 +147,7 @@ gateway.addResponder('ISY-994i Program', {
 });
 
 // Adapter Responder
-gateway.addResponder('ISY-994i Networking', {
+gateway.addResponder('Networking', {
 
   addresses: function(gateway) {
     return Promise.resolve({

@@ -74,7 +74,6 @@ app.use('/api/responders',    require('./routes/responder')(app));
 app.use('/api/urls',          require('./routes/url'      )(app));
 app.use('/',                  require('./routes/root'     )(app));
 
-
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {

@@ -10,13 +10,7 @@ var gateway = require('./adapter').addGateway('OS X Keyboard Maestro', {
 }); 
 
 // Adapter Responder
-gateway.addResponder('OS X Keyboard Maestro Server', {
-
-  addresses: function(gateway) {
-    return Promise.resolve({
-      'default': 'OS X Keyboard Maestro Server' 
-    });
-  },
+gateway.addResponder('Server', {
 
   commands: function(gateway) {
     var message = "/authenticated.html";
