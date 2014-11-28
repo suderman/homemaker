@@ -37,21 +37,60 @@ gateway.addResponder('Insteon Scene', {
 
   commands: function(gateway) {
     return Promise.resolve({
-      'ISY-994i Insteon': {
-        '[off] DOF': '0', 
-        '[on] DON': '255', 
-        '[fast on] DFON': '255', 
-        '[fast off] DFOF': '0', 
-        '[brighten] BRT': null, 
-        '[dim] DIM': null, 
-        '[begin manual dimming] BMAN': null, 
-        '[stop manual dimming] SMAN': null, 
-        '[1%] DON/3': '3', 
-        '[10%] DON/25': '25', 
-        '[50%] DON/50': '128', 
-        '[75%] DON/192': '192', 
-        '[100%] DON/255': '255' 
-      }
+      'ISY-994i Insteon': [
+        { name:     'Off',
+          command:  'DOF', 
+          feedback: '0' 
+        },
+        { name:     'On',
+          command:  'DON', 
+          feedback: '255' 
+        },
+        { name:     'Fast On',
+          command:  'DFOF', 
+          feedback: '255' 
+        },
+        { name:     'Fast Off', 
+          command:  'DFOF', 
+          feedback: '0' 
+        },
+        { name:     'Brighten', 
+          command:  'BRT', 
+          feedback:  '+7'
+        },
+        { name:     'Dim', 
+          command:  'DIM', 
+          feedback:  '-8'
+        },
+        { name:     'Begin Manual Dimming', 
+          command:  'BMAN', 
+          feedback: null 
+        },
+        { name:     'Stop Manual Dimming', 
+          command:  'SMAN', 
+          feedback: null
+        },
+        { name:     '1%', 
+          command:  'DON/3', 
+          feedback: '3' 
+        },
+        { name:     '10%', 
+          command:  'DON/25', 
+          feedback: '25' 
+        },
+        { name:     '50%', 
+          command:  'DON/50', 
+          feedback: '128' 
+        },
+        { name:     '75%', 
+          command:  'DON/192', 
+          feedback: '192' 
+        },
+        { name:     '100%', 
+          command:  'DON/255', 
+          feedback: '255' 
+        }
+      ]
     });
   },
 
@@ -83,21 +122,60 @@ gateway.addResponder('Insteon Device', {
 
   commands: function(gateway) {
     return Promise.resolve({
-      'ISY-994i Insteon': {
-        '[off] DOF': '0', 
-        '[on] DON': '255', 
-        '[fast on] DFON': '255', 
-        '[fast off] DFOF': '0', 
-        '[brighten] BRT': null, 
-        '[dim] DIM': null, 
-        '[begin manual dimming] BMAN': null, 
-        '[stop manual dimming] SMAN': null, 
-        '[1%] DON/3': '3', 
-        '[10%] DON/25': '25', 
-        '[50%] DON/50': '128', 
-        '[75%] DON/192': '192', 
-        '[100%] DON/255': '255' 
-      }
+      'ISY-994i Insteon': [
+        { name:     'Off',
+          command:  'DOF', 
+          feedback: '0' 
+        },
+        { name:     'On',
+          command:  'DON', 
+          feedback: '255' 
+        },
+        { name:     'Fast On',
+          command:  'DFOF', 
+          feedback: '255' 
+        },
+        { name:     'Fast Off', 
+          command:  'DFOF', 
+          feedback: '0' 
+        },
+        { name:     'Brighten', 
+          command:  'BRT', 
+          feedback:  '+7'
+        },
+        { name:     'Dim', 
+          command:  'DIM', 
+          feedback:  '-8'
+        },
+        { name:     'Begin Manual Dimming', 
+          command:  'BMAN', 
+          feedback: null 
+        },
+        { name:     'Stop Manual Dimming', 
+          command:  'SMAN', 
+          feedback: null
+        },
+        { name:     '1%', 
+          command:  'DON/3', 
+          feedback: '3' 
+        },
+        { name:     '10%', 
+          command:  'DON/25', 
+          feedback: '25' 
+        },
+        { name:     '50%', 
+          command:  'DON/50', 
+          feedback: '128' 
+        },
+        { name:     '75%', 
+          command:  'DON/192', 
+          feedback: '192' 
+        },
+        { name:     '100%', 
+          command:  'DON/255', 
+          feedback: '255' 
+        }
+      ]
     });
   },
 
@@ -129,15 +207,36 @@ gateway.addResponder('Program', {
 
   commands: function(gateway) {
     return Promise.resolve({
-      'ISY-994i Program': {
-        'run': 'Run', 
-        'runThen': 'Run Then', 
-        'runElse': 'Run Else', 
-        'stop': 'Stop', 
-        'enable': 'Enable', 
-        'enableRunAtStartup': 'Enable Run at Startup', 
-        'disableRunAtStartup': 'Disable Run at Startup'
-      }
+      'ISY-994i Program': [
+        { name:     'Run', 
+          command:  'run', 
+          feedback: null 
+        },
+        { name:     'Run Then', 
+          command:  'runThen', 
+          feedback: null 
+        },
+        { name:     'Run Else', 
+          command:  'runElse', 
+          feedback: null 
+        },
+        { name:     'Stop', 
+          command:  'stop', 
+          feedback: null 
+        },
+        { name:     'Enable', 
+          command:  'enable', 
+          feedback: null 
+        },
+        { name:     'Enable Run at Startup', 
+          command:  'enableRunAtStartup', 
+          feedback: null 
+        },
+        { name:     'Disable Run at Startup', 
+          command:  'disableRunAtStartup', 
+          feedback: null 
+        }
+      ]
     });
   },
 
@@ -163,9 +262,13 @@ gateway.addResponder('Networking', {
       return jsdom(res.body)
 
     }).then(function(window) {
-      return _.object(_.map(window.document.querySelectorAll('NetRule'), function (rule) {
-        return [rule.querySelector('id').innerHTML, rule.querySelector('name').innerHTML]
-      })); 
+      return _.map(window.document.querySelectorAll('NetRule'), function (rule) {
+        return {
+          name:     rule.querySelector('name').innerHTML,
+          command:  rule.querySelector('id').innerHTML,
+          feedback: null
+        }
+      }); 
 
     }).then(function(commands) {
       var group = {};

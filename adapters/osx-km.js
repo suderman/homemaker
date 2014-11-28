@@ -22,9 +22,13 @@ gateway.addResponder('Server', {
       var commandGroups = {};
       _(window.document.querySelectorAll('optgroup')).each(function (optgroup) {
         var key = gateway.get('name') + ' ' + optgroup.getAttribute('label');
-        commandGroups[key] = _.object(_.map(optgroup.querySelectorAll('option'), function (option) {
-          return [option.getAttribute('value'), option.getAttribute('label')];
-        }));
+        commandGroups[key] = _.map(optgroup.querySelectorAll('option'), function (option) {
+          return {
+            name:     option.getAttribute('label'),
+            command:  option.getAttribute('value'),
+            feedback: null
+          }
+        });
       }); 
       return commandGroups;
 

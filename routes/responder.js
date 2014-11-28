@@ -5,6 +5,7 @@
    /api/responders/1
    /api/responders/1/commands
 */
+var Promise = require('bluebird');
 module.exports = function(app) {
 
   var Responder = app.get('db').model('Responder');
@@ -20,8 +21,16 @@ module.exports = function(app) {
 
   // GET available commands
   .get('/:id/commands', function(req, res) {
-    Responder.find(req.params.id).then(function(model){ 
-      return model.commands();
+    var responderId = parseInt(req.params.id, 10);
+
+    Responder.find(responderId).then(function(responder){ 
+      return responder.commands();
+
+      // return Promise.props({
+      //   adapter: responder.commands(),
+      //   device: Responder.findAll({ gateway_id: gatewayId }) 
+      // });
+
     }).then(function(commands){
       res.send(commands);
 
