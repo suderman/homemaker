@@ -14,7 +14,14 @@ module.exports = function(app) {
       
   },{
     related: ['device'],
-    nested: ['actions']
+    nested: ['actions'],
+
+    findAllByDevice: function(device) {
+      return this.findAll({
+        device_id: device.get('id')
+      });
+    }
+
   });
 
   return db.model('Command', Command);

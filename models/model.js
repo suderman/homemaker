@@ -24,7 +24,6 @@ module.exports = function(app) {
 
           // Optional second argument for related tables
           related = (_.isArray(args[1])) ? (args[1]) : this.related;
-          // console.log(this.tableName + ': ' + ', related: ' + related + ', this.related: ' + this.related)
           
       // Find by id or by attribute object
       if (idAttr) {

@@ -19,6 +19,8 @@ module.exports = function(app) {
     },
 
     virtuals: {
+
+      // Gateway Name + ResponderType + Responder Name
       title: function() {
         return [
           this.get('gatewayName') || this.related('gateway').get('name'), ' ',
@@ -27,11 +29,18 @@ module.exports = function(app) {
         ].join('');
       },
 
+      // Adapter's GatewayType
       gatewayType: function() {
         var type = this.related('gateway').get('type');
         return (type) ? type : undefined;
       },
 
+      // Adapter's GatewayType + ResponderType
+      responderType: function() {
+        return this.get('gatewayType') + ' ' + this.get('type');
+      },
+
+      // Gateway ID + ResponderType + Responder Address
       identity: function() {
         return [
           this.get('gateway_id'), 
@@ -67,9 +76,42 @@ module.exports = function(app) {
       }
     },
 
-    commands: function() {
+    adapterCommands: function() {
       var gateway = this.related('gateway');
       return this.adapter().commands(gateway, this.get('address'));
+    },
+
+    deviceCommands: function() {
+      var Device = db.model('Device'),
+          Command = db.model('Command');
+
+      return Device.findAllByResponder(this).then(function(collection) {
+        var devices = {};
+        collection.each(function(device) {
+          devices[device.get('name')] = Command.findAllByDevice(device);
+        });
+
+        return Promise.props(devices);
+      });
+    },
+
+    commands: function() {
+      var commands = {
+        adapter: this.adapterCommands(), 
+        device:  this.deviceCommands()
+      };
+
+      return Promise.props(commands).then(function(commands) {
+        return _(commands.adapter).extend(commands.device);
+
+      }).then(function(devices) {
+        return _(devices).omit(function(device) {
+          return (device.length < 1);
+        });
+
+      }).catch(function(err) {
+        console.log(err);
+      });
     },
 
     message: function(command) {

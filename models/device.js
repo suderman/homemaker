@@ -10,7 +10,14 @@ module.exports = function(app) {
 
   },{
     related: [],
-    nested: ['commands']
+    nested: ['commands'],
+
+    findAllByResponder: function(responder) {
+      return this.findAll({
+        responder_type: responder.get('responderType')
+      });
+    }
+
   });
 
   return db.model('Device', Device);
