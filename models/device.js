@@ -31,16 +31,21 @@ module.exports = function(app) {
     // },
 
     findAllAdapter: function() {
-      // var p = {
-      //   // adapter: this.findAllResponder(),
-      //   saved: Device.findAll()
-      // };
-      //
-      // return Promise.prop(p).then(function(devices) {
-      //   res.send(devices);
-      // });
 
-      return this.findAllResponder();
+      return Promise.props({
+        adapter: this.findAllResponder(),
+        saved: Device.findAll().get('models')
+
+      }).then(function(devices) {
+        devices.adapter = _(_(devices.adapter).keys()).map(function (name) {
+          return { id: encodeURIComponent(name), name: name };
+        });
+        return devices;
+
+      }).then(function(devices) {
+        return _(devices.adapter.concat(devices.saved)).sortBy(function(a) { return a.name; });
+
+      });
     },
 
     findAllResponder: function() {

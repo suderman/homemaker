@@ -22,9 +22,16 @@ module.exports = function(app) {
     }).catch(router.error.bind(router, res));
   })
 
+  // GET adapter device
   .get('/:id', function(req, res) {
     var id = decodeURIComponent(req.params.id);
     res.send(id);
+  })
+
+  // GET commands for adapter device
+  .get('/:id/commands', function(req, res) {
+    var id = decodeURIComponent(req.params.id);
+    res.send(id + ' commands');
   })
 
 };

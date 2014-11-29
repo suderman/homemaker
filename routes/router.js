@@ -20,7 +20,7 @@ module.exports = function(Model) {
 
   // Define nested routes from passed Model argument
   Model.nested.forEach(function(name){
-    router.get('/:id/' + name, function(req, res) {
+    router.get('/:id(\\d+)/' + name, function(req, res) {
 
       Model.find(req.params.id, [name]).then(function(model){ 
         return model.related(name); 
