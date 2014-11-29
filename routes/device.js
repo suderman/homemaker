@@ -4,8 +4,8 @@
    /api/devices/all
    /api/devices/1
    /api/devices/1/commands
-   /api/devices/adapter-device-name--responder--1
-   /api/devices/adapter-device-name--responder--1/commands
+   /api/devices/adapter-device-name[1]
+   /api/devices/adapter-device-name[1]/commands
 */
 var Promise = require('bluebird');
 module.exports = function(app) {

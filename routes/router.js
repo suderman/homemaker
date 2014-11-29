@@ -1,4 +1,5 @@
-module.exports = function(Model) {
+var _ = require('underscore');
+module.exports = function(Model, argRoutes) {
 
   var router = require('express').Router();
 
@@ -18,67 +19,84 @@ module.exports = function(Model) {
   // Without a passed Model, return here
   if (!Model) { return router; }
 
-  // Define nested routes from passed Model argument
-  Model.nested.forEach(function(name){
-    router.get('/:id(\\d+)/' + name, function(req, res) {
-
-      Model.find(req.params.id, [name]).then(function(model){ 
-        return model.related(name); 
-
-      }).then(function(collection) {
-        return collection.load([collection.relatedData.parentTableName]);
-
-      }).then(function(collection) {
-        res.send(collection.toJSON()); 
-
-      }).catch(router.error.bind(router, res));
-    });
-
-  });
+  argRoutes = (argRoutes) || {};
+  var routes = { index: true, get: true, post: true, put: true, delete: true, nested: true }
+  _(routes).extend(argRoutes);
 
   // Define default routes with passed Model argument
-  return router
+  // ------------------------------------------------
+  
+  // Define nested routes from passed Model argument
+  if (routes['nested']) {
+    Model.nested.forEach(function(name){
+      router.get('/:id(\\d+)/' + name, function(req, res) {
+
+        Model.find(req.params.id, [name]).then(function(model){ 
+          return model.related(name); 
+
+        }).then(function(collection) {
+          return collection.load([collection.relatedData.parentTableName]);
+
+        }).then(function(collection) {
+          res.send(collection.toJSON()); 
+
+        }).catch(router.error.bind(router, res));
+      });
+
+    });
+  }
 
   // GET all
-  .get('/', function(req, res) {
-    Model.findAll().then(function(collection){ 
-      res.send(collection.toJSON()); 
-    }).catch(router.error.bind(router, res));
-  })
+  if (routes['index']) {
+    router.get('/', function(req, res) {
+      Model.findAll().then(function(collection){ 
+        res.send(collection.toJSON()); 
+      }).catch(router.error.bind(router, res));
+    });
+  }
 
   // GET one
-  .get('/:id(\\d+)/', function(req, res) {
-    Model.find(req.params.id).then(function(model){ 
-      res.send(model.toJSON()); 
-    }).catch(router.error.bind(router, res));
-  })
+  if (routes['get']) {
+    router.get('/:id(\\d+)/', function(req, res) {
+      Model.find(req.params.id).then(function(model){ 
+        res.send(model.toJSON()); 
+      }).catch(router.error.bind(router, res));
+    });
+  }
 
   // POST one
-  .post('/', function(req, res) {
-    Model.new().then(function(model){ 
-      return model.save(req.body, { patch: false }); 
-    }).then(function(model){ 
-      res.send(model.toJSON()); 
-    }).catch(router.error.bind(router, res));
-  })
+  if (routes['post']) {
+    router.post('/', function(req, res) {
+      Model.new().then(function(model){ 
+        return model.save(req.body, { patch: false }); 
+      }).then(function(model){ 
+        res.send(model.toJSON()); 
+      }).catch(router.error.bind(router, res));
+    });
+  }
 
   // PUT one
-  .put('/:id(\\d+)/', function(req, res) {
-    Model.find(req.params.id).then(function(model){
-      return model.save(req.body, { patch: true }); 
-    }).then(function(model){ 
-      res.send(model.toJSON()); 
-    }).catch(router.error.bind(router, res));
-  })
+  if (routes['put']) {
+    router.put('/:id(\\d+)/', function(req, res) {
+      Model.find(req.params.id).then(function(model){
+        return model.save(req.body, { patch: true }); 
+      }).then(function(model){ 
+        res.send(model.toJSON()); 
+      }).catch(router.error.bind(router, res));
+    })
+  }
 
   // DELETE one
-  .delete('/:id(\\d+)/', function(req, res) {
-    Model.find(req.params.id).then(function(model){
-      return model.destroy(); 
-    }).then(function(model){ 
-      res.send(model.toJSON()); 
-    }).catch(router.error.bind(router, res));
-  })
+  if (routes['delete']) {
+    router.delete('/:id(\\d+)/', function(req, res) {
+      Model.find(req.params.id).then(function(model){
+        return model.destroy(); 
+      }).then(function(model){ 
+        res.send(model.toJSON()); 
+      }).catch(router.error.bind(router, res));
+    })
+  }
 
+  return router;
 };
 

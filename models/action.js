@@ -25,15 +25,21 @@ module.exports = function(app) {
     },
 
     virtuals: {
-      command: function() {
-        return this.get('custom_command') || this.related('command').get('command');
+
+      message: function() {
+        return this.get('custom_command') || this.related('command').get('command') || null;
+      },
+
+      feedback: function() {
+        return this.get('custom_feedback') || this.related('command').get('feedback') || null;
       }
     },
 
     run: function() {
-      this.related('responder').send(this.get('command')).then(function(response) {
-        console.log("PROMISE RESPONSE " + response)
-      }).catch(function(err){ });
+      return this.related('responder').send(this.get('message'));
+      // this.related('responder').send(this.get('message')).then(function(response) {
+      //   console.log("PROMISE RESPONSE " + response)
+      // }).catch(function(err){ });
     }
 
   },{

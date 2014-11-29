@@ -6,15 +6,11 @@ module.exports = function(app) {
 
     device: function() {
       return this.belongsTo('Device');
-    },
-
-    actions: function() {
-      return this.hasMany('Action');
-    }, 
+    }
       
   },{
     related: ['device'],
-    nested: ['actions'],
+    nested: [],
 
     findAllByDevice: function(device) {
       return this.findAll({

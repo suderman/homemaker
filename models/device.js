@@ -34,7 +34,11 @@ module.exports = function(app) {
       // The id is the encoded name, with the responder id at the end
       }).then(function(devices) {
         devices.adapter = _(devices.adapter).map(function(device, name) {
-          return { id: encodeURIComponent(name) + '--responder--' + device.responderId, name: name };
+          return { 
+            id: encodeURIComponent(name) + '[' + device.responderId + ']', 
+            name: name,
+            responder_id: device.responderId
+          };
         }); 
         return devices;
 
@@ -79,7 +83,7 @@ module.exports = function(app) {
     },
 
     fromParams: function(params) {
-      var array = decodeURIComponent(params.id).split('--responder--');
+      var array = decodeURIComponent(params.id).split('[');
       var name = array[0], responderId = parseInt(array[1], 10);
       return { 
         id: params.id,
