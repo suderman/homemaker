@@ -26,11 +26,6 @@ module.exports = function(app) {
     Responder.find(responderId).then(function(responder){ 
       return responder.commands();
 
-      // return Promise.props({
-      //   adapter: responder.commands(),
-      //   device: Responder.findAll({ gateway_id: gatewayId }) 
-      // });
-
     }).then(function(commands){
       res.send(commands);
 

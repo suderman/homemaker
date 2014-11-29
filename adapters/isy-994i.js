@@ -272,7 +272,7 @@ gateway.addResponder('Networking', {
 
     }).then(function(commands) {
       var group = {};
-      return group[gateway.get('name') + ' Networking ' + address] = commands, group;
+      return group[gateway.get('name') + ' Networking/' + address] = commands, group;
 
     }).catch(function(error) {
       return {};
