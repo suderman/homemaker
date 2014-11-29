@@ -30,7 +30,6 @@ module.exports = function(gateway, responder) {
 
   // function(gateway) -> return given gateway
   if (_.isUndefined(responder)) {
-    // return adapters[gateway].gateway;
     return adapters[gateway];
   }
 

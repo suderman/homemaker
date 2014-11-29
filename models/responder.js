@@ -78,7 +78,7 @@ module.exports = function(app) {
 
     adapterCommands: function() {
       var gateway = this.related('gateway');
-      return this.adapter().commands(gateway, this.get('address'));
+      return this.adapter().commands(gateway, this.get('address'), this.get('id'));
     },
 
     deviceCommands: function() {

@@ -4,12 +4,15 @@
    /api/devices/all
    /api/devices/1
    /api/devices/1/commands
+   /api/devices/adapter-device-name--responder--1
+   /api/devices/adapter-device-name--responder--1/commands
 */
 var Promise = require('bluebird');
 module.exports = function(app) {
 
   // Models
-  var Device = app.get('db').model('Device');
+  var Device = app.get('db').model('Device'),
+      Responder = app.get('db').model('Responder');
 
   // Define routes
   var router = app.get('router')(Device);
@@ -24,14 +27,26 @@ module.exports = function(app) {
 
   // GET adapter device
   .get('/:id', function(req, res) {
-    var id = decodeURIComponent(req.params.id);
-    res.send(id);
+    var device = Device.fromParams(req.params);
+    res.send(device);
   })
 
   // GET commands for adapter device
   .get('/:id/commands', function(req, res) {
-    var id = decodeURIComponent(req.params.id);
-    res.send(id + ' commands');
+    var device = Device.fromParams(req.params);
+
+    Responder.find(device.responderId).then(function(responder) { 
+      return responder.commands();
+
+    }).then(function(device){
+      var key = Object.keys(device)[0];
+      return device[key];
+     
+    }).then(function(commands){
+      res.send(commands);
+
+    }).catch(router.error.bind(router, res));
+
   })
 
 };
