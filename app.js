@@ -39,7 +39,7 @@ app.set('db', require('bookshelf')(require('knex')({
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'api',
+    database: 'homemaker',
     charset: 'utf8'
   }
 }))
