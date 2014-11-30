@@ -15,7 +15,7 @@ module.exports = function(app) {
     t.integer('responder_id'),
     t.string('name', 255);
     t.integer('command_id'),
-    t.string('custom_command', 255),
+    t.text('custom_command'),
     t.string('custom_feedback', 255);
   });
 
@@ -24,7 +24,7 @@ module.exports = function(app) {
     t.integer('device_id'),
     t.string('name', 255),
     t.string('feedback', 255),
-    t.string('command', 255);
+    t.text('command');
   });
 
   createTable('device', function(t) {

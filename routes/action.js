@@ -14,4 +14,14 @@ module.exports = function(app) {
   var router = app.get('router')(Action);
   return router
 
+  // GET any path and match to URL model
+  .get('/:id/run', function(req, res) {
+    Action.find(req.params.id).then(function (action){ 
+      return action.run();
+    
+    }).then(function(feedback) {
+      res.send(feedback); 
+
+    }).catch(router.fourOhFour.bind(router, res));
+  })
 };

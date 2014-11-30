@@ -1,8 +1,23 @@
 module.exports = function(app) {
   var db = app.get('db');
 
+  var _ = require('underscore');
+  var Promise = require('bluebird');
+
   var Action = db.model('Model').extend({
     tableName: 'action',
+
+    initialize: function() {
+      
+      this.on('saved', function(action){
+        action.updateURL();
+      });
+
+      this.on('destroying', function(action){
+        action.deleteURL();
+      });
+
+    },
 
     node: function() {
       return this.belongsTo('Node');
@@ -37,9 +52,46 @@ module.exports = function(app) {
 
     run: function() {
       return this.related('responder').send(this.get('message'));
-      // this.related('responder').send(this.get('message')).then(function(response) {
-      //   console.log("PROMISE RESPONSE " + response)
-      // }).catch(function(err){ });
+    },
+
+    path: function(path) {
+      var Node = db.model('Node');
+
+      path = path || [];
+      path.unshift(this.get('name'));
+
+      var id = this.get('node_id');
+      if (id < 1) return path.join('/');
+
+      return Node.find(id).then(function(node) {
+        return node.path(path);
+      });
+    },
+
+    deleteURL: function() {
+      return db.model('URL').find({ node_id: id }).then(function(url) {
+        return url.destroy();
+      });
+    },
+    deleteURL: function() {
+      return db.model('URL').find({ action_id: id }).then(function(url) {
+        return url.destroy();
+      });
+    },
+
+    updateURL: function() {
+
+      var URL = db.model('URL');
+      var id = this.get('id');
+      if (id < 1) return;
+
+      return Promise.props({
+        path: this.path(),
+        url: URL.findOrNew({ action_id: id }, { action_id: id, type: 'action' }) 
+
+      }).then(function(action) {
+        return action.url.save({ path: action.path });
+      })
     }
 
   },{

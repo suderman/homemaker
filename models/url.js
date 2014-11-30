@@ -21,7 +21,13 @@ module.exports = function(app) {
 
   },{
     related: ['node','action'],
-    nested: []
+    nested: [],
+
+    findOrNew: function(findBy, attributes) {
+      return URL.find(findBy).then(function(url) {
+        return (url) ? url : new URL(attributes);
+      });
+    }
   });
 
   return db.model('URL', URL);

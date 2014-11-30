@@ -10,24 +10,40 @@
 module.exports = function(app) {
 
   // Models used
-  var Node = app.get('db').model('Node');
+  var Node = app.get('db').model('Node'),
+      URL = app.get('db').model('URL');
 
   // Default routes
   var router = app.get('router')(Node, {index:false});
+  return router
 
   // Index
-  router.get('/', function(req, res) {
+  .get('/', function(req, res) {
     Node.findAll({ node_id: null }).then(function(collection){ 
       res.send(collection.toJSON({shallow: true})); 
     }).catch(router.error.bind(router, res));
-  });
+  })
 
   // Index all
-  router.get('/all', function(req, res) {
+  .get('/all', function(req, res) {
     Node.findAll().then(function(collection){ 
       res.send(collection.toJSON({shallow: true})); 
     }).catch(router.error.bind(router, res));
-  });
+  })
+
+
+  .get('/:id/update', function(req, res) {
+
+    Node.find(req.params.id).then(function(node) { 
+      return node.updateURL();
+     
+    }).then(function(nodes){
+      res.send(nodes);
+
+    }).catch(router.error.bind(router, res));
+
+  })
+
 
   return router
 };
