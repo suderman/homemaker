@@ -69,14 +69,15 @@ Gateway.findAll().then(function(gateways) {
 app.set('router', require('./routes/router'));
 
 // Define routes
-app.use('/api/actions',       require('./routes/action'   )(app));
-app.use('/api/commands',      require('./routes/command'  )(app));
-app.use('/api/devices',       require('./routes/device'   )(app));
-app.use('/api/gateways',      require('./routes/gateway'  )(app));
-app.use('/api/nodes',         require('./routes/node'     )(app));
-app.use('/api/responders',    require('./routes/responder')(app));
-app.use('/api/urls',          require('./routes/url'      )(app));
-app.use('/',                  require('./routes/root'     )(app));
+app.use('/homemaker/actions',    require('./routes/action'   )(app));
+app.use('/homemaker/commands',   require('./routes/command'  )(app));
+app.use('/homemaker/devices',    require('./routes/device'   )(app));
+app.use('/homemaker/gateways',   require('./routes/gateway'  )(app));
+app.use('/homemaker/nodes',      require('./routes/node'     )(app));
+app.use('/homemaker/responders', require('./routes/responder')(app));
+app.use('/homemaker/urls',       require('./routes/url'      )(app));
+app.use('/homemaker',            require('./routes/homemaker')(app));
+app.use('/',                     require('./routes/api'      )(app));
 
 // development error handler
 // will print stacktrace
