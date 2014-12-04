@@ -7,6 +7,9 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var _ = require('underscore');
 
+// Load environment variables
+require('dotenv').load();
+
 // Allow cross domain
 app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
@@ -37,10 +40,10 @@ app.set('db', require('bookshelf')(require('knex')({
   client: 'mysql',
   debug: false,
   connection: {
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    database: 'homemaker',
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
     charset: 'utf8'
   }
 }))
