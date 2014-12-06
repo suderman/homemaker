@@ -1,7 +1,19 @@
-var _ = require('underscore');
+var _ = require('underscore'),
+    React = require('react'),
+    beautifyHTML = require('js-beautify').html;
+    
 module.exports = function(Model, argRoutes) {
 
   var router = require('express').Router();
+
+  // Render react component
+  router.render = function(payload) {
+    return React.renderToString(payload); 
+    // return beautifyHTML(React.renderToString(payload), { 
+    //   indent_size: 4,
+    //   end_with_newline: true 
+    // });
+  },
 
   // API typically errors out with an empty object
   router.error = function(res, err) {

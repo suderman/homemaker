@@ -14,7 +14,8 @@ module.exports = function(app) {
 
   // GET home page
   .get('/', function(req, res) {
-    res.render('index', { title: 'API' });
+    // res.render('index', { title: 'API', body: '' });
+    res.send({}); 
   })
 
   // GET any path and match to URL model
