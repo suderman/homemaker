@@ -1,4 +1,5 @@
 var React = require('react');
+var request = require('superagent');
 
 var Gateway = React.createClass({
   render: function() {
@@ -12,18 +13,24 @@ var Gateway = React.createClass({
 });
 
 var Gateways = React.createClass({
+
+  getInitialState: function() {
+    return { collection: this.props.initialData || global.initialData || [] };
+  },
+
+  componentDidMount: function() {
+    request.get(this.props.url).end(function(res) {
+      this.setState({ collection: res.body });
+    }.bind(this));
+  },
+
   render: function() {
 
-    console.log(this.props.collection);
-    var collection = this.props.collection.map(function(model) {
-      var props = { key:  model.name,
+    var collection = this.state.collection.map(function(model) {
+      var props = { key:  model.id,
                     name: model.name, 
                     host: model.host, 
                     port: model.port };
-      // var props = { key:  model.get('name'),
-      //               name: model.get('name'), 
-      //               host: model.get('host'), 
-      //               port: model.get('port') };
       return (<Gateway {...props}/>);
     });
 

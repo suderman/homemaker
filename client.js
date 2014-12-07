@@ -15,16 +15,18 @@ var client = { name: 'homemaker' };
 global.client = client;
 global._ = _;
 
-console.log('client code!!');
-request.get('/homemaker/api/gateways').end(function(res) {
-  console.log('requested');
-  console.log(res.body);
-  React.render(<Gateways collection={res.body}/>, document.getElementById('mount')) 
-});
+React.render(<Gateways url="/homemaker/api/gateways" />, document.getElementById('mount')) 
 
-document.body.onclick = function() {
-  request.get('/homemaker/api/gateways/all').end(function(res) {
-    React.render(<Gateways collection={res.body}/>, document.getElementById('mount')) 
-  });
-}
+// console.log('client code!!');
+// request.get('/homemaker/api/gateways').end(function(res) {
+//   console.log('requested');
+//   console.log(res.body);
+//   React.render(<Gateways url="/homemaker/api/gateways" collection={res.body}/>, document.getElementById('mount')) 
+// });
+
+// document.body.onclick = function() {
+//   request.get('/homemaker/api/gateways/all').end(function(res) {
+//     React.render(<Gateways collection={res.body}/>, document.getElementById('mount')) 
+//   });
+// }
 

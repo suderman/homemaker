@@ -1,5 +1,4 @@
 var React = require('react'),
-    Hero = require('../components/hero'),
     Gateways = require('../components/gateway').Gateways;
 
   
@@ -9,19 +8,17 @@ var React = require('react'),
 */
 module.exports = function(app) {
 
-  var gateways = [{name: 'one', host: 'onehost', port: '80'}, {name: 'two', host: 'onetwo', port: '90'}];
-
   // Define routes
   var router = app.get('router')();
   return router
 
   // GET home page
   .get('/', function(req, res) {
-    res.render('index', { title: 'Homemaker', body: router.render(<Hero name="Jonathan James Suderman"/>) });
+    res.render('index', { title: 'Homemaker', body: router.render(<p/>) });
   })
 
   .get('/nodes', function(req, res) {
-    res.render('index', { title: 'Nodes & Actions', body: router.render(<Hero name="Jonathan James"/>) });
+    res.render('index', { title: 'Nodes & Actions', body: router.render(<p/>) });
   })
 
   .get('/gateways', function(req, res) {
@@ -29,7 +26,8 @@ module.exports = function(app) {
     app.get('db').model('Gateway').findAll().then(function(collection){ 
       res.render('index', { 
         title: 'Gateways & Responders', 
-        body: router.render(<Gateways collection={collection.toJSON()}/>) 
+        initialData: JSON.stringify(collection.toJSON()),
+        body: router.render(<Gateways initialData={collection.toJSON()} />) 
       });
 
     }).catch(router.error.bind(router, res));
@@ -38,7 +36,7 @@ module.exports = function(app) {
   })
 
   .get('/devices', function(req, res) {
-    res.render('index', { title: 'Devices & Commands', body: router.render(<Hero name="Jonathan James"/>) });
+    res.render('index', { title: 'Devices & Commands', body: router.render(<p/>) });
   })
 
 };

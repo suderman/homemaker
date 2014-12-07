@@ -37,10 +37,10 @@
     ]
   },
   "scripts": {
-    "watch": "watchify -o public/scripts/client.js -v -d ./client.js",
-    "build": "browserify ./client.js | uglifyjs -cm > public/scripts/client.js",
-    "watch-server": "npm run watch & npm run server",
+    "watch":  "watchify -o public/scripts/client.js -v -d ./client.js",
+    "build":  "browserify ./client.js | uglifyjs -cm > public/scripts/client.js",
+    "dev":    "npm run watch & npm run server",
     "server": "node ./bin/www",
-    "start": "npm run server"
+    "start":  "npm run server"
   }
 }
