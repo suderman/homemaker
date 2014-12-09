@@ -1,6 +1,6 @@
 var React = require('react');
-var GatewayStore = require('../stores/GatewayStore');
-var GatewayActions = require('../actions/GatewayActions');
+var Reflux = require('reflux');
+var GatewayActions = require('../actions/GatewayActions'); 
 var FormText = require('../components/FormText');
 
 var Gateway = React.createClass({
@@ -20,12 +20,16 @@ var Gateway = React.createClass({
     event.preventDefault();
 
     var gateway = {
-      name: this.refs.name.refs.input.getDOMNode().value.trim(),
-      host: this.refs.host.refs.input.getDOMNode().value.trim(),
-      port: this.refs.port.refs.input.getDOMNode().value.trim()
+      id:     this.props.id,
+      type:   this.props.type,
+      active: this.props.active,
+      name:   this.refs.name.refs.input.getDOMNode().value.trim(),
+      host:   this.refs.host.refs.input.getDOMNode().value.trim(),
+      port:   this.refs.port.refs.input.getDOMNode().value.trim()
     };
 
     console.log(gateway)
+    return GatewayActions.updateGateway(gateway);
     // return GatewayActions.updateGateway(this.props);
   },
 

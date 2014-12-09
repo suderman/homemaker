@@ -1,48 +1,41 @@
 var React = require('react');
-var GatewayStore = require('../stores/GatewayStore');
-var GatewayActions = require('../actions/GatewayActions');
+var Reflux = require('reflux');
+
+var GatewayActions = require('../actions/GatewayActions'); 
+var GatewayStore = require('../stores/GatewayStore'); 
 var Gateway = require('../components/Gateway');
 
 var GatewayList = React.createClass({
-  mixins: [GatewayStore.mixin],
+  mixins: [Reflux.ListenerMixin],
+  // mixins: [Reflux.connect(Store, 'collection')],
 
   getInitialState: function() {
-    return{ collection: this.props.initialData || global.initialData || [] };
+    return{ list: this.props.initialData || global.initialData || [] };
   },
-
-  // Called on componentDidMount & componentWillUnmount
-  onChange: function() {
-    console.log('onchange');
-    return true
+  
+  onListChange: function(list) {
+    this.setState({
+      list: list
+    });
   },
 
   componentDidMount: function() {
-    return GatewayStore.getGateways().then(function(collection) {
-      this.setState({collection: collection});
-    }.bind(this));
+    this.listenTo(GatewayStore, this.onListChange);
   },
 
-
-  tickleRobot: function() {
-    console.log(GatewayActions);
-    return GatewayActions.tickleRobot(true);
+  fireball: function() {
+    return GatewayActions.fireball('Santa');
   },
-
-  // componentDidMount: function() {
-  //   // require('superagent').get(this.props.url).end(function(res) {
-  //   //   this.setState({ collection: res.body });
-  //   // }.bind(this));
-  // },
 
   render: function() {
 
-    var list = this.state.collection.map( function(model) {
-      return (<Gateway key={model.id} name={model.name} host={model.host} port={model.port} />);
+    var list = this.state.list.map( function(model) {
+      return (<Gateway key={model.id} id={model.id} type={model.type} active={model.active} name={model.name} host={model.host} port={model.port} />);
     });
 
     return (
       <div className="gateway-list">
-        <h2 onClick={this.tickleRobot}>Gateways</h2>
+        <h2 onClick={this.fireball}>Gateways</h2>
         <ol>{list}</ol>
       </div>
     );

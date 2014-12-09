@@ -1,51 +1,56 @@
-var Promise = require('../lib').Promise,
-    Agent = require('../lib').Agent,
-    Flux = require('../lib').Flux;
+var _ = require('underscore');
+var Promise = require('bluebird/js/browser/bluebird');
+var Agent = require('superagent-promise');
+var Reflux = require('reflux');
 
-_gateways = global.initialData || [];
+var _gateways = global.initialData || [];
 
-function addGateway(gateway) {
-  _gateways.push(gateway);
+function getById(id) {
+  return _(_gateways).findWhere({id: id});
 }
 
-function updateGateway(gateway) {
-  _gateways.push(gateway);
-}
+var GatewayStore = Reflux.createStore({
 
-var GatewayStore = Flux.createStore({
+  // this will set up listeners to all publishers in actions file, 
+  // using onKeyname (or keyname) as callbacks
+  listenables: [require('../actions/GatewayActions')],
+
+  onFireball: function(victim) {
+    console.log(victim + ' got torched!');
+  },
+
+  onUpdateGateway: function(updatedGateway) {
+    this.updateList(updatedGateway);
+  },
 
   getGateways: function() {
-
-    return Agent.get('/homemaker/api/gateways').end().then(function(res) {
+    var path = '/homemaker/api/gateways/';
+    return Agent.get(path).end().then(function(res) {
       _gateways = res.body;
       return _gateways;
 
     }).catch(function(error) {
       console.log(error);
     });
+  },
+
+  putGateway: function(gateway) {
+    var path = '/homemaker/api/gateways/' + gateway.id;
+    return Agent.put(path).send(gateway).end().then(function(res) {
+      return _gateways;
+
+    }).catch(function(error) {
+      console.log(error);
+    });
+  },
+
+  updateList: function(updatedGateway) {
+    var existingGateway = getById(updatedGateway.id);
+    _(existingGateway).extend(updatedGateway);
+    this.putGateway(updatedGateway);
+    return _gateways;
   }
-
-}, function(payload) {
-
-  console.log('GatewayStore')
-  console.log(payload)
-
-  switch(payload.actionType) {
-
-    case 'ADD_GATEWAY':
-      addGateway(payload.gateway);
-    break;
-
-    case 'UPDATE_GATEWAY':
-      updateGateway(payload.gateway);
-    break;
-
-    default:
-      return true;
-  }
-
-  GatewayStore.emitChange();
-  return true;
 
 });
+
 module.exports = GatewayStore;
