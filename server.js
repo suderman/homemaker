@@ -8,7 +8,7 @@ var bodyParser = require('body-parser');
 var _ = require('underscore');
 
 // Allow requiring of jsx
-require('node-jsx').install();
+require('node-jsx').install({harmony:true});
 
 // Load environment variables
 require('dotenv').load();

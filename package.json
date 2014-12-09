@@ -17,30 +17,36 @@
     "express": "~4.9.0",
     "flux": "^2.0.1",
     "hjs": "~0.0.6",
+    "js-beautify": "^1.5.4",
     "jsdom": "^1.3.1",
     "knex": "^0.7.3",
     "less-middleware": "1.0.x",
+    "mcfly": "0.0.8",
     "morgan": "~1.3.0",
     "mysql": "^2.5.2",
     "node-jsx": "^0.12.4",
+    "promise": "^6.0.1",
     "react": "^0.12.1",
     "reactify": "^0.17.1",
     "request-promise": "^0.3.2",
+    "superagent": "^0.21.0",
+    "superagent-promise": "^0.2.0",
     "uglify-js": "^2.4.15",
     "underscore": "^1.7.0",
     "watchify": "^2.1.1"
   },
   "browserify": {
     "transform": [
-      "reactify",
+      ["reactify", {"es6":true}],
       "envify"
     ]
   },
   "scripts": {
-    "watch":  "watchify -o public/scripts/client.js -v -d ./client.js",
-    "build":  "browserify ./client.js | uglifyjs -cm > public/scripts/client.js",
-    "dev":    "npm run watch & npm run server",
+    "watch": "watchify -o public/scripts/client.js -v -d ./client.js",
+    "build": "browserify ./client.js | uglifyjs -cm > public/scripts/client.js",
+    "dev": "npm run watch & npm run server",
+    "symlink": "./bin/symlink",
     "server": "node ./bin/www",
-    "start":  "npm run server"
+    "start": "npm run server"
   }
 }

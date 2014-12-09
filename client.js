@@ -8,14 +8,14 @@ require('console-polyfill');
 
 var request = require('superagent'),
     React = require('react'),
-    Gateways = require('./components/gateway').Gateways,
+    GatewayList = require('./components/GatewayList'),
     _ = require('underscore');
 
 var client = { name: 'homemaker' };
 global.client = client;
 global._ = _;
 
-React.render(<Gateways url="/homemaker/api/gateways" />, document.getElementById('mount')) 
+React.render(<GatewayList/>, document.getElementById('mount')) 
 
 // console.log('client code!!');
 // request.get('/homemaker/api/gateways').end(function(res) {
