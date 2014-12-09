@@ -34,7 +34,7 @@ module.exports = function(app) {
 
   .get('/gateways', function(req, res) {
 
-    app.get('db').model('Gateway').findAll().then(function(collection){ 
+    app.get('db').model('Gateway').findAll(null).then(function(collection){ 
       var initialData = JSON.stringify(collection.toJSON());
 
       res.render('index', { 

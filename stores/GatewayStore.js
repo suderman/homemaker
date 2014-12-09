@@ -19,12 +19,23 @@ var GatewayStore = Reflux.createStore({
     console.log(victim + ' got torched!');
   },
 
+  onGetGateways: function() {
+    this.getGateways().then(function(gateways) {
+      this.trigger(gateways);
+    }.bind(this));
+  },
+
   onUpdateGateway: function(updatedGateway) {
-    this.updateList(updatedGateway);
+    // var list = this.updateList(updatedGateway);
+
+    var existingGateway = getById(updatedGateway.id);
+    _(existingGateway).extend(updatedGateway);
+    this.putGateway(updatedGateway);
+    this.trigger(_gateways);
   },
 
   getGateways: function() {
-    var path = '/homemaker/api/gateways/';
+    var path = '/homemaker/api/gateways/all';
     return Agent.get(path).end().then(function(res) {
       _gateways = res.body;
       return _gateways;
@@ -44,12 +55,12 @@ var GatewayStore = Reflux.createStore({
     });
   },
 
-  updateList: function(updatedGateway) {
-    var existingGateway = getById(updatedGateway.id);
-    _(existingGateway).extend(updatedGateway);
-    this.putGateway(updatedGateway);
-    return _gateways;
-  }
+  // updateList: function(updatedGateway) {
+  //   var existingGateway = getById(updatedGateway.id);
+  //   _(existingGateway).extend(updatedGateway);
+  //   this.putGateway(updatedGateway);
+  //   return _gateways;
+  // }
 
 });
 

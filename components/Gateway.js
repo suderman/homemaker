@@ -16,6 +16,12 @@ var Gateway = React.createClass({
     // this.setProps(props);
   },
 
+  toggleEditing: function(event) {
+    this.setState({ 
+      editing: ((this.state.editing) ? false : true)
+    });
+  },
+
   handleSubmit: function(event) {
     event.preventDefault();
 
@@ -23,14 +29,12 @@ var Gateway = React.createClass({
       id:     this.props.id,
       type:   this.props.type,
       active: this.props.active,
-      name:   this.refs.name.refs.input.getDOMNode().value.trim(),
-      host:   this.refs.host.refs.input.getDOMNode().value.trim(),
-      port:   this.refs.port.refs.input.getDOMNode().value.trim()
+      name:   this.refs['name'].refs['input'].getDOMNode().value.trim(),
+      host:   this.refs['host'].refs['input'].getDOMNode().value.trim(),
+      port:   this.refs['port'].refs['input'].getDOMNode().value.trim()
     };
 
-    console.log(gateway)
     return GatewayActions.updateGateway(gateway);
-    // return GatewayActions.updateGateway(this.props);
   },
 
   render: function() {
@@ -40,7 +44,7 @@ var Gateway = React.createClass({
 
     return (
       <li className={className}>
-        <h3>{name}</h3>
+        <h3 onClick={this.toggleEditing}>{name}</h3>
         <p>{host}:{port}</p>
         <form className="gatewayForm" onSubmit={this.handleSubmit}>
           <FormText ref="name" label="Name" defaultValue={name} />

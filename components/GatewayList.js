@@ -6,23 +6,22 @@ var GatewayStore = require('../stores/GatewayStore');
 var Gateway = require('../components/Gateway');
 
 var GatewayList = React.createClass({
-  mixins: [Reflux.ListenerMixin],
-  // mixins: [Reflux.connect(Store, 'collection')],
+  // mixins: [Reflux.ListenerMixin],
+  mixins: [Reflux.connect(GatewayStore, 'list')],
 
   getInitialState: function() {
     return{ list: this.props.initialData || global.initialData || [] };
   },
   
-  onListChange: function(list) {
-    this.setState({
-      list: list
-    });
-  },
+  // onListChange: function(list) {
+  //   this.setState({ list: list });
+  // },
 
   componentDidMount: function() {
-    this.listenTo(GatewayStore, this.onListChange);
+    // this.listenTo(GatewayStore, this.onListChange);
+    return GatewayActions.getGateways();
   },
-
+  
   fireball: function() {
     return GatewayActions.fireball('Santa');
   },
