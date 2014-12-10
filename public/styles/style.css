@@ -1,1 +1,1 @@
-body{padding:50px;font:18px "Lucida Grande",Helvetica,Arial,sans-serif}a{color:#00B7FF}li.gateway form.gatewayForm{display:none}li.gateway.editing form.gatewayForm{display:block}
+li.gateway form{display:none}li.gateway.editing form{display:block}

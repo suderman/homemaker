@@ -3,10 +3,13 @@ var Promise = require('bluebird/js/browser/bluebird');
 var Agent = require('superagent-promise');
 var Reflux = require('reflux');
 
-var _gateways = global.initialData || [];
+var __state = {
+  list: global.initialData || [],
+  types: []
+}
 
 function getById(id) {
-  return _(_gateways).findWhere({id: id});
+  return _(__state.list).findWhere({id: id});
 }
 
 var GatewayStore = Reflux.createStore({
@@ -20,25 +23,27 @@ var GatewayStore = Reflux.createStore({
   },
 
   onGetGateways: function() {
-    this.getGateways().then(function(gateways) {
-      this.trigger(gateways);
-    }.bind(this));
+    var self = this;
+
+    self.getGateways().then(function() {
+      return self.getGatewayTypes();
+    }).then(function() {
+      self.trigger(__state);
+    });
   },
 
   onUpdateGateway: function(updatedGateway) {
-    // var list = this.updateList(updatedGateway);
-
     var existingGateway = getById(updatedGateway.id);
     _(existingGateway).extend(updatedGateway);
     this.putGateway(updatedGateway);
-    this.trigger(_gateways);
+    this.trigger(__state);
   },
 
   getGateways: function() {
     var path = '/homemaker/api/gateways/all';
     return Agent.get(path).end().then(function(res) {
-      _gateways = res.body;
-      return _gateways;
+      __state.list = res.body;
+      return __state.list;
 
     }).catch(function(error) {
       console.log(error);
@@ -48,19 +53,21 @@ var GatewayStore = Reflux.createStore({
   putGateway: function(gateway) {
     var path = '/homemaker/api/gateways/' + gateway.id;
     return Agent.put(path).send(gateway).end().then(function(res) {
-      return _gateways;
-
+      return __state.list;
     }).catch(function(error) {
       console.log(error);
     });
   },
 
-  // updateList: function(updatedGateway) {
-  //   var existingGateway = getById(updatedGateway.id);
-  //   _(existingGateway).extend(updatedGateway);
-  //   this.putGateway(updatedGateway);
-  //   return _gateways;
-  // }
+  getGatewayTypes: function() {
+    var path = '/homemaker/api/gateways/types';
+    return Agent.get(path).end().then(function(res) {
+      __state.types = res.body;
+      return __state.types;
+    }).catch(function(error) {
+      console.log(error);
+    });
+  }
 
 });
 

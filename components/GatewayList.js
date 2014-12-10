@@ -4,22 +4,19 @@ var Reflux = require('reflux');
 var GatewayActions = require('../actions/GatewayActions'); 
 var GatewayStore = require('../stores/GatewayStore'); 
 var Gateway = require('../components/Gateway');
+var Button = require('react-bootstrap/Button');
 
 var GatewayList = React.createClass({
-  // mixins: [Reflux.ListenerMixin],
-  mixins: [Reflux.connect(GatewayStore, 'list')],
+  mixins: [Reflux.connect(GatewayStore)],
 
   getInitialState: function() {
-    return{ list: this.props.initialData || global.initialData || [] };
+    return this.props.data || { list: [], types: [] };
   },
   
-  // onListChange: function(list) {
-  //   this.setState({ list: list });
-  // },
-
   componentDidMount: function() {
-    // this.listenTo(GatewayStore, this.onListChange);
-    return GatewayActions.getGateways();
+    if (this.state.list.length < 1) {
+      GatewayActions.getGateways();
+    }
   },
   
   fireball: function() {
@@ -27,15 +24,19 @@ var GatewayList = React.createClass({
   },
 
   render: function() {
-
-    var list = this.state.list.map( function(model) {
-      return (<Gateway key={model.id} id={model.id} type={model.type} active={model.active} name={model.name} host={model.host} port={model.port} />);
-    });
+    var types = this.state.types;
+    var list = this.state.list;
 
     return (
       <div className="gateway-list">
-        <h2 onClick={this.fireball}>Gateways</h2>
-        <ol>{list}</ol>
+        <h2>Gateways</h2>
+        <ol>{list.map(function(g) {
+          return (<Gateway key={g.id} id={g.id} type={g.type} active={g.active} 
+                  name={g.name} host={g.host} port={g.port} username={g.username} 
+                  password={g.password} types={types} />);
+        })}</ol>
+
+        <Button bsStyle="danger" onClick={this.fireball}>Fireball</Button>
       </div>
     );
   }
