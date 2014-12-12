@@ -1,33 +1,26 @@
 var _ = require('underscore'),
     React = require('react'),
-    ReactRouter = require('react-router'),
-    beautifyHTML = require('js-beautify').html,
-    reactRoutes = require('../components/routes');
+    Layout = require('../components/Layout'),
+    beautifyHTML = require('js-beautify').html;
     
 module.exports = function(Model, argRoutes) {
-
   var router = require('express').Router();
 
-  // Render react component
-  router.renderReactRouter = function(req, res, options) {
+  // Render React template
+  router.render = function(req, res, data) {
+    var state = data.state || {};
+    var title = data.title || 'Untitled';
+    var params = data.params || {};
+    params.pathname = req.originalUrl
 
-    var data = options.data || [];
-    var path = options.path || req.params[0];
-    var title = options.title || path;
+    var body = React.renderToString(<Layout params={params} body={data.body} />);
 
-    // Get routes
-    ReactRouter.run(reactRoutes, path, function(Handler, state) {
-    
-      res.render('index', { 
-        title: title, 
-        data: JSON.stringify(data),
-        body: beautifyHTML(React.renderToString(<Handler data={data}/>), { 
-          indent_size: 4,
-          end_with_newline: true 
-        })
-      });
+    res.render('index', { 
+      title: title, 
+      state: JSON.stringify(state),
+      body: beautifyHTML(body, { indent_size: 4, end_with_newline: true })
     });
-  },
+  }
 
   // API typically errors out with an empty object
   router.error = function(res, err) {

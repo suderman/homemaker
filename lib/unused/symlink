@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+ln -sf ../actions     ./node_modules/actions
+ln -sf ../components  ./node_modules/components
+ln -sf ../stores      ./node_modules/stores

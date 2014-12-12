@@ -13,6 +13,11 @@ require('node-jsx').install({harmony:true});
 // Load environment variables
 require('dotenv').load();
 
+// Used when calling own routes within app 
+app.localhost = function() {
+  return 'http://127.0.0.1:' + app.get('port');
+}
+
 // Allow cross domain
 app.use(function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');

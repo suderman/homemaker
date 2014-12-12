@@ -4,19 +4,19 @@ var http = new (require('http-transport'))();
 var Reflux = require('reflux');
 
 var __state = {
-  list: [],
+  list: global.initialData || [],
   types: []
 }
 
-function getById(id) {
-  return _(__state.list).findWhere({id: id});
+function getByName(name) {
+  return _(__state.list).findWhere({name: name});
 }
 
-var GatewayStore = Reflux.createStore({
+var DeviceStore = Reflux.createStore({
 
   // this will set up listeners to all publishers in actions file, 
   // using onKeyname (or keyname) as callbacks
-  listenables: [require('../actions/GatewayActions')],
+  listenables: [require('../actions/DeviceActions')],
 
   onGetState: function() {
     var store = this;
@@ -31,8 +31,8 @@ var GatewayStore = Reflux.createStore({
       console.log('not found in local storage')
       Promise.props({
 
-        list: http.get('/homemaker/api/gateways/all').get('body'),
-        types: http.get('/homemaker/api/gateways/types').get('body')
+        list: http.get('/homemaker/api/devices/all').get('body'),
+        types: http.get('/homemaker/api/responders/types').get('body')
 
       }).then(function(state) {
         store.trigger(state);
@@ -40,29 +40,25 @@ var GatewayStore = Reflux.createStore({
     }
   },
 
-  onFireball: function(victim) {
-    console.log(victim + ' got torched!');
-  },
-
-  onGetGateways: function() {
+  onGetDevices: function() {
     var self = this;
 
-    self.getGateways().then(function() {
-      return self.getGatewayTypes();
+    self.getDevices().then(function() {
+      return self.getDeviceTypes();
     }).then(function() {
       self.trigger(__state);
     });
   },
-  
-  onUpdateGateway: function(updatedGateway) {
-    var existingGateway = getById(updatedGateway.id);
-    _(existingGateway).extend(updatedGateway);
-    this.putGateway(updatedGateway);
+
+  onUpdateDevice: function(updatedDevice) {
+    var existingDevice = getByName(updatedDevice.name);
+    _(existingDevice).extend(updatedDevice);
+    this.putDevice(updatedDevice);
     this.trigger(__state);
   },
 
-  getGateway: function(id) {
-    var path = '/homemaker/api/gateways/' + id;
+  getDevices: function() {
+    var path = '/homemaker/api/devices/all';
     return http.get(path).then(function(res) {
       __state.list = res.body;
       return __state.list;
@@ -72,28 +68,17 @@ var GatewayStore = Reflux.createStore({
     });
   },
 
-  getGateways: function() {
-    var path = '/homemaker/api/gateways/all';
-    return http.get(path).then(function(res) {
-      __state.list = res.body;
-      return __state.list;
-
-    }).catch(function(error) {
-      console.log(error);
-    });
-  },
-
-  putGateway: function(gateway) {
-    var path = '/homemaker/api/gateways/' + gateway.id;
-    return http.put(path, gateway).then(function(res) {
+  putDevice: function(device) {
+    var path = '/homemaker/api/devices/' + device.id;
+    return http.put(path, device).then(function(res) {
       return __state.list;
     }).catch(function(error) {
       console.log(error);
     });
   },
 
-  getGatewayTypes: function() {
-    var path = '/homemaker/api/gateways/types';
+  getDeviceTypes: function() {
+    var path = '/homemaker/api/responders/types';
     return http.get(path).then(function(res) {
       __state.types = res.body;
       return __state.types;
@@ -101,6 +86,7 @@ var GatewayStore = Reflux.createStore({
       console.log(error);
     });
   }
+
 });
 
-module.exports = GatewayStore;
+module.exports = DeviceStore;

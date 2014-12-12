@@ -1,6 +1,10 @@
-var React = require('react'),
-    GatewayList = require('components/GatewayList');
+var Promise = require('bluebird');
+var http = new (require('http-transport'))();
 
+var React = require('react'),
+    Page = require('../components/Page'),
+    DeviceList = require('../components/DeviceList'),
+    GatewayList = require('../components/GatewayList');
   
 /* Homemaker Routes
  * -----------------------------
@@ -8,82 +12,85 @@ var React = require('react'),
 */
 module.exports = function(app) {
 
-  var initialData = JSON.stringify(null);
-
   // Define routes
-  var ExpressRouter = app.get('router')();
-  return ExpressRouter
+  var router = app.get('router')();
+  return router
 
   // GET home page
   .get('/', function(req, res) {
-    res.render('index', { 
-      title: 'Homemaker', 
-      initialData: initialData,
-      body: '' 
-      // body: router.render(<p/>) 
+
+    router.render(req, res, {
+      title: 'Homemaker home page', 
+      params: {},
+      body: <Page/>
     });
+
   })
 
-  // .get('/nodes', function(req, res) {
-  //   res.render('index', { 
-  //     title: 'Nodes & Actions', 
-  //     initialData: initialData,
-  //     body: router.render(<p/>) 
-  //   });
-  // })
+  .get('/nodes', function(req, res) {
 
-  // .get('/gateways', function(req, res) {
-  //
-  //   app.get('db').model('Gateway').findAll(null).then(function(collection){ 
-  //     var initialData = JSON.stringify(collection.toJSON());
-  //
-  //     res.render('index', { 
-  //       title: 'Gateways & Responders', 
-  //       initialData: initialData,
-  //       body: ExpressRouter.render(<GatewayList initialData={collection.toJSON()} />) 
-  //     });
-  //
-  //   }).catch(ExpressRouter.error.bind(ExpressRouter, res));
-  // })
+    Promise.props({
+      list: [],
+      types: []
 
-  .get('/gateways', function(req, res) {
-    var data = {};
+    }).then(function(state) {
 
-    app.get('db').model('Gateway').findAll(null).then(function(collection){ 
-      data['list'] = collection.toJSON();
-      return app.get('db').model('Gateway').types()
-
-    }).then(function(types) {
-      data['types'] = types;
-      return;
-
-    }).then(function() {
-
-      ExpressRouter.renderReactRouter(req, res, {
-        path: '/homemaker/gateways',
-        title: 'Gateways & Responders', 
-        data: data,
+      router.render(req, res, {
+        title: 'Nodes & Actions', 
+        state: state,
+        body: <Page state={state}/>
       });
 
-    }).catch(ExpressRouter.error.bind(ExpressRouter, res));
+    }).catch(router.error.bind(router, res));
+
   })
 
-  // .get('/devices', function(req, res) {
-  //   res.render('index', { 
-  //     title: 'Devices & Commands', 
-  //     initialData: initialData,
-  //     body: router.render(<p/>) 
-  //   });
-  // })
+
+  .get('/gateways', function(req, res) {
+
+    Promise.props({
+      list: http.get(app.localhost() + '/homemaker/api/gateways/all').get('body'),
+      types: http.get(app.localhost() + '/homemaker/api/gateways/types').get('body')
+
+    }).then(function(state) {
+
+      router.render(req, res, {
+        title: 'Gateways & Responders', 
+        state: state,
+        body: <GatewayList state={state}/>
+      });
+
+    }).catch(router.error.bind(router, res));
+
+  })
+
+
+  .get('/devices', function(req, res) {
+
+    Promise.props({
+      list: http.get(app.localhost() + '/homemaker/api/devices/all').get('body'),
+      types: http.get(app.localhost() + '/homemaker/api/responders/types').get('body')
+
+    }).then(function(state) {
+
+      router.render(req, res, {
+        title: 'Devices & Commands', 
+        state: state,
+        body: <DeviceList state={state}/>
+      });
+
+    }).catch(router.error.bind(router, res));
+
+  })
 
   // CATCH-ALL
   .get(/^\/(.+)/, function(req, res) {
     var path = '/homemaker/' + req.params[0];
 
-    ExpressRouter.renderReactRouter(req, res, {
-      path: path,
+    router.render(req, res, {
       title: 'Homemaker ' + path,
-      data: null
+      body: <Page/>
     });
+
   })
 };
