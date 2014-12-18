@@ -3,7 +3,7 @@ var fs = require('fs');
 var adapters = {}
 
 // require all files in adapters directory (except this file)
-_(fs.readdirSync('./adapters')).each(function(filename) {
+_(fs.readdirSync(__dirname)).each(function(filename) {
   if ((filename !== _(__filename.split('/')).last()) && (filename !== 'adapter.js')) { 
     var adapter = require('./' + filename);
     adapters[adapter.name] = adapter;

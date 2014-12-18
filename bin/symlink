@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-ln -sf ../lib         ./node_modules/lib
-ln -sf ../models      ./node_modules/models
-ln -sf ../routes      ./node_modules/routes
-ln -sf ../actions     ./node_modules/actions
-ln -sf ../components  ./node_modules/components
-ln -sf ../stores      ./node_modules/stores
+ln -sf ../app ./node_modules/app
+ln -sf ../api ./node_modules/api
+ln -sf ../lib ./node_modules/lib

@@ -7,7 +7,7 @@
     "bluebird": "^2.3.6",
     "body-parser": "~1.8.1",
     "bookshelf": "^0.7.7",
-    "compression": "^1.2.2",
+    "browserify": "^7.0.0",
     "cookie-parser": "~1.3.3",
     "debug": "~2.0.0",
     "director": "^1.2.5",
@@ -36,27 +36,26 @@
   },
   "devDependencies": {
     "aliasify": "^1.5.0",
-    "browserify": "^7.0.0",
     "express-debug": "^1.1.1",
     "uglifyify": "^2.6.0"
   },
   "browserify": {
     "transform": [
-      [
-        "reactify",
-        {
-          "es6": true
-        }
-      ],
-      "envify"
+      [ "reactify", { "es6": true } ],
+      "envify",
+      "lib",
+      "routes",
+      "actions",
+      "components",
+      "stores"
     ]
   },
   "scripts": {
-    "watch": "watchify -o public/script.js -v -d ./app/script.js",
-    "build": "browserify ./app/script.js | uglifyjs -cm > public/script.js",
+    "watch": "watchify -o public/scripts/client.js -v -d ./client.js",
+    "build": "browserify ./client.js | uglifyjs -cm > public/scripts/client.js",
     "dev": "npm run watch & npm run server",
     "symlink": "./bin/symlink",
-    "server": "node ./bin/start",
-    "start": "NODE_ENV=production npm run build & npm run server"
+    "server": "node ./bin/www",
+    "start": "NODE_ENV=development npm run server"
   }
 }

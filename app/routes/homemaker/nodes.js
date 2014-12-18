@@ -1,14 +1,14 @@
 /* Homemaker Routes
  * -----------------------------
-   /homemaker/gateways
+   /homemaker/nodes
 */
 var Promise = require('bluebird');
 var http = new (require('http-transport'))();
 
 var React = require('react'),
-    Page = require('components/Page'),
-    DeviceList = require('components/DeviceList'),
-    GatewayList = require('components/GatewayList');
+    Page = require('app/components/Page'),
+    DeviceList = require('app/components/DeviceList'),
+    GatewayList = require('app/components/GatewayList');
 
 module.exports = function(app) {
 
@@ -18,15 +18,15 @@ module.exports = function(app) {
   router.get('/', function(req, res) {
 
     Promise.props({
-      list: http.get(app.localhost() + '/homemaker/api/gateways/all').get('body'),
-      types: http.get(app.localhost() + '/homemaker/api/gateways/types').get('body')
+      list: [],
+      types: []
 
     }).then(function(state) {
 
       router.render(req, res, {
-        title: 'Gateways & Responders', 
+        title: 'Nodes & Actions', 
         state: state,
-        body: <GatewayList state={state}/>
+        body: <Page state={state}/>
       });
 
     }).catch(router.error.bind(router, res));

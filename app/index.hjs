@@ -5,7 +5,6 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ title }}</title>
-  <!-- <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" /> -->
   <link rel="stylesheet" href="/style.css" />
   <!--[if lt IE 9]>
     <script>(function(){var ef=function(){};window.console=window.console||{log:ef,warn:ef,error:ef,dir:ef}}());</script>
@@ -19,6 +18,6 @@
 <body>
   {{{ body }}}
   <script>window.state={{{ state }}};</script>
-  <script src="/client.js"></script>
+  <script src="/script.js"></script>
 </body>
 </html>

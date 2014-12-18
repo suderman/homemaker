@@ -1,0 +1,27 @@
+#!/usr/bin/env node
+var debug = require('debug')('homemaker');
+
+// Port numbers
+var appPort = process.env.PORT || 5005;
+var apiPort = process.env.API_PORT || 5006;
+
+// Start App
+var app = require('../app');
+app.set('port', appPort);
+app.set('app_port', appPort);
+app.set('api_port', apiPort);
+
+var appServer = app.listen(appPort, function() {
+  debug('App listening on port ' + appServer.address().port);
+});
+
+// Start API
+var api = require('../api');
+app.set('port', apiPort);
+app.set('api_port', apiPort);
+app.set('app_port', appPort);
+
+var apiServer = api.listen(apiPort, function() {
+  debug('API listening on port ' + apiServer.address().port);
+});
+

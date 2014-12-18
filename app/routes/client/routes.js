@@ -1,4 +1,4 @@
-var router = require('../../lib/router/client');
+var router = require('../../../lib/router/client');
 
 // React components
 var React = require('react');

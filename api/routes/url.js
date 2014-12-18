@@ -1,7 +1,7 @@
-/* API Routes
+/* URLs Routes
  * -----------------------------
-   /
-   /*anything*
+   /api/urls
+   /api/urls/1
 */
 module.exports = function(app) {
 
@@ -9,15 +9,10 @@ module.exports = function(app) {
   var URL = app.get('db').model('URL');
 
   // Define routes
-  var router = require('lib/router/server')()
+  var router = require('lib/router/server')();
+  return router.resource(URL)
 
-  // GET home page
-  .get('/', function(req, res) {
-    // res.render('index', { title: 'API', body: '' });
-    res.send({}); 
-  })
-
-  // GET any path and match to URL model
+  // Run URL action by path name
   .get(/^\/(.+)/, function(req, res) {
     var args = { path: req.params[0] };
     URL.find(args).then(function (url){ 
@@ -26,8 +21,6 @@ module.exports = function(app) {
       res.send(url.toJSON()); 
 
     }).catch(router.fourOhFour.bind(router, res));
-  })
+  });
 
-  // Mount
-  app.use('/', router);
 };
