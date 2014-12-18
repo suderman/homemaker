@@ -1,0 +1,16 @@
+{
+  "name": "router",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./server.js",
+  "browser": "./client.js",
+  "devDependencies": {
+    "browserify": "^7.0.0"
+  },
+  "browserify": {
+    "transform": [
+      [ "reactify", { "es6": true } ],
+      "envify"
+    ]
+  },
+}

@@ -8,11 +8,10 @@ module.exports = function(app) {
 
   // Models
   var Action = app.get('db').model('Action');
-  // var Node = app.get('db').model('Node');
 
-  // Default routes
-  var router = app.get('router')(Action);
-  return router
+  // Routes
+  var router = require('lib/router/server')();
+  return router.resource(Action)
 
   // GET any path and match to URL model
   .get('/:id/run', function(req, res) {

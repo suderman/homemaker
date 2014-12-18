@@ -13,9 +13,16 @@ module.exports = function(app) {
   var Node = app.get('db').model('Node'),
       URL = app.get('db').model('URL');
 
-  // Default routes
-  var router = app.get('router')(Node, {index:false});
+  // Define routes
+  var router = require('lib/router/server')();
   return router
+  
+  // Everything but index
+  .getResource(Node)   
+  .postResource(Node)  
+  .putResource(Node)   
+  .deleteResource(Node)
+  .nestedResource(Node)
 
   // Index
   .get('/', function(req, res) {
@@ -43,7 +50,4 @@ module.exports = function(app) {
     }).catch(router.error.bind(router, res));
 
   })
-
-
-  return router
 };

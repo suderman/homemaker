@@ -7,16 +7,15 @@
    /api/devices/adapter-device-name[1]
    /api/devices/adapter-device-name[1]/commands
 */
-var Promise = require('bluebird');
 module.exports = function(app) {
 
   // Models
   var Device = app.get('db').model('Device'),
       Responder = app.get('db').model('Responder');
 
-  // Define routes
-  var router = app.get('router')(Device);
-  return router
+  // Routes
+  var router = require('lib/router/server')();
+  return router.resource(Device)
 
   // GET all including adapters
   .get('/all', function(req, res) {
@@ -48,5 +47,4 @@ module.exports = function(app) {
     }).catch(router.error.bind(router, res));
 
   })
-
 };

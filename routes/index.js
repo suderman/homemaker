@@ -9,8 +9,7 @@ module.exports = function(app) {
   var URL = app.get('db').model('URL');
 
   // Define routes
-  var router = app.get('router')();
-  return router
+  var router = require('lib/router/server')()
 
   // GET home page
   .get('/', function(req, res) {
@@ -29,4 +28,6 @@ module.exports = function(app) {
     }).catch(router.fourOhFour.bind(router, res));
   })
 
+  // Mount
+  app.use('/', router);
 };

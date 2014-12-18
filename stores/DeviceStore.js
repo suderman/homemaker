@@ -35,6 +35,7 @@ var DeviceStore = Reflux.createStore({
         types: http.get('/homemaker/api/responders/types').get('body')
 
       }).then(function(state) {
+        localStorage.setItem(router.pathname(), JSON.stringify(state));
         store.trigger(state);
       });
     }

@@ -6,4 +6,5 @@ exports.Gateway           = require('./Gateway');
 exports.GatewayList       = require('./GatewayList');
 exports.GatewayTypeInput  = require('./GatewayTypeInput');
 exports.Layout            = require('./Layout');
+exports.Navigation        = require('./Navigation');
 exports.Page              = require('./Page');

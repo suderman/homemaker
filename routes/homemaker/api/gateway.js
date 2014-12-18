@@ -17,8 +17,8 @@ module.exports = function(app) {
       Responder = app.get('db').model('Responder');
 
   // Define routes
-  var router = app.get('router')(Gateway);
-  return router
+  var router = require('lib/router/server')();
+  return router.resource(Gateway)
   
   // GET all without filters
   .get('/all', function(req, res) {
@@ -66,5 +66,5 @@ module.exports = function(app) {
 
     }).catch(router.error.bind(router, res));
   })
-
+  
 };

@@ -1,5 +1,6 @@
 var React = require('react');
-var { Navbar, Nav, NavItem } = require('react-bootstrap');
+var { Row, Grid } = require('react-bootstrap');
+var { Navigation } = require('../components');
 
 var Layout = React.createClass({
 
@@ -12,31 +13,18 @@ var Layout = React.createClass({
 
   render: function() {
 
-    function navigate (selectedKey, href) {
-      if (global.router) {
-        global.router.go(href);
-      }
-    }
-
-    var { body, params } = this.props;
+    var { body, route } = this.props;
 
     return (
-      <div id="app">
+      <Grid id="app">
+        <Row>
+          <Navigation route={route}/>
+        </Row>
 
-        <Navbar>
-          <Nav activeKey={params.pathname} onSelect={navigate}>
-            <NavItem eventKey="/" href="/" disabled={true}>API</NavItem>
-            <NavItem eventKey="/homemaker/nodes" href="/homemaker/nodes">Nodes & Actions</NavItem>
-            <NavItem eventKey="/homemaker/gateways" href="/homemaker/gateways">Gateways & Responders</NavItem>
-            <NavItem eventKey="/homemaker/devices" href="/homemaker/devices">Devices & Commands</NavItem>
-          </Nav>
-        </Navbar>
-
-        { /*<h1>{params.title}</h1> */ }
-        <div id="main">
+        <Row id="main">
           {body}
-        </div>
-      </div>
+        </Row>
+      </Grid>
     );
   }
 });

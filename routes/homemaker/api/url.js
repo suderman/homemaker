@@ -9,6 +9,6 @@ module.exports = function(app) {
   var URL = app.get('db').model('URL');
 
   // Define routes
-  var router = app.get('router')(URL);
-  return router
+  var router = require('lib/router/server')();
+  return router.resource(URL);
 };

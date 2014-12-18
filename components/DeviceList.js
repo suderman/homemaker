@@ -12,12 +12,18 @@ var DeviceList = React.createClass({
     return this.props.state || { list: [], types: [] };
   },
   
-  componentDidMount: function() {
-    // if (!this.state.list.length) {
-      // DeviceActions.getDevices();
-    // }
-    DeviceActions.getState();
+  componentWillMount: function() {
+    if (typeof window !== 'undefined') {
+      DeviceActions.getState();
+    }
   },
+
+  // componentDidMount: function() {
+  //   // if (!this.state.list.length) {
+  //     // DeviceActions.getDevices();
+  //   // }
+  //   DeviceActions.getState();
+  // },
   
   render: function() {
     var list = this.state.list;

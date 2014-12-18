@@ -1,0 +1,18 @@
+@import "bootstrap";
+
+#app { max-width: 750px; }
+
+li {
+  &.gateway form { display: none; }
+  &.gateway.editing form { display: block; }
+}
+
+li {
+  &.device form { display: none; }
+  &.editing form { display: block; }
+}
+
+.nav > li > a {
+  padding-left: 12px;
+  padding-right: 12px;
+}

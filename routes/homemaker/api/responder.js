@@ -5,14 +5,13 @@
    /api/responders/1
    /api/responders/1/commands
 */
-var Promise = require('bluebird');
 module.exports = function(app) {
 
   var Responder = app.get('db').model('Responder');
 
-  // Default routes
-  var router = app.get('router')(Responder);
-  return router
+  // Routes
+  var router = require('lib/router/server')();
+  return router.resource(Responder)
 
   // GET valid gateway responder types
   .get('/types', function(req, res) {

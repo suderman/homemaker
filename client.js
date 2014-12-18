@@ -1,3 +1,5 @@
+'use strict';
+
 // React is used to render everything
 require('react').initializeTouchEvents(true);
 
@@ -9,5 +11,5 @@ localStorage.setItem(router.pathname(), JSON.stringify(global.state));
 
 // Go to current route
 document.addEventListener('DOMContentLoaded', function() {
-  router.init();
+  router.start();
 });

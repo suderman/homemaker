@@ -13,13 +13,19 @@ var GatewayList = React.createClass({
     return this.props.state || { list: [], types: [] };
   },
   
-  componentDidMount: function() {
-    // if (!this.state.list.length) {
-      // GatewayActions.getGateways();
-      
+  componentWillMount: function() {
+    if (typeof window !== 'undefined') {
       GatewayActions.getState();
-    // }
+    }
   },
+
+  // componentDidMount: function() {
+  //   // if (!this.state.list.length) {
+  //     // GatewayActions.getGateways();
+  //     
+  //     GatewayActions.getState();
+  //   // }
+  // },
   
   fireball: function() {
     return GatewayActions.fireball('Santa');

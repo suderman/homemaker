@@ -1,65 +1,71 @@
 // DEBUG=homemaker npm start
+var _ = require('underscore');
+var path = require('path');
 var express = require('express');
 var app = express();
-var path = require('path');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var _ = require('underscore');
 
-// Allow requiring of jsx
-require('node-jsx').install({harmony:true});
+// Logging
+app.use(require('morgan')('dev'));
 
 // Load environment variables
 require('dotenv').load();
 
 // Used when calling own routes within app 
-app.localhost = function() {
-  return 'http://127.0.0.1:' + app.get('port');
-}
+app.localhost = function() { return 'http://127.0.0.1:' + app.get('port'); } 
 
-// Allow cross domain
-app.use(function(req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*');
-  next();
-});
+// // Allow cross domain
+// app.use(function(req, res, next) {
+//   res.header('Access-Control-Allow-Origin', '*');
+//   next();
+// });
 
-// parse application/x-www-form-urlencoded
+// parse application/x-www-form-urlencoded and application/json
+var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
-
-// parse application/json
 app.use(bodyParser.json());
+
+// Get cookie info
+app.use(require('cookie-parser')());
  
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
+// Compress all requests
+app.use(require('compression')());
+
+// Handlebars view engine (only used once!)
+app.set('views', path.join(__dirname));
 app.set('view engine', 'hjs');
 
-app.use(logger('dev'));
-app.use(cookieParser());
-app.use(require('less-middleware')(path.join(__dirname, 'public')));
+// LESS compiler
+app.use(require('less-middleware')(path.join(__dirname, 'styles'), {
+  dest: path.join(__dirname, 'public')
+}));
+
+// Static assets
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Allow requiring of jsx
+require('node-jsx').install({harmony:true});
 
 // Load adapters & protocols
 app.set('adapters', require('./adapters'));
 app.set('protocols', require('./protocols'));
 
-// Configure database
-app.set('db', require('bookshelf')(require('knex')({
-  client: 'mysql',
-  debug: false,
-  connection: {
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    charset: 'utf8'
-  }
-}))
-.plugin('registry')
-.plugin('virtuals')
-.plugin('visibility'));
+// app.set('db', require('bookshelf')(require('knex')({
+//   client: 'mysql',
+//   debug: false,
+//   connection: {
+//     host: process.env.DB_HOST,
+//     user: process.env.DB_USER,
+//     password: process.env.DB_PASSWORD,
+//     database: process.env.DB_NAME,
+//     charset: 'utf8'
+//   }
+// }))
+// .plugin('registry')
+// .plugin('virtuals')
+// .plugin('visibility'));
 
-// Ensure database is set up
+// Configure database
+require('./db/config')(app);
 require('./db/schema')(app);
 
 // Define models
@@ -73,29 +79,20 @@ Gateway.findAll().then(function(gateways) {
   });
 });
 
-// Define base route
-app.set('router', require('./routes/router'));
-
 // Define routes
-app.use('/homemaker/api/actions',    require('./routes/action'   )(app));
-app.use('/homemaker/api/commands',   require('./routes/command'  )(app));
-app.use('/homemaker/api/devices',    require('./routes/device'   )(app));
-app.use('/homemaker/api/gateways',   require('./routes/gateway'  )(app));
-app.use('/homemaker/api/nodes',      require('./routes/node'     )(app));
-app.use('/homemaker/api/responders', require('./routes/responder')(app));
-app.use('/homemaker/api/urls',       require('./routes/url'      )(app));
-app.use('/homemaker',                require('./routes/homemaker')(app));
-app.use('/',                         require('./routes/api'      )(app));
+require('routes/homemaker/api')(app);
+require('routes/homemaker')(app);
+require('routes')(app);
+
+// app.use('/homemaker',                require('./routes/homemaker')(app));
+// app.use('/',                         require('./routes'      )(app));
 
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
     app.use(function(err, req, res, next) {
         res.status(err.status || 500);
-        res.render('error', {
-            message: err.message,
-            error: err
-        });
+        res.render('index', { body: err.message + '<br><br>' + err });
     });
 }
 
