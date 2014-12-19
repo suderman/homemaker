@@ -13,3 +13,6 @@ localStorage.setItem(router.pathname(), JSON.stringify(global.state));
 document.addEventListener('DOMContentLoaded', function() {
   router.start();
 });
+
+var socket = io();
+console.log(socket);
