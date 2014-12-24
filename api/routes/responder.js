@@ -10,8 +10,8 @@ module.exports = function(app) {
   var Responder = app.get('db').model('Responder');
 
   // Routes
-  var router = require('lib/router/server')();
-  return router.resource(Responder)
+  var router = require('api/routes')();
+  router.resource(Responder)
 
   // GET valid gateway responder types
   .get('/types', function(req, res) {
@@ -29,5 +29,7 @@ module.exports = function(app) {
       res.send(commands);
 
     }).catch(router.error.bind(router, res));
-  })
+  });
+
+  return router.express;
 };

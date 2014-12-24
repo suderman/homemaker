@@ -49,7 +49,15 @@ module.exports = function(port) {
   });
 
   // Define routes
-  require('./routes')(app);
+  app.use('/actions',    require('./routes/action'   )(app));
+  app.use('/commands',   require('./routes/command'  )(app));
+  app.use('/devices',    require('./routes/device'   )(app));
+  app.use('/gateways',   require('./routes/gateway'  )(app));
+  app.use('/nodes',      require('./routes/node'     )(app));
+  app.use('/responders', require('./routes/responder')(app));
+  app.use('/urls',       require('./routes/url'      )(app));
+  app.get('/',           function(req, res) { res.send({}); });
+
 
   // development error handler
   // will print stacktrace

@@ -1,6 +1,6 @@
 /* Homemaker Routes
  * -----------------------------
-   /homemaker/devices
+   /homemaker/nodes
 */
 var Promise = require('bluebird');
 var http = new (require('http-transport'))();
@@ -13,25 +13,25 @@ var React = require('react'),
 module.exports = function(app) {
 
   // Define routes
-  var router = require('lib/router/server')();
+  var router = require('app/routes/server')();
 
-  router.get('/', function(req, res) {
+  router.get('/homemaker/nodes', function(req, res) {
 
     Promise.props({
-      list: http.get(app.api('/devices/all')).get('body'),
-      types: http.get(app.api('/responders/types')).get('body')
+      list: [],
+      types: []
 
     }).then(function(state) {
 
       router.render(req, res, {
-        title: 'Devices & Commands', 
+        title: 'Nodes & Actions', 
         state: state,
-        body: <DeviceList state={state}/>
+        body: <Page state={state}/>
       });
 
     }).catch(router.error.bind(router, res));
 
   });
 
-  return router;
+  return router.express;
 };

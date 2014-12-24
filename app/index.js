@@ -3,7 +3,6 @@ var path = require('path');
 var express = require('express');
 var app = express();
 var server = require('http').Server(app);
-var io = require('socket.io')(server);
 
 // DEBUG=homemaker npm start
 module.exports = function(port, apiPort) {
@@ -13,9 +12,10 @@ module.exports = function(port, apiPort) {
     console.log('App listening on port ' + port);
   });
 
-  io.on('connection', function(socket){
-    console.log('a user connected');
-  });
+  // Used when calling localhost api routes within app 
+  app.api = function(path) { 
+    return 'http://127.0.0.1:' + apiPort + path; 
+  } 
 
   // Logging
   app.use(require('morgan')('dev'));
@@ -40,7 +40,7 @@ module.exports = function(port, apiPort) {
 
   // LESS compiler
   app.use(require('less-middleware')(path.join(__dirname, 'styles'), {
-    dest: path.join(__dirname, 'public')
+    dest: path.join(__dirname, '../public')
   }));
 
   // Static assets
@@ -50,8 +50,13 @@ module.exports = function(port, apiPort) {
   require('node-jsx').install({harmony:true});
 
   // Define routes
-  require('./routes/homemaker')(app);
-  require('./routes')(app);
+  app.use(require('./routes/server/devices')(app));
+  app.use(require('./routes/server/gateways')(app));
+  app.use(require('./routes/server/nodes')(app));
+  app.use(require('./routes/server/home')(app));
+
+  // Socket.io
+  require('./socket')(app, server);
 
   // development error handler
   // will print stacktrace
@@ -71,11 +76,6 @@ module.exports = function(port, apiPort) {
           error: {}
       });
   });
-
-  // Used when calling localhost api routes within app 
-  app.api = function(path) { 
-    return 'http://127.0.0.1:' + apiPort + path; 
-  } 
 
   return app;
 };

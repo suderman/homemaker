@@ -13,9 +13,9 @@ var React = require('react'),
 module.exports = function(app) {
 
   // Define routes
-  var router = require('lib/router/server')()
+  var router = require('app/routes/server')();
 
-  router.get('/', function(req, res) {
+  router.get('/homemaker/gateways', function(req, res) {
 
     Promise.props({
       list: http.get(app.api('/gateways/all')).get('body'),
@@ -33,5 +33,5 @@ module.exports = function(app) {
 
   });
 
-  return router;
+  return router.express;
 };

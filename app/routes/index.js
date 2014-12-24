@@ -8,7 +8,7 @@ var http = new (require('http-transport'))();
 module.exports = function(app) {
 
   // Define routes
-  var router = require('lib/router/server')()
+  var router = require('app/routes/server')();
 
   // GET home page
   .get('/', function(req, res) {

@@ -10,8 +10,8 @@ module.exports = function(app) {
   var Action = app.get('db').model('Action');
 
   // Routes
-  var router = require('lib/router/server')();
-  return router.resource(Action)
+  var router = require('api/routes')();
+  router.resource(Action)
 
   // GET any path and match to URL model
   .get('/:id/run', function(req, res) {
@@ -22,5 +22,7 @@ module.exports = function(app) {
       res.send(feedback); 
 
     }).catch(router.fourOhFour.bind(router, res));
-  })
+  });
+
+  return router.express;
 };

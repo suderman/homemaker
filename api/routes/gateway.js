@@ -17,7 +17,7 @@ module.exports = function(app) {
       Responder = app.get('db').model('Responder');
 
   // Define routes
-  var router = require('lib/router/server')();
+  var router = require('api/routes')();
   return router.resource(Gateway)
   
   // GET all without filters

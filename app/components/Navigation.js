@@ -21,10 +21,17 @@ var Navigation = React.createClass({
       global.router.go(href, this.title);
     }
 
-    var route = (global.router) ? global.router.pathname() : this.props.route;
+    var fullRoute = (global.router) ? global.router.pathname() : this.props.route;
+
+    // Get only the first part of the route so it matches the top navigation
+    for (var route='', parts=fullRoute.split('/'), i=0; i<3; i++) {
+      if (parts[i]) {
+        route += '/' + parts[i];
+      }
+    }
 
     return (
-      <Navbar>
+      <Navbar className="nnavbar-fixed-top">
         <Nav activeKey={route} onSelect={navigate}>
           {this.NavItem('API',                    '/', true)}
           {this.NavItem('Nodes & Actions',        '/homemaker/nodes')}

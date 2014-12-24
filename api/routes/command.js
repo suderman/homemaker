@@ -9,6 +9,8 @@ module.exports = function(app) {
   var Command = app.get('db').model('Command');
 
   // Routes
-  var router = require('lib/router/server')();
-  return router.resource(Command);
+  var router = require('api/routes')();
+  router.resource(Command);
+
+  return router.express;
 };

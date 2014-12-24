@@ -14,8 +14,8 @@ module.exports = function(app) {
       Responder = app.get('db').model('Responder');
 
   // Routes
-  var router = require('lib/router/server')();
-  return router.resource(Device)
+  var router = require('api/routes')();
+  router.resource(Device)
 
   // GET all including adapters
   .get('/all', function(req, res) {
@@ -46,5 +46,7 @@ module.exports = function(app) {
 
     }).catch(router.error.bind(router, res));
 
-  })
+  });
+
+  return router.express;
 };

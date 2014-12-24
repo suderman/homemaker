@@ -1,6 +1,6 @@
 var React = require('react');
-var Reflux = require('reflux');
-var GatewayActions = require('../actions/GatewayActions'); 
+// var Reflux = require('reflux');
+// var GatewayActions = require('../actions/GatewayActions'); 
 // var FormText = require('../components/FormText');
 var Input = require('react-bootstrap/Input');
 var GatewayTypeInput = require('../components/GatewayTypeInput');

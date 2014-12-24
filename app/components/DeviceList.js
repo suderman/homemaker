@@ -1,41 +1,65 @@
 var React = require('react');
-var Reflux = require('reflux');
-
-var DeviceActions = require('../actions/DeviceActions'); 
-var DeviceStore = require('../stores/DeviceStore'); 
-var Device = require('../components/Device');
+var { Panel, ListGroup, ListGroupItem, Button, ButtonGroup } = require('react-bootstrap');
+var initialState = { list: [] };
 
 var DeviceList = React.createClass({
-  mixins: [Reflux.connect(DeviceStore)],
+  mixins: [require('./SocketMixin')(initialState)],
 
-  getInitialState: function() {
-    return this.props.state || { list: [], types: [] };
-  },
-  
-  componentWillMount: function() {
-    if (typeof window !== 'undefined') {
-      DeviceActions.getState();
-    }
-  },
-
-  // componentDidMount: function() {
-  //   // if (!this.state.list.length) {
-  //     // DeviceActions.getDevices();
-  //   // }
-  //   DeviceActions.getState();
-  // },
-  
   render: function() {
     var list = this.state.list;
-    var types = this.state.types;
+
+    function boom(e) {
+      e.preventDefault();
+      console.log('trigger')
+      socket.emit('get', router.pathname());
+    }
+
+    function navigate(event) {
+      event.preventDefault();
+      global.router.go(event.target.href, event.target.name);
+    }
 
     return (
       <div className="device-list">
-        <h2>Devices</h2>
-        <ol>{list.map(function(item) {
-          return (<Device key={item.name} id={item.id} type={item.responder_type} 
-                          name={item.name} types={types} />);
-        })}</ol>
+        <Panel header="Devices" >
+        <a href="#" onClick={boom}>Trigger!</a>
+        <ListGroup>
+
+        {list.map(function(item) {
+
+          var editPath = '/homemaker/devices/' + item.id + '/edit';
+          var viewPath = '/homemaker/devices/' + item.id;
+          var buttonGroup = '';
+
+          if (parseInt(item.id, 10) > 0) {
+            buttonGroup = (
+              <ButtonGroup>
+                <Button className="edit" href={editPath} onClick={navigate}>Edit</Button>
+                <Button className="view" href={viewPath} onClick={navigate}>Commands</Button>
+              </ButtonGroup>
+            );
+          } else {
+            buttonGroup = (
+              <ButtonGroup>
+                <Button className="view" href={viewPath} onClick={navigate}>Commands</Button>
+              </ButtonGroup>
+            );
+          }
+
+          return (
+            <ListGroupItem key={item.name} className="device">
+              {buttonGroup}
+              <h4>{item.name}</h4>
+              <div className="clear"></div>
+            </ListGroupItem>
+          );
+            
+          // return (<Device key={item.name} id={item.id} type={item.responder_type} 
+          //                 name={item.name} types={types} />);
+        })}
+
+        </ListGroup>
+        </Panel>
       </div>
     );
   }

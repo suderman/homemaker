@@ -1,23 +1,23 @@
 var React = require('react');
-var Reflux = require('reflux');
+// var Reflux = require('reflux');
 
-var GatewayActions = require('../actions/GatewayActions'); 
-var GatewayStore = require('../stores/GatewayStore'); 
+// var GatewayActions = require('../actions/GatewayActions'); 
+// var GatewayStore = require('../stores/GatewayStore'); 
 var Gateway = require('../components/Gateway');
 var Button = require('react-bootstrap/Button');
 
 var GatewayList = React.createClass({
-  mixins: [Reflux.connect(GatewayStore)],
+  // mixins: [Reflux.connect(GatewayStore)],
 
   getInitialState: function() {
     return this.props.state || { list: [], types: [] };
   },
   
-  componentWillMount: function() {
-    if (typeof window !== 'undefined') {
-      GatewayActions.getState();
-    }
-  },
+  // componentWillMount: function() {
+  //   if (typeof window !== 'undefined') {
+  //     GatewayActions.getState();
+  //   }
+  // },
 
   // componentDidMount: function() {
   //   // if (!this.state.list.length) {

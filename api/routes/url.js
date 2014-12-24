@@ -9,8 +9,8 @@ module.exports = function(app) {
   var URL = app.get('db').model('URL');
 
   // Define routes
-  var router = require('lib/router/server')();
-  return router.resource(URL)
+  var router = require('api/routes')();
+  router.resource(URL)
 
   // Run URL action by path name
   .get(/^\/(.+)/, function(req, res) {
@@ -23,4 +23,5 @@ module.exports = function(app) {
     }).catch(router.fourOhFour.bind(router, res));
   });
 
+  return router.express;
 };

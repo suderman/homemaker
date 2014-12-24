@@ -1,6 +1,6 @@
 /* Homemaker Routes
  * -----------------------------
-   /homemaker/nodes
+   /homemaker
 */
 var Promise = require('bluebird');
 var http = new (require('http-transport'))();
@@ -13,25 +13,18 @@ var React = require('react'),
 module.exports = function(app) {
 
   // Define routes
-  var router = require('lib/router/server')()
+  var router = require('app/routes/server')();
 
-  router.get('/', function(req, res) {
+  // CATCH-ALL
+  router.get(/^\/homemaker(.*)/, function(req, res) {
+    var path = req.params[0];
 
-    Promise.props({
-      list: [],
-      types: []
-
-    }).then(function(state) {
-
-      router.render(req, res, {
-        title: 'Nodes & Actions', 
-        state: state,
-        body: <Page state={state}/>
-      });
-
-    }).catch(router.error.bind(router, res));
+    router.render(req, res, {
+      title: 'Homemaker home ' + path,
+      body: <Page/>
+    });
 
   });
 
-  return router;
+  return router.express;
 };

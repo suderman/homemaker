@@ -5,8 +5,9 @@ var Router = function() {
 };
 
 Router.prototype.pathname = function(href) {
-  href = href || global.location.href;
-  var path = href.split('://').reverse().shift().split('/');
+  href = href || global.location.href; // passed href for current location  
+  href = href.split('#')[0].replace(/\/+$/, ''); // strip trailing / and #
+  var path = href.split('://').reverse().shift().split('/'); // don't want domain
   return path[0] = '', path.join('/');
 }
 
@@ -28,7 +29,7 @@ Router.prototype.start = function() {
 
 // React components
 var React = require('react'),
-    Layout = require('../../app/components/Layout');
+    Layout = require('../../components/Layout');
 
 // Render page overtop
 Router.prototype.render = function (body, route) {
@@ -37,6 +38,6 @@ Router.prototype.render = function (body, route) {
 }
 
 // Make this available everywhere
-var router = new Router();
+var router = require('./routes')(new Router());
 global.router = router;
 module.exports = router;
