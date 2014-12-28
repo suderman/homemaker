@@ -27,7 +27,7 @@ var Device = React.createClass({
       form = (
         <form className="form-horizontal" onBlur={this.handleBlur}>
           <Input type="text" name="name" label="Name" value={device.name} onChange={this.handleChange} labelClassName="col-sm-2" wrapperClassName="col-sm-10" />
-          <InputSelect name="responder_type" label="Type" value={device.type} options={types} handleChange={this.handleChange} labelClassName="col-sm-2" wrapperClassName="col-sm-10" />
+          <InputSelect name="responder_type" label="Type" value={device.type} options={types} onChange={this.handleChange} labelClassName="col-sm-2" wrapperClassName="col-sm-10" />
         </form>
       );
     }

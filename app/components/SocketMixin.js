@@ -33,8 +33,7 @@ module.exports = function(initialState, itemName) {
     },
 
     handleChange: function(event) {
-      console.log(event.target.name)
-      console.log(event.target.value)
+
       var value = {};
       value[event.target.name] = event.target.value;
 

@@ -9,10 +9,10 @@ var InputSelect = React.createClass({
   },
 
   render: function() {
-    var { label, name, value, options, handleChange, ...other } = this.props;
+    var { label, name, value, options, onChange, ...other } = this.props;
 
     return (
-      <Input {...other} type="select" ref="input" label={label} name={name} value={value} onChange={handleChange}>
+      <Input {...other} type="select" ref="input" label={label} name={name} value={value} onChange={onChange}>
         {options.map(function(type) {
           var name = type, value = type;
           if (_.isObject(type)) {
