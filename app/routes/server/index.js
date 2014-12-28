@@ -6,10 +6,10 @@ var Router = function() {
   this.express = new require('express').Router();
 };
 
-// API typically errors out with an empty object
+// Error!
 Router.prototype.error = function(res, err) {
   console.log(err)
-  res.send({});
+  res.send(err);
 };
 
 // Normal 404 error page
@@ -39,9 +39,8 @@ Router.prototype.delete = function(path, callback) {
 Router.prototype.render = function(req, res, data) {
   var state = data.state || {};
   var title = data.title || 'Untitled';
-  var route = req.originalUrl
+  var route = req.originalUrl;
 
-  console.log(route);
   var body = React.renderToString(<Layout route={route} body={data.body} />);
 
   res.render('index', { 

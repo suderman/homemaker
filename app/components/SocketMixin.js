@@ -1,6 +1,9 @@
-module.exports = function(initialState) {
+var _ = require('underscore');
+module.exports = function(initialState, itemName) {
 
   initialState = initialState || {};
+  itemName = itemName || 'item';
+
   return {
 
     getInitialState: function() {
@@ -27,6 +30,27 @@ module.exports = function(initialState) {
           component.setState(state); 
         }
       });
+    },
+
+    handleChange: function(event) {
+      console.log(event.target.name)
+      console.log(event.target.value)
+      var value = {};
+      value[event.target.name] = event.target.value;
+
+      var item = {};
+      _(item).extend(this.state[itemName], value);
+
+      var state = {};
+      state[itemName] = item;
+
+      this.setState(state);
+    },
+
+    handleBlur: function(event) {
+      var path = router.pathname();
+      localStorage.setItem(path, JSON.stringify(this.state));
+      socket.emit('set', path, this.state[itemName]);
     }
 
   }

@@ -40,12 +40,14 @@ module.exports = function(app) {
             responder_id: device.responderId
           };
         }); 
+        devices.saved = _(devices.saved).map(function(model) {
+          return model.attributes;
+        }); 
         return devices;
 
       // Sort both types of devices by name and return
       }).then(function(devices) {
-        return _(devices.adapter.concat(devices.saved)).sortBy(function(a) { return a.name; });
-
+        return _(devices.adapter.concat(devices.saved)).sortBy(function(a) { return a.name.toLowerCase(); });
       });
     },
 

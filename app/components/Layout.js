@@ -1,15 +1,8 @@
 var React = require('react');
 var { Row, Grid } = require('react-bootstrap');
-var { Navigation } = require('../components');
+var Navigation = require('app/components/Navigation');
 
 var Layout = React.createClass({
-
-  componentDidMount: function() {
-    // var title = this.props.params.title || 'Untitled'
-    // document.head.getElementsByTagName('title').forEach(function(title) {
-    //   title.innerHTML = title;
-    // });
-  },
 
   render: function() {
 

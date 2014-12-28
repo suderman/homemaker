@@ -1,12 +1,20 @@
 var _ = require('underscore');
 module.exports = function(app) {
 
+  var parseFields = function(fields) {
+    _(fields).each(function(value, key) {
+      if (fields[key] == 'null') fields[key] = null;
+    });
+    return fields;
+  }
+
   var assembleReq = function(path) {
     path = (path) ? path.split('#')[0].replace(/\/+$/, '') : '/';
     return {
       path: path, 
       slugs: path.split('/'), 
-      api: app.api 
+      parse: parseFields,
+      api: app.api
     }
   }
 

@@ -1,61 +1,42 @@
+var _ = require('underscore');
 var React = require('react');
-// var Reflux = require('reflux');
-// var GatewayActions = require('../actions/GatewayActions'); 
-// var FormText = require('../components/FormText');
-var Input = require('react-bootstrap/Input');
-var GatewayTypeInput = require('../components/GatewayTypeInput');
+var InputSelect = require('app/components/InputSelect');
+// var CommandList = require('app/components/CommandList');
+var { Panel, Input, Label } = require('react-bootstrap');
 
-var Gateway = React.createClass({
+var initialState = { gateway: {}, types: [], responders: [] };
+var itemName = 'gateway';
 
-  getInitialState: function() {
-    return { editing: false, type: this.props.type || null };
-  },
-
-  toggleEditing: function(event) {
-    this.setState({ 
-      editing: ((this.state.editing) ? false : true)
-    });
-  },
-
-  handleSubmit: function(event) {
-    event.preventDefault();
-
-    var gateway = {
-      id:       this.props.id,
-      type:     this.refs['type'].getValue(),
-      name:     this.refs['name'].getValue(),
-      host:     this.refs['host'].getValue(),
-      port:     this.refs['port'].getValue(),
-      username: this.refs['username'].getValue(),
-      password: this.refs['password'].getValue(),
-      active:   this.props.active
-    };
-
-    return GatewayActions.updateGateway(gateway);
-  },
+var Device = React.createClass({
+  mixins: [require('app/components/SocketMixin')(initialState, itemName)],
 
   render: function() {
 
-    var className = (this.state.editing) ? 'gateway editing' : 'gateway';
-    var {name, host, port, username, password, type, types} = this.props;
+    var { gateway, types, responders } = this.state;
+
+    var header = (
+      <h4>
+        <strong>{gateway.name}</strong>
+        <Label>{gateway.type}</Label>
+      </h4>
+    );
 
     return (
-      <li className={className}>
-        <h3 onTouchEnd={this.toggleEditing} onClick={this.toggleEditing}>{name}</h3>
-        <p>{host}:{port}</p>
-
-        <form className="form-horizontal container" onSubmit={this.handleSubmit}>
-          <Input type="text" ref="name" label="Name" defaultValue={name} labelClassName="col-sm-2" wrapperClassName="col-sm-10" />
-          <Input type="text" ref="host" label="Host" defaultValue={host} labelClassName="col-sm-2" wrapperClassName="col-sm-10" />
-          <Input type="text" ref="port" label="Port" defaultValue={port} labelClassName="col-sm-2" wrapperClassName="col-sm-10" />
-          <Input type="text" ref="username" label="Username" defaultValue={username} labelClassName="col-sm-2" wrapperClassName="col-sm-10" />
-          <Input type="text" ref="password" label="Password" defaultValue={password} labelClassName="col-sm-2" wrapperClassName="col-sm-10" />
-          <GatewayTypeInput ref="type" label="Type" value={type} options={types} labelClassName="col-sm-2" wrapperClassName="col-sm-10" />
-          <Input type="submit" value="Update" wrapperClassName="col-sm-offset-2 col-sm-10" />
-        </form>
-      </li>
+      <div className="device">
+        <Panel header={header}>
+          <form className="form-horizontal" onBlur={this.handleBlur}>
+            <Input type="text" name="name" label="Name" value={gateway.name} onChange={this.handleChange} labelClassName="col-sm-2" wrapperClassName="col-sm-10" />
+            <Input type="text" name="host" label="Host" value={gateway.host} onChange={this.handleChange} labelClassName="col-sm-2" wrapperClassName="col-sm-10" />
+            <Input type="text" name="port" label="Port" value={gateway.port} onChange={this.handleChange} labelClassName="col-sm-2" wrapperClassName="col-sm-10" />
+            <Input type="text" name="username" label="Username" value={gateway.username} onChange={this.handleChange} labelClassName="col-sm-2" wrapperClassName="col-sm-10" />
+            <Input type="text" name="password" label="Password" value={gateway.password} onChange={this.handleChange} labelClassName="col-sm-2" wrapperClassName="col-sm-10" />
+            <InputSelect name="type" label="Type" value={gateway.type} options={types} onChange={this.handleChange} labelClassName="col-sm-2" wrapperClassName="col-sm-10" />
+          </form>
+        </Panel>
+      </div>
     );
+
   }
 });
 
-module.exports = Gateway;
+module.exports = Device;

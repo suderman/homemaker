@@ -15,5 +15,10 @@ module.exports = function(app, server) {
       });
 
     });
+
+    socket.on('set', function(path, state) {
+      console.log('set path: ' + path)
+      api.set(path, state);
+    });
   });
 }

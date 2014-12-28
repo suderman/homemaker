@@ -1,12 +1,13 @@
-exports.Device            = require('./Device');
-exports.DeviceList        = require('./DeviceList');
-exports.CommandList       = require('./CommandList');
-exports.FormText          = require('./FormText');
-exports.Gateway           = require('./Gateway');
-exports.GatewayList       = require('./GatewayList');
-exports.GatewayTypeInput  = require('./GatewayTypeInput');
-exports.Layout            = require('./Layout');
-exports.Navigation        = require('./Navigation');
-exports.Page              = require('./Page');
-exports.TypeInput         = require('./TypeInput');
-exports.SocketMixin       = require('./SocketMixin');
+module.exports = {
+  SocketMixin: require('./SocketMixin'),
+  DeviceList: require('./DeviceList'),
+  Device: require('./Device'),
+  CommandList: require('./CommandList'),
+  Command: require('./Command'),
+  GatewayList: require('./GatewayList'),
+  Gateway: require('./Gateway'),
+  Layout: require('./Layout'),
+  Navigation: require('./Navigation'),
+  Page: require('./Page'),
+  InputSelect: require('./InputSelect')
+}

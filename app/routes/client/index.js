@@ -29,7 +29,8 @@ Router.prototype.start = function() {
 
 // React components
 var React = require('react'),
-    Layout = require('../../components/Layout');
+    Layout = require('app/components/Layout');
+    // Layout = require('../../components/Layout');
 
 // Render page overtop
 Router.prototype.render = function (body, route) {

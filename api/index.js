@@ -42,7 +42,7 @@ module.exports = function(port) {
 
   // Connect to active gateways
   var Gateway = app.get('db').model('Gateway');
-  Gateway.findAll().then(function(gateways) {
+  Gateway.findAll({active:true}).then(function(gateways) {
     gateways.each(function(gateway) {
       gateway.connect();
     });

@@ -1,50 +1,33 @@
 var React = require('react');
-// var Reflux = require('reflux');
-
-// var GatewayActions = require('../actions/GatewayActions'); 
-// var GatewayStore = require('../stores/GatewayStore'); 
-var Gateway = require('../components/Gateway');
-var Button = require('react-bootstrap/Button');
+var { Panel, ListGroup, ListGroupItem } = require('react-bootstrap');
+var initialState = { gateways: [] };
 
 var GatewayList = React.createClass({
-  // mixins: [Reflux.connect(GatewayStore)],
-
-  getInitialState: function() {
-    return this.props.state || { list: [], types: [] };
-  },
-  
-  // componentWillMount: function() {
-  //   if (typeof window !== 'undefined') {
-  //     GatewayActions.getState();
-  //   }
-  // },
-
-  // componentDidMount: function() {
-  //   // if (!this.state.list.length) {
-  //     // GatewayActions.getGateways();
-  //     
-  //     GatewayActions.getState();
-  //   // }
-  // },
-  
-  fireball: function() {
-    return GatewayActions.fireball('Santa');
-  },
+  mixins: [require('app/components/SocketMixin')(initialState)],
 
   render: function() {
-    var types = this.state.types;
-    var list = this.state.list;
+    var gateways = this.state.gateways;
+
+    function navigate(event) {
+      event.preventDefault();
+      global.router.go(event.target.href, event.target.name);
+    }
 
     return (
       <div className="gateway-list">
-        <h2>Gateways</h2>
-        <ol>{list.map(function(g) {
-          return (<Gateway key={g.id} id={g.id} type={g.type} active={g.active} 
-                  name={g.name} host={g.host} port={g.port} username={g.username} 
-                  password={g.password} types={types} />);
-        })}</ol>
+        <Panel header="Gateways" >
+        <ListGroup>
 
-        <Button bsStyle="danger" onClick={this.fireball}>Fireball</Button>
+        {gateways.map(function(gateway) {
+          return (
+            <ListGroupItem key={gateway.name} className="gateway">
+              <a href={'/homemaker/gateways/' + gateway.id} onClick={navigate}>{gateway.name}</a>
+            </ListGroupItem>
+          );
+        })}
+
+        </ListGroup>
+        </Panel>
       </div>
     );
   }

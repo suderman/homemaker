@@ -112,7 +112,7 @@ module.exports = function(app) {
   },{
     related: [],
     nested: ['responders'],
-    findAttributes: { active: true },
+    // findAttributes: { active: true },
 
     connections: function(key, value) {
       if (!key) { return false; } 

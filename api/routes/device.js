@@ -7,6 +7,7 @@
    /api/devices/adapter-device-name[1]
    /api/devices/adapter-device-name[1]/commands
 */
+var _ = require('underscore');
 module.exports = function(app) {
 
   // Models
@@ -41,6 +42,9 @@ module.exports = function(app) {
       var key = Object.keys(device)[0];
       return device[key];
      
+    }).then(function(commands) {
+      return _(commands).sortBy(function(a) { return a.name.toLowerCase(); });
+
     }).then(function(commands){
       res.send(commands);
 

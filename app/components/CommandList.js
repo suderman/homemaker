@@ -1,31 +1,16 @@
 var React = require('react');
-// var Reflux = require('reflux');
-
-// var DeviceActions = require('../actions/DeviceActions'); 
-// var DeviceStore = require('../stores/DeviceStore'); 
-// var Device = require('../components/Device');
-var { Panel, ListGroup, ListGroupItem, Button, ButtonGroup } = require('react-bootstrap');
-
+var { Panel, ListGroup, ListGroupItem } = require('react-bootstrap');
 
 var CommandList = React.createClass({
-  // mixins: [Reflux.connect(DeviceStore)],
-
-  // getInitialState: function() {
-  //   return this.props.list || { list: [] };
-  // },
-  
-  // componentWillMount: function() {
-  //   if (typeof window !== 'undefined') {
-  //     DeviceActions.getState();
-  //   }
-  // },
   
   render: function() {
-    var list = this.props.list;
+    var commands = this.props.commands;
 
     function navigate (event) {
       event.preventDefault();
-      global.router.go(this.href, this.name);
+      if (event.target.href) {
+        global.router.go(event.target.href, this.name);
+      }
     }
 
     return (
@@ -33,21 +18,16 @@ var CommandList = React.createClass({
         <Panel header="Commands">
         <ListGroup>
 
-        {list.map(function(item) {
+        {commands.map(function(command) {
 
-          var buttonGroup = '';
-          if (parseInt(item.id, 10) > 0) {
-            buttonGroup = (
-              <ButtonGroup>
-                <Button className="edit" href={'/homemaker/commands/'+item.id} onClick={navigate}>Edit</Button>
-              </ButtonGroup>
-            );
+          var href = '';
+          if (parseInt(command.id, 10) > 0) {
+            href='/homemaker/commands/' + command.id
           }
+
           return (
-            <ListGroupItem key={item.name} className="device">
-              {buttonGroup}
-              <h4>{item.name}</h4>
-              <div className="clear"></div>
+            <ListGroupItem key={command.name} className="command">
+              <a href={href} onClick={navigate}>{command.name}</a>
             </ListGroupItem>
           );
             

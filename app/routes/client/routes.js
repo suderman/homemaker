@@ -1,5 +1,5 @@
 var React = require('react');
-var { GatewayList, Gateway, DeviceList, Page, Device } = require('../../components');
+var { GatewayList, Gateway, DeviceList, Page, Device, Command } = require('app/components');
 
 module.exports = function(router) {
 
@@ -17,6 +17,10 @@ module.exports = function(router) {
 
   router.on('/homemaker/devices/(.+)', function (id) {
     router.render(<Device id={id}/>);
+  });
+
+  router.on('/homemaker/commands/:id', function (id) {
+    router.render(<Command id={id}/>);
   });
 
   router.on('/homemaker/nodes', function () {
