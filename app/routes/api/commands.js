@@ -12,7 +12,8 @@ routes.push({
     var id = req.slugs[3];
     return Promise.props({
       item:     http.get(req.api('/commands/' + id)).get('body'),
-      devices:  http.get(req.api('/devices')).get('body')
+      devices:  http.get(req.api('/devices')).get('body'),
+      isNew:    false
     });
   },
 
@@ -25,6 +26,11 @@ routes.push({
       command:   state.command
     });
     http.put(req.api('/commands/' + id), fields);
+  },
+
+  remove: function(req) {
+    var id = req.slugs[3];
+    return http.delete(req.api('/commands/' + id));
   }
 
 });

@@ -33,8 +33,8 @@ module.exports = function(app, server) {
     socket.on('remove', function(path) {
       console.log('remove path: ' + path)
       api.remove(path);
-      var array = path.split('/'); array.pop();
-      socket.emit('redirect', array.join('/'));
+      // var array = path.split('/'); array.pop();
+      // socket.emit('redirect', array.join('/'));
     });
 
   });

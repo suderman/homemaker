@@ -38,7 +38,7 @@ var Device = React.createClass({
       <div className="device">
         <Panel header={header}>
           {form}
-          {((isNew) || (isAdapter)) || <Button bsStyle="danger" onClick={this.removeItem}>Delete</Button>}
+          {((isNew) || (isAdapter)) || <Button bsStyle="danger" href="/homemaker/devices" onClick={this.removeItem}>Delete</Button>}
         </Panel>
         {(isNew) || <CommandList deviceId={device.id} isAdapter={isAdapter} commands={commands} />}
       </div>

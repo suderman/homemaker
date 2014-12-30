@@ -69,7 +69,8 @@ routes.push({
     return Promise.props({
       item:     http.get(req.api('/devices/' + id)).get('body'),
       types:    http.get(req.api('/responders/types')).get('body'),
-      commands: http.get(req.api('/devices/' + id + '/commands')).get('body')
+      commands: http.get(req.api('/devices/' + id + '/commands')).get('body'),
+      isNew:    false
     });
   },
 

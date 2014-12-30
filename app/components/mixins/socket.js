@@ -13,6 +13,8 @@ module.exports = function(initialState) {
     },
   
     componentDidMount: function() {
+      console.log('component did mount' + router.pathname())
+      console.log(this)
       var component = this;
       var path = router.pathname();
 
@@ -29,6 +31,11 @@ module.exports = function(initialState) {
       socket.emit('get', path);
 
       socket.on('set', function(path, state) {
+        console.log('component did mount set state');
+        console.log('old state')
+        console.log(component.state)
+        console.log('new state')
+        console.log(state);
         if (state) {
           localStorage.setItem(path, JSON.stringify(state));
           component.setState(state); 
@@ -68,8 +75,10 @@ module.exports = function(initialState) {
 
     removeItem: function(event) {
       var path = router.pathname();
+      var newPath = event.target.href || '/homemaker';
       localStorage.removeItem(path);
       socket.emit('remove', path);
+      router.go(newPath);
     }
 
   }

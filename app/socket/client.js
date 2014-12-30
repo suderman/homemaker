@@ -2,24 +2,29 @@ var socket = io();
 
 socket.on('newId', function(id) {
   var path = router.pathname();
+  var newPath = '/homemaker';
 
   if (path.match('/commands/new$')=='/commands/new') { 
-    router.go('/commands/' + id);
+    newPath += '/commands/' + id;
   } else if (path.match('/devices/new$')=='/devices/new') {
-    router.go('/devices/' + id);
+    newPath += '/devices/' + id;
   } else if (path.match('/gateways/new$')=='/gateways/new') {
-    router.go('/gateways/' + id);
+    newPath += '/gateways/' + id;
   } else if (path.match('/responders/new$')=='/responders/new') {
-    router.go('/responders/' + id);
+    newPath += '/responders/' + id;
   } else if (path.match('/nodes/new$')=='/nodes/new') {
-    router.go('/nodes/' + id);
+    newPath += '/nodes/' + id;
   } else if (path.match('/actions/new$')=='/actions/new') {
-    router.go('/actions/' + id);
+    newPath += '/actions/' + id;
   } else if (path.match('/urls/new$')=='/urls/new') {
-    router.go('/urls/' + id);
+    newPath += '/urls/' + id;
   } else if (path.match('/new$')=='/new') { 
-    router.go([path.split('/new')[0], id].join('/'));
+    newPath = [path.split('/new')[0], id].join('/');
   }
+
+  router.go(newPath);
+  socket.emit('get', newPath);
+
 });
 
 socket.on('redirect', function(path) {

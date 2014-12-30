@@ -1,4 +1,5 @@
 var _ = require('underscore');
+var Promise = require('bluebird/js/browser/bluebird');
 module.exports = function(app) {
 
   var parseFields = function(fields) {
@@ -23,17 +24,27 @@ module.exports = function(app) {
       regexParam = /\:(\w+)/g;
 
   var matchRoute = function(path) {
-    return _(routes).find(function(route) {
+    var route = _(routes).find(function(route) {
       var regex = '^' + route.path + '$';
       regex = regex.replace(regexSlash, '\/'); 
       regex = regex.replace(regexParam, '(.+)');
       return path.match(new RegExp(regex, 'i'));
     });
+
+    var reject = function() {
+      return Promise.reject(new Error('No matching route'));
+    }
+    if (!route)        route = {}; 
+    if (!route.get)    route.get = reject; 
+    if (!route.set)    route.set = reject; 
+    if (!route.remove) route.remove = reject; 
+    return route;
   };
 
   return {
 
     get: function(path) {
+      console.log('!! matchRounte ' + path)
       var req = assembleReq(path);
       return matchRoute(req.path).get(req);
     },
