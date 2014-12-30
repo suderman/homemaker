@@ -41,6 +41,11 @@ module.exports = function(app) {
     set: function(path, state) {
       var req = assembleReq(path);
       return matchRoute(req.path).set(req, state);
+    },
+
+    remove: function(path) {
+      var req = assembleReq(path);
+      return matchRoute(req.path).remove(req);
     }
 
   };

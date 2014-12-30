@@ -56,7 +56,7 @@ module.exports = function(port, apiPort) {
   app.use(require('./routes/server/home')(app));
 
   // Socket.io
-  require('./socket')(app, server);
+  require('./socket/server')(app, server);
 
   // development error handler
   // will print stacktrace

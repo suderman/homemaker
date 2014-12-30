@@ -9,10 +9,14 @@ var router = require('./routes/client');
 // Save in-page state into local storage
 localStorage.setItem(router.pathname(), JSON.stringify(global.state));
 
-// Open a socket
-global.socket = io();
+// Socket.io
+var socket = require('./socket/client');
+
+// Needed for mobile
+require('react').initializeTouchEvents(true);
 
 // Go to current route
 document.addEventListener('DOMContentLoaded', function() {
   router.start();
 });
+

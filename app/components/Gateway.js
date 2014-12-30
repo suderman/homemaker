@@ -4,15 +4,15 @@ var InputSelect = require('app/components/InputSelect');
 // var CommandList = require('app/components/CommandList');
 var { Panel, Input, Label } = require('react-bootstrap');
 
-var initialState = { gateway: {}, types: [], responders: [] };
-var itemName = 'gateway';
+var initialState = { item: {}, types: [], responders: [] };
 
 var Device = React.createClass({
-  mixins: [require('app/components/SocketMixin')(initialState, itemName)],
+  mixins: [require('app/components/mixins/navigate'), require('app/components/mixins/socket')(initialState)],
 
   render: function() {
 
-    var { gateway, types, responders } = this.state;
+    var { types, responders } = this.state;
+    var gateway = this.state.item;
 
     var header = (
       <h4>
@@ -24,13 +24,13 @@ var Device = React.createClass({
     return (
       <div className="device">
         <Panel header={header}>
-          <form className="form-horizontal" onBlur={this.handleBlur}>
-            <Input type="text" name="name" label="Name" value={gateway.name} onChange={this.handleChange} labelClassName="col-sm-2" wrapperClassName="col-sm-10" />
-            <Input type="text" name="host" label="Host" value={gateway.host} onChange={this.handleChange} labelClassName="col-sm-2" wrapperClassName="col-sm-10" />
-            <Input type="text" name="port" label="Port" value={gateway.port} onChange={this.handleChange} labelClassName="col-sm-2" wrapperClassName="col-sm-10" />
-            <Input type="text" name="username" label="Username" value={gateway.username} onChange={this.handleChange} labelClassName="col-sm-2" wrapperClassName="col-sm-10" />
-            <Input type="text" name="password" label="Password" value={gateway.password} onChange={this.handleChange} labelClassName="col-sm-2" wrapperClassName="col-sm-10" />
-            <InputSelect name="type" label="Type" value={gateway.type} options={types} onChange={this.handleChange} labelClassName="col-sm-2" wrapperClassName="col-sm-10" />
+          <form className="form-horizontal" onChange={this.setItem} onBlur={this.saveItem}>
+            <Input type="text" name="name" label="Name" value={gateway.name} labelClassName="col-sm-2" wrapperClassName="col-sm-10" />
+            <Input type="text" name="host" label="Host" value={gateway.host} labelClassName="col-sm-2" wrapperClassName="col-sm-10" />
+            <Input type="text" name="port" label="Port" value={gateway.port} labelClassName="col-sm-2" wrapperClassName="col-sm-10" />
+            <Input type="text" name="username" label="Username" value={gateway.username} labelClassName="col-sm-2" wrapperClassName="col-sm-10" />
+            <Input type="text" name="password" label="Password" value={gateway.password} labelClassName="col-sm-2" wrapperClassName="col-sm-10" />
+            <InputSelect name="type" label="Type" value={gateway.type} options={types} labelClassName="col-sm-2" wrapperClassName="col-sm-10" />
           </form>
         </Panel>
       </div>

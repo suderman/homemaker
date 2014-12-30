@@ -14,9 +14,20 @@ module.exports = function(app) {
   // Define routes
   var router = require('app/routes/server')();
 
-  router.get('/homemaker/devices', function(req, res) {
+  router.get('/homemaker/devices/:id/commands/new', function(req, res) {
+    api.get(req.url).then(function(state) {
 
-    // var {path, params} = pathParams(req);
+      router.render(req, res, {
+        title: 'New Command', 
+        state: state,
+        body: <Command state={state}/>
+      });
+
+    }).catch(router.error.bind(router, res));
+
+  });
+
+  router.get('/homemaker/devices', function(req, res) {
     api.get(req.url).then(function(state) {
 
       router.render(req, res, {
@@ -26,12 +37,22 @@ module.exports = function(app) {
       });
 
     }).catch(router.error.bind(router, res));
+  });
+
+  router.get('/homemaker/devices/new', function(req, res) {
+    api.get(req.url).then(function(state) {
+
+      router.render(req, res, {
+        title: 'New Device', 
+        state: state,
+        body: <Device state={state}/>
+      });
+
+    }).catch(router.error.bind(router, res));
 
   });
 
   router.get('/homemaker/devices/:id', function(req, res) {
-
-    // var {path, params} = pathParams(req);
     api.get(req.url).then(function(state) {
 
       router.render(req, res, {

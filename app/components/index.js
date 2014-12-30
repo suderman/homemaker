@@ -1,5 +1,6 @@
 module.exports = {
-  SocketMixin: require('./SocketMixin'),
+  SocketMixin: require('./mixins/socket'),
+  NavigateMixin: require('./mixins/navigate'),
   DeviceList: require('./DeviceList'),
   Device: require('./Device'),
   CommandList: require('./CommandList'),

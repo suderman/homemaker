@@ -18,7 +18,24 @@ module.exports = function(app, server) {
 
     socket.on('set', function(path, state) {
       console.log('set path: ' + path)
-      api.set(path, state);
+
+      var promise = api.set(path, state);
+      if (!promise) return;
+      
+      promise.then(function(json) {
+        var body = JSON.parse(json);
+        if (body.id) {
+          socket.emit('newId', body.id);
+        }
+      });
     });
+
+    socket.on('remove', function(path) {
+      console.log('remove path: ' + path)
+      api.remove(path);
+      var array = path.split('/'); array.pop();
+      socket.emit('redirect', array.join('/'));
+    });
+
   });
 }
