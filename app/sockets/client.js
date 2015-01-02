@@ -23,7 +23,7 @@ socket.on('newId', function(id) {
   }
 
   router.go(newPath);
-  socket.emit('get', newPath);
+  socket.emit('json', newPath);
 
 });
 

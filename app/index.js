@@ -12,10 +12,10 @@ module.exports = function(port, apiPort) {
     console.log('App listening on port ' + port);
   });
 
-  // Used when calling localhost api routes within app 
-  app.api = function(path) { 
-    return 'http://127.0.0.1:' + apiPort + path; 
-  } 
+  // // Used when calling localhost api routes within app 
+  // app.api = function(path) { 
+  //   return 'http://127.0.0.1:' + apiPort + path; 
+  // } 
 
   // Logging
   app.use(require('morgan')('dev'));
@@ -49,14 +49,12 @@ module.exports = function(port, apiPort) {
   // Allow requiring of jsx
   require('node-jsx').install({harmony:true});
 
-  // Define routes
-  app.use(require('./routes/server/devices')(app));
-  app.use(require('./routes/server/gateways')(app));
-  app.use(require('./routes/server/nodes')(app));
-  app.use(require('./routes/server/home')(app));
+  // Server-side routers
+  require('app/routers/json')(app, 'http://127.0.0.1:' + apiPort);
+  require('app/routers/html')(app);
 
   // Socket.io
-  require('./socket/server')(app, server);
+  require('./sockets/server')(app, server);
 
   // development error handler
   // will print stacktrace

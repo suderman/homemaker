@@ -9,7 +9,7 @@ module.exports = function(initialState) {
     },
   
     componentWillUnmount: function() {
-      socket.removeAllListeners('set');
+      socket.removeAllListeners('json');
     },
   
     componentDidMount: function() {
@@ -28,9 +28,9 @@ module.exports = function(initialState) {
       if (state) { 
         component.setState(state); 
       }
-      socket.emit('get', path);
+      socket.emit('json', path);
 
-      socket.on('set', function(path, state) {
+      socket.on('json', function(path, state) {
         console.log('component did mount set state');
         console.log('old state')
         console.log(component.state)
@@ -64,7 +64,7 @@ module.exports = function(initialState) {
 
       // Send the state item to the server
       var path = router.pathname();
-      socket.emit('set', path, this.state.item);
+      socket.emit('json', path, this.state.item);
 
       // Also update the localstorage (only if not a new item)
       if (!path.match('/new$')=='/new') { 
@@ -77,7 +77,7 @@ module.exports = function(initialState) {
       var path = router.pathname();
       var newPath = event.target.href || '/homemaker';
       localStorage.removeItem(path);
-      socket.emit('remove', path);
+      socket.emit('json', path, null);
       router.go(newPath);
     }
 

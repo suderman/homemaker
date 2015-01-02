@@ -1,31 +1,12 @@
-/* Homemaker Routes
- * -----------------------------
-   /
-   /*anything*
-*/
-var http = new (require('http-transport'))();
+var routes = [];
+routes = routes.concat(require('./home'));
+routes = routes.concat(require('./gateways'));
+routes = routes.concat(require('./commands'));
+routes = routes.concat(require('./devices'));
 
-module.exports = function(app) {
+// List all routes in order
+routes.forEach(function(route) {
+  console.log(route.path);
+});
 
-  // Define routes
-  var router = require('app/routes/server')();
-
-  // GET home page
-  .get('/', function(req, res) {
-    res.send({}); 
-  })
-
-  // Find a URL path and run its action
-  .get(/^\/(.+)/, function(req, res) {
-    var path = app.api('/urls/' + req.params[0]);
-
-    http.get(path).then(function(json) {
-      res.send(json.body); 
-
-    }).catch(router.error.bind(router, res));
-
-  });
-
-  // Mount
-  app.use('/', router);
-};
+module.exports = routes;
