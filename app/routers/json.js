@@ -10,7 +10,8 @@ var Router = function(localhost) {
 
 Router.prototype.parseFields = function(fields) {
   _(fields).each(function(value, key) {
-    if (fields[key] == 'null') fields[key] = null;
+    if (!fields[key]) fields[key] = '';
+    if (fields[key] === 'null') fields[key] = null;
   });
   return fields;
 }
