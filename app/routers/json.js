@@ -43,6 +43,7 @@ module.exports = function(app, localhost) {
   var json = function(path, state) {
     var req = util.req(path, state);
     var route = router.matchRoute(req.path);
+
     if ((route) && (route.json)) {
       return route.json.call(router, req, state);
     } else {

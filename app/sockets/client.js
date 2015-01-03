@@ -2,6 +2,11 @@ var socket = io();
 
 socket.on('newId', function(id) {
   var path = router.pathname();
+  
+  // Only redirect when current only a '/new' path
+  if (path.match('/new$')!=='/new') return;
+
+  // Every path starts with this
   var newPath = '/homemaker';
 
   if (path.match('/commands/new$')=='/commands/new') { 
@@ -22,9 +27,9 @@ socket.on('newId', function(id) {
     newPath = [path.split('/new')[0], id].join('/');
   }
 
+  // Redirect to the new path and send a GET request
   router.go(newPath);
   socket.emit('json', newPath);
-
 });
 
 socket.on('redirect', function(path) {

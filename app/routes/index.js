@@ -1,8 +1,8 @@
 var routes = [];
-routes = routes.concat(require('./home'));
 routes = routes.concat(require('./gateways'));
 routes = routes.concat(require('./commands'));
 routes = routes.concat(require('./devices'));
+routes = routes.concat(require('./home'));
 
 // List all routes in order
 routes.forEach(function(route) {

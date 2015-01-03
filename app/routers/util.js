@@ -14,9 +14,17 @@ var methodFromState = function(state) {
   return 'SET';
 }
 
-// Cached regexes
-var regexSlash = /\//g;
-var regexParam = /\:(\w+)/g;
+var regexSlashBefore = /\//g;
+var regexSlashAfter  = '\\/';
+function regexSlash(path) {
+  return path.replace(regexSlashBefore, regexSlashAfter); 
+}
+
+var regexParamBefore = /\:(\w+)/g;
+var regexParamAfter  = '[\\w\\[\\]\\(\\)\\<\\>\\{\\}\\+\\*\\=\\$\\.\\|\\!%-]+';
+function regexParam(path) {
+  return path.replace(regexParamBefore, regexParamAfter);
+}
 
 module.exports = {
 
@@ -24,29 +32,13 @@ module.exports = {
 
   // Convert a path into a regex pattern
   regex: function(path) {
-    var regex = '^' + path.trim() + '$';
-    regex = this.regexSlash(regex);
-    regex = this.regexParam(regex);
+    var regex = path.trim();
+    regex = regexSlash(regex);
+    regex = regexParam(regex);
     return new RegExp(regex, 'i');
   },
 
-  // Escape forward slashes
-  regexSlash: function(path) {
-    return path.replace(regexSlash, '\/'); 
-  },
-
-  // Everything except forward slashes
-  regexParam: function(path) {
-    return path.replace(regexParam, '([^\/]+)');
-  },
-
-  // Director router can't seem to handle anything trickier than this
-  regexOn: function(path) {
-    return path.replace(regexParam, '(.+)');
-    // return path.replace(regexParam, '([^\/]*)');
-  },
-
-  // Assemble a simple request object
+  // Assemble a simple req object
   req: function(path, state) {
 
     path = (path) ? path.split('#')[0].replace(/\/+$/, '') : '/';

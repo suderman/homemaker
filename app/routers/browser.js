@@ -46,8 +46,7 @@ var util = require('./util');
 _(util.routes).each(function(route) {
   if ((route.on) && (route.path)) {
 
-    console.log('director: ' + util.regexOn(route.path));
-    router.on(util.regexOn(route.path), function() {
+    router.on(util.regex(route.path), function() {
       var component = route.on.call(router, util.req(route.path, 'ON'));
       router.render(component);
     });

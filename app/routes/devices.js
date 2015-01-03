@@ -20,7 +20,6 @@ routes.push({
   },
 
   json: function(req, state) {
-    console.log(req)
     switch(req.method) {
 
       case 'GET':
