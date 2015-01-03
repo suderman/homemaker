@@ -24,7 +24,7 @@ var Device = React.createClass({
     return (
       <div className="device">
         <Panel header={header}>
-          <form className="form-horizontal" onChange={this.setItem} onBlur={this.saveItem}>
+          <form className="form-horizontal" onFocus={this.cacheItem} onChange={this.setItem} onBlur={this.saveItem}>
             <Input type="text" name="name" label="Name" value={gateway.name} labelClassName="col-sm-2" wrapperClassName="col-sm-10" />
             <Input type="text" name="host" label="Host" value={gateway.host} labelClassName="col-sm-2" wrapperClassName="col-sm-10" />
             <Input type="text" name="port" label="Port" value={gateway.port} labelClassName="col-sm-2" wrapperClassName="col-sm-10" />

@@ -28,7 +28,7 @@ var Device = React.createClass({
     );
 
     var form = (isAdapter) ? 'Adapter' : (
-      <form className="form-horizontal" onChange={this.setItem} onBlur={this.saveItem}>
+      <form className="form-horizontal" onFocus={this.cacheItem} onChange={this.setItem} onBlur={this.saveItem}>
         <Input type="text" name="name" label="Name" value={device.name} labelClassName="col-sm-2" wrapperClassName="col-sm-10" />
         <InputSelect name="responder_type" label="Type" value={device.type} options={types} labelClassName="col-sm-2" wrapperClassName="col-sm-10" />
       </form>

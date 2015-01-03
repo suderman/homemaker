@@ -25,7 +25,7 @@ var Command = React.createClass({
     return (
       <div className="command">
         <Panel header={header}>
-          <form className="form-horizontal" onChange={this.setItem} onBlur={this.saveItem}>
+          <form className="form-horizontal" onFocus={this.cacheItem} onChange={this.setItem} onBlur={this.saveItem}>
             <InputSelect name="device_id" label="Device" value={command.device_id} options={devices} labelClassName="col-sm-2" wrapperClassName="col-sm-10" />
             <Input type="text" ref="name" name="name" label="Name" value={command.name} labelClassName="col-sm-2" wrapperClassName="col-sm-10" />
             <Input type="text" ref="feedback" name="feedback" label="Feedback" value={command.feedback} labelClassName="col-sm-2" wrapperClassName="col-sm-10" />

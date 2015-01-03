@@ -7,10 +7,6 @@ var routes = [];
 routes.push({
   path: '/homemaker',
 
-  on: function (req) {
-    return <Page/>;
-  },
-
   html: function(req, state) {
     return {
       title: 'Homemaker Home', 

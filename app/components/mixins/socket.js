@@ -14,27 +14,32 @@ module.exports = function(initialState) {
   
     componentDidMount: function() {
       console.log('component did mount' + router.pathname())
-      var component = this;
       var path = router.pathname();
+      this.values = {};
 
       if (path.match('/new$')=='/new') { 
-        component.setState({ isNew: true });
+        this.setState({ isNew: true });
       } else {
-        component.setState({ isNew: false });
+        this.setState({ isNew: false });
       }
 
       var state = JSON.parse(localStorage.getItem(path));
       if (state) { 
-        component.setState(state); 
+        this.setState(state); 
       }
       socket.emit('json', path);
 
       socket.on('json', function(path, state) {
         if (state) {
           localStorage.setItem(path, JSON.stringify(state));
-          component.setState(state); 
+          this.setState(state); 
         }
-      });
+      }.bind(this));
+    },
+
+    cacheItem: function(event) {
+      console.log('cache item')
+      this.values[event.target.name] = event.target.value;
     },
 
     setItem: function(event) {
@@ -54,7 +59,14 @@ module.exports = function(initialState) {
     },
 
     saveItem: function(event) {
+
+      // If nothing has changed, skip this
+      if (this.values[event.target.name] == event.target.value) return;
+
       console.log('save item')
+
+      // Cache value
+      this.values[event.target.name] = event.target.value;
 
       // Send the state item to the server
       var path = router.pathname();
@@ -69,6 +81,8 @@ module.exports = function(initialState) {
 
     removeItem: function(event) {
       console.log('remove item')
+      event.preventDefault();
+
       var path = router.pathname();
       var newPath = event.target.href || '/homemaker';
       localStorage.removeItem(path);

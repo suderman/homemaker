@@ -4,7 +4,7 @@ socket.on('newId', function(id) {
   var path = router.pathname();
   
   // Only redirect when current only a '/new' path
-  if (path.match('/new$')!=='/new') return;
+  if (path.match('/new$')!='/new')  return
 
   // Every path starts with this
   var newPath = '/homemaker';

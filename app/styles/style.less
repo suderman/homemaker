@@ -1,6 +1,15 @@
 @import "bootstrap";
 
-#app { max-width: 750px; }
+#app { 
+  max-width: 750px; 
+  
+  // Prevent text selection
+  -webkit-user-select: none;
+  -moz-user-select: none;   
+  -ms-user-select: none;    
+  -o-user-select: none;
+  user-select: none;   
+}
 
 li {
   &.gateway form { display: none; }

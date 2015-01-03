@@ -44,13 +44,16 @@ var util = require('./util');
 
 // Load routes
 _(util.routes).each(function(route) {
-  if ((route.on) && (route.path)) {
+  if ((route.html) && (route.path)) {
 
+    // Set 'on' in director router with regex
     router.on(util.regex(route.path), function() {
-      var component = route.on.call(router, util.req(route.path, 'ON'));
-      router.render(component);
-    });
 
+      // Call the route's html method and render just the body
+      var html = route.html.call(router, util.req(route.path, 'GET'));
+      router.render(html.body);
+
+    });
   }
 });
 

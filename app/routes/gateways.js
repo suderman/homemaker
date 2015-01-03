@@ -7,10 +7,6 @@ var routes = [];
 routes.push({
   path: '/homemaker/gateways/:id',
 
-  on: function (req) {
-    return <Gateway/>;
-  },
-
   html: function(req, state) {
     return {
       title: 'Gateway Responders', 
@@ -55,10 +51,6 @@ routes.push({
 
 routes.push({
   path: '/homemaker/gateways',
-
-  on: function (req) {
-    return <GatewayList/>;
-  },
 
   html: function(req, state) {
     return {

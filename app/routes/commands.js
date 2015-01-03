@@ -7,10 +7,6 @@ var routes = [];
 routes.push({
   path: '/homemaker/devices/:id/commands/new',
 
-  on: function (req) {
-    return <Command/>;
-  },
-
   html: function(req, state) {
     return {
       title: 'New Command', 
@@ -46,10 +42,6 @@ routes.push({
 
 routes.push({
   path: '/homemaker/commands/:id',
-
-  on: function (req) {
-    return <Command/>;
-  },
 
   html: function(req, state) {
     return {

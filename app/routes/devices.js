@@ -7,10 +7,6 @@ var routes = [];
 routes.push({
   path: '/homemaker/devices/new',
 
-  on: function (req) {
-    return <Device/>;
-  },
-
   html: function(req, state) {
     return {
       title: 'New Device', 
@@ -44,10 +40,6 @@ routes.push({
 
 routes.push({
   path: '/homemaker/devices/:id',
-
-  on: function (req) {
-    return <Device/>;
-  },
 
   html: function(req, state) {
     return {
@@ -88,10 +80,6 @@ routes.push({
 
 routes.push({
   path: '/homemaker/devices',
-
-  on: function (req) {
-    return <DeviceList/>;
-  },
 
   html: function(req, state) {
     return {
