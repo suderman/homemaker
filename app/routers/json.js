@@ -1,7 +1,6 @@
 var _ = require('underscore');
-var Promise = require('bluebird/js/browser/bluebird');
+var Promise = require('bluebird');
 var http = new (require('http-transport'))();
-
 var util = require('./util');
 
 var Router = function(localhost) {
@@ -20,6 +19,10 @@ Router.prototype.matchRoute = function(path) {
   return _(util.routes).find(function(route) {
     return path.match(util.regex(route.path));
   });
+}
+
+Router.prototype.props = function(props) {
+  return Promise.props(props);
 }
 
 Router.prototype.get = function(path) {

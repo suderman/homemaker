@@ -5,6 +5,45 @@ var { GatewayList, Gateway } = require('app/components');
 var routes = [];
 
 routes.push({
+  path: '/homemaker/gateways/new',
+
+  html: function(req, state) {
+    return {
+      title: 'Gateway Device', 
+      state: state,
+      body: <Gateway state={state}/>
+    };
+  },
+
+  json: function(req, state) {
+    switch(req.method) {
+
+      case 'GET':
+        return Promise.props({
+          item:       { type: 'HTTP' },
+          types:      this.get('/gateways/types'),
+          responders: [],
+          isNew:      true
+        });
+        break;
+
+      case 'SET':
+        return this.post('/gateways', {
+          name:     state.name,
+          type:     state.type,
+          host:     state.host,
+          port:     state.port,
+          username: state.username,
+          password: state.password,
+          active:   state.active
+        });
+        break;
+    }
+  }
+});
+
+
+routes.push({
   path: '/homemaker/gateways/:id',
 
   html: function(req, state) {

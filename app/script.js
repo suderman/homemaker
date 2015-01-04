@@ -1,10 +1,6 @@
 'use strict';
 
-// React is used to render everything
-require('react').initializeTouchEvents(true);
-
 // Director is used to route everything
-// var router = require('./routes/client');
 var router = require('app/routers/browser');
 
 // Save in-page state into local storage

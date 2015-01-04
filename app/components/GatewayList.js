@@ -9,9 +9,15 @@ var GatewayList = React.createClass({
     var gateways = this.state.gateways;
     var go = this.go;
 
+    var header = (
+      <h4>
+        <strong>Gateways</strong>
+      </h4>
+    );
+
     return (
       <div className="gateway-list">
-        <Panel header="Gateways" >
+        <Panel header={header}>
         <ListGroup>
 
         {gateways.map(function(gateway) {
@@ -21,6 +27,10 @@ var GatewayList = React.createClass({
             </ListGroupItem>
           );
         })}
+
+        <ListGroupItem key='new' className="gateway new">
+          <a href='/homemaker/gateways/new' onClick={go}>Add New Gateway</a>
+        </ListGroupItem>
 
         </ListGroup>
         </Panel>

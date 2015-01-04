@@ -1,4 +1,4 @@
-var Promise = require('bluebird');
+var _ = require('underscore');
 var React = require('react');
 var { Responder } = require('app/components');
 
@@ -20,17 +20,24 @@ routes.push({
     switch(req.method) {
 
       case 'GET':
-        return Promise.props({
-          item:     this.get('/responders/' + id),
-          gateways: this.get('/gateways/'),
-          isNew:    false
-        });
+        return this.get('/responders/' + id).then(function(unknownStatusResponder) {
+          return this.get('/gateways/' + unknownStatusResponder.gateway_id + '/responders/all').then(function(responders) {
+            return {
+              item:  _(responders).find(function(potentialResponder) {
+                        return unknownStatusResponder.identity == potentialResponder.identity;
+                     }),
+              isNew: false
+            };
+          });
+        }.bind(this));
         break;
 
       case 'SET':
         return this.put('/responders/' + id, {
           gateway_id: state.gateway_id,
-          name:       state.name
+          name:       state.name,
+          address:    state.address,
+          type:       state.type
         });
         break;
 

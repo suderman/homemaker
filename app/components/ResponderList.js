@@ -6,6 +6,7 @@ var ResponderList = React.createClass({
   
   render: function() {
     var responders = this.props.responders;
+    var gatewayName = this.props.gatewayName || 'Gateway';
     var newPath = '/homemaker/responders/' + this.props.gateway_id + '/responders/new';
     var go = this.go;
 
@@ -16,6 +17,8 @@ var ResponderList = React.createClass({
 
           {responders.map(function(responder) {
 
+            var name = (responder.name == 'default') ? gatewayName : responder.name;
+
             var href = '';
             var status = <Glyphicon glyph="star-empty"/>;
             if (parseInt(responder.id, 10) > 0) {
@@ -25,7 +28,7 @@ var ResponderList = React.createClass({
 
             return (
               <ListGroupItem key={responder.name + responder.id} className="responder">
-                <a href={href} onClick={go}>{status}&nbsp;&nbsp;{responder.name}</a>
+                <a href={href} onClick={go}>{status}&nbsp;&nbsp;{name}</a>
               </ListGroupItem>
             );
               

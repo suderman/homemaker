@@ -35,7 +35,7 @@ var Device = React.createClass({
           </form>
           {(isNew) || <Button bsStyle="danger" href="/homemaker/gateways" onClick={this.removeItem}>Delete</Button>}
         </Panel>
-        {(isNew) || <ResponderList gateway_id={gateway.id} responders={responders} />}
+        {(isNew) || <ResponderList gateway_id={gateway.id} gatewayName={gateway.name} responders={responders} />}
       </div>
     );
 

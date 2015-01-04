@@ -9,9 +9,15 @@ var DeviceList = React.createClass({
     var devices = this.state.devices;
     var go = this.go;
 
+    var header = (
+      <h4>
+        <strong>Devices</strong>
+      </h4>
+    );
+
     return (
       <div className="device-list">
-        <Panel header="Devices" >
+        <Panel header={header}>
         <ListGroup>
 
           {devices.map(function(device) {
