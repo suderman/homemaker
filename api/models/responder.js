@@ -77,8 +77,10 @@ module.exports = function(app) {
     },
 
     adapterCommands: function() {
-      var gateway = this.related('gateway');
-      return this.adapter().commands(gateway, this.get('address'));
+      var gatewayType = this.get('gatewayType'),
+          gateway = this.related('gateway'),
+          address = this.get('address');
+      return (gatewayType) ? this.adapter().commands(gateway, address) : Promise.resolve({});
     },
 
     deviceCommands: function() {
