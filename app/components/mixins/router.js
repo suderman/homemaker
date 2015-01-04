@@ -1,6 +1,6 @@
 module.exports = {
 
-  navigate: function(event) {
+  go: function(event) {
     event.preventDefault();
     if (event.target.href) {
       var name = event.target.name || this.name || undefined;

@@ -20,6 +20,22 @@ Router.prototype.go = function(href, title) {
   this.director.setRoute(pathname);
 }
 
+// Get or set the document title
+Router.prototype.title = function(value) {
+
+  // Get document title or return false if it's not there
+  var title = document.head.getElementsByTagName('title')[0];
+  if (!title) return false;
+
+  // If textContent isn't supported, use innerText
+  var text = ('innerText' in title) ? 'innerText' : 'textContent';
+
+  // Set title with value (if supplied) and return title value
+  if (value) title[text] = value;
+  return title[text];
+
+}
+
 Router.prototype.on = function(path, callback) {
   return this.director.on(path, callback);
 }
@@ -49,9 +65,12 @@ _(util.routes).each(function(route) {
     // Set 'on' in director router with regex
     router.on(util.regex(route.path), function() {
 
-      // Call the route's html method and render just the body
+      // Call the route's html method
       var html = route.html.call(router, util.req(route.path, 'GET'));
+
+      // Render the body and set the title
       router.render(html.body);
+      router.title(html.title);
 
     });
   }

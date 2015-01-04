@@ -6,7 +6,7 @@ var { Panel, Input, Label, Button } = require('react-bootstrap');
 var initialState = { item: {}, devices: [], isNew: true };
 
 var Command = React.createClass({
-  mixins: [require('app/components/mixins/navigate'), require('app/components/mixins/socket')(initialState)],
+  mixins: [require('app/components/mixins/router'), require('app/components/mixins/socket')(initialState)],
 
   render: function() {
     var command = this.state.item;
@@ -16,7 +16,7 @@ var Command = React.createClass({
 
     var header = (
       <h4>
-        <Button href={devicePath} onClick={this.navigate}>Back to Device</Button>
+        <Button href={devicePath} onClick={this.go}>Back to Device</Button>
         <strong>{command.name}</strong>
         <div className="clear"/>
       </h4>

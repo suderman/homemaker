@@ -2,12 +2,12 @@ var React = require('react');
 var { Panel, ListGroup, ListGroupItem } = require('react-bootstrap');
 
 var CommandList = React.createClass({
-  mixins: [require('app/components/mixins/navigate')],
+  mixins: [require('app/components/mixins/router')],
   
   render: function() {
     var commands = this.props.commands;
     var newPath = '/homemaker/devices/' + this.props.deviceId + '/commands/new';
-    var navigate = this.navigate;
+    var go = this.go;
 
     return (
       <div className="command-list">
@@ -23,7 +23,7 @@ var CommandList = React.createClass({
 
             return (
               <ListGroupItem key={command.name} className="command">
-                <a href={href} onClick={navigate}>{command.name}</a>
+                <a href={href} onClick={go}>{command.name}</a>
               </ListGroupItem>
             );
               
@@ -31,7 +31,7 @@ var CommandList = React.createClass({
 
           {(this.props.isAdapter) || (
             <ListGroupItem key='new' className="command new">
-              <a href={newPath} onClick={navigate}>Add New Command</a>
+              <a href={newPath} onClick={go}>Add New Command</a>
             </ListGroupItem>
           )}
 

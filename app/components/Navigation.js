@@ -17,7 +17,7 @@ var Navigation = React.createClass({
 
   render: function() {
 
-    function navigate (selectedKey, href) {
+    function go(selectedKey, href) {
       global.router.go(href, this.title);
     }
 
@@ -32,7 +32,7 @@ var Navigation = React.createClass({
 
     return (
       <Navbar className="nnavbar-fixed-top">
-        <Nav activeKey={route} onSelect={navigate}>
+        <Nav activeKey={route} onSelect={go}>
           {this.NavItem('API',                    '/', true)}
           {this.NavItem('Nodes & Actions',        '/homemaker/nodes')}
           {this.NavItem('Gateways & Responders',  '/homemaker/gateways')}

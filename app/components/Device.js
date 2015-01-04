@@ -7,7 +7,7 @@ var { Panel, Input, Label, Button } = require('react-bootstrap');
 var initialState = { item: {}, types: [], commands: [] };
 
 var Device = React.createClass({
-  mixins: [require('app/components/mixins/navigate'), require('app/components/mixins/socket')(initialState)],
+  mixins: [require('app/components/mixins/router'), require('app/components/mixins/socket')(initialState)],
 
   render: function() {
 
@@ -22,8 +22,9 @@ var Device = React.createClass({
 
     var header = (
       <h4>
+        <Button href="/homemaker/devices" onClick={this.go}>Back to Devices</Button>
         <strong>{displayName}</strong>
-        <Label>{device.type}</Label>
+        <div className="clear"/>
       </h4>
     );
 
