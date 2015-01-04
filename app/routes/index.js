@@ -1,4 +1,5 @@
 var routes = [];
+routes = routes.concat(require('./responders'));
 routes = routes.concat(require('./gateways'));
 routes = routes.concat(require('./commands'));
 routes = routes.concat(require('./devices'));
