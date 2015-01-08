@@ -21,7 +21,9 @@ var Connection = function(gateway) {
 } 
 
 Connection.prototype.connect = function() {
-  setInterval(this.heartbeat.bind(this), 60000);  
+  console.log('Connection connect setInterval for ' + this.title)
+  var interval = _.random(50000, 70000); // somewhere between 50-70 seconds
+  setInterval(this.heartbeat.bind(this), interval);  
   return this.heartbeat(); // Begin
 }
 
@@ -50,6 +52,7 @@ Connection.prototype.get = function(payload) {
 
 // Connect to trigger keep-alive
 Connection.prototype.heartbeat = function() {
+  console.log('*heartbeat* ' + this.title);
   var connection = this;
   var promise = this.get();
 

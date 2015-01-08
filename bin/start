@@ -1,5 +1,21 @@
 #!/usr/bin/env node
 
+// npm install nodetime
+require('nodetime').profile({
+  accountKey: '27fb8b951cce7c959fb70095ea264c00a9399462', 
+  appName: 'Homemaker'
+});
+
+var memwatch = require('memwatch');
+memwatch.on('leak', function(info) {
+  console.log('MEMWATCH LEAK:')
+  console.log(info);
+});
+memwatch.on('stats', function(stats) {
+  console.log('MEMWATCH STATS:')
+  console.log(stats);
+});
+
 // Port numbers
 var appPort = process.env.PORT || 5005;
 var apiPort = process.env.API_PORT || 5006;

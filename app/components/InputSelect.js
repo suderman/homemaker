@@ -14,12 +14,12 @@ var InputSelect = React.createClass({
     return (
       <Input {...other} type="select" ref="input" label={label} name={name} value={value} onChange={onChange}>
         {options.map(function(type) {
-          var name = type, value = type;
+          var optionName = type, optionValue = type;
           if (_.isObject(type)) {
-            name = type.name;
-            value = type.id;
+            optionName = type.name;
+            optionValue = type.id;
           }
-          return <option key={value} value={value}>{name}</option>
+          return <option key={optionValue} value={optionValue} selected={value == optionValue}>{optionName}</option>
         })}
       </Input>
     );

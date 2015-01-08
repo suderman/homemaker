@@ -15,7 +15,8 @@ var Device = React.createClass({
     var device = this.state.item;
     device.type = device.responder_type || 'Adapter';
     var isAdapter = (device.responder_type) ? false : true;
-    var displayName = device.name || '(Unnamed Device #' + device.id + ')';
+    // var displayName = device.name || '(Unnamed Device #' + device.id + ')';
+    var displayName = device.name || '';
     if (isNew) {
       displayName = device.name || 'New Device';
     }

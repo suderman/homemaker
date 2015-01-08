@@ -1,7 +1,9 @@
+var _ = require('underscore');
 var socket = io();
 
+/* 
 socket.on('newId', function(id) {
-  var path = router.pathname();
+  var path = app.pathname();
   
   // Only redirect when current only a '/new' path
   if (path.match('/new$')!='/new')  return
@@ -28,14 +30,60 @@ socket.on('newId', function(id) {
   }
 
   // Redirect to the new path and send a GET request
-  router.go(newPath);
-  socket.emit('json', newPath);
+  app.go(newPath);
+  // socket.emit('json', newPath);
 });
+*/
+
+socket.on('invalidate', function(paths) {
+  console.log('invalidate ' + paths);
+  _(paths).each(function(path) {
+    app.upToDate[path] = false;
+  });
+});
+
+socket.on('invalidateAll', function() {
+  console.log('invalidate all');
+  app.upToDate = null;
+  app.upToDate = {};
+});
+
+socket.on('invalidateAllExcept', function(paths) {
+  console.log('invalidate all except ' + paths);
+  app.upToDate = null;
+  app.upToDate = {};
+  _(paths).each(function(path) {
+    app.upToDate[path] = true;
+  });
+});
+
+
+socket.on('json', function(path, state) {
+  console.log('json received for ' + path);
+  console.log(state)
+
+  // If state is null, remove
+  if (_.isNull(state)) {
+    app.upToDate[path] = false;
+    app.removeItem(path);
+
+  // Else, set item
+  } else if (state) {
+    app.upToDate[path] = true;
+    app.mergeItem(path, state);
+
+    // If this item is the current route, re-render now
+    if (path == app.pathname()) {
+      console.log('about to setState for ' + path)
+      app.setState(state);
+    }
+  }
+});
+
 
 socket.on('redirect', function(path) {
   console.log('on redirect ' + path);
-  router.go(path);
+  app.go(path);
 });
 
-global.socket = socket;
 module.exports = socket;  

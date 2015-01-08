@@ -32,7 +32,10 @@ var Connection = function(gateway) {
     console.log(gateway.get('title') + " is not connected");
     this.client.destroy();
     this.connected = false;
-    setTimeout(this.connect.bind(this), 60000);
+
+    console.log('Connection connect setTimeout for ' + this.title)
+    var interval = _.random(50000, 70000); // somewhere between 50-70 seconds
+    setTimeout(this.connect.bind(this), interval);
   }.bind(this));
 } 
 

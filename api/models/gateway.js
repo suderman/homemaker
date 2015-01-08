@@ -81,6 +81,7 @@ module.exports = function(app) {
       if (!Gateway.connections(id)) {
         var Connection = app.get('protocols')(this.adapter().protocol);
         Gateway.connections(id, new Connection(this));
+        console.log('Connection count: ' + _(_connections).keys().length);
       } 
 
       return Gateway.connections(id);
@@ -116,7 +117,10 @@ module.exports = function(app) {
 
     connections: function(key, value) {
       if (!key) { return false; } 
-      if (value) { return _connections[key] = value; } 
+      if (value) { 
+        console.log('Setting connection ' + key + ' with value: ' + value.title);
+        return _connections[key] = value; 
+      } 
       if (_connections[key]) { return _connections[key]; }
       return false;
     },

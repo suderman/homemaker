@@ -21,18 +21,19 @@
     "jsdom": "^1.3.1",
     "knex": "^0.7.3",
     "less-middleware": "1.0.x",
+    "localforage": "^1.2.1",
     "morgan": "~1.3.0",
     "mysql": "^2.5.2",
     "node-jsx": "^0.12.4",
-    "promise": "^6.0.1",
+    "offline-js": "^0.7.11",
     "react": "^0.12.1",
     "react-bootstrap": "^0.13.0",
     "reactify": "^0.17.1",
-    "reflux": "^0.2.1",
     "request-promise": "^0.3.2",
     "socket.io": "^1.2.1",
     "uglify-js": "^2.4.15",
     "underscore": "^1.7.0",
+    "underscore-deep-extend": "0.0.5",
     "watchify": "^2.1.1"
   },
   "devDependencies": {
@@ -57,7 +58,8 @@
     "build": "browserify ./app/script.js | uglifyjs -cm > public/script.js",
     "dev": "npm run watch & npm run server",
     "symlink": "./bin/symlink",
-    "server": "node ./bin/start",
+    "server": "node --nouse_idle_notification --expose_gc ./bin/start",
+    "inspect": "node-debug -p 8585 --web-host 0.0.0.0 ./bin/start",
     "start": "NODE_ENV=production npm run build & npm run server"
   }
 }

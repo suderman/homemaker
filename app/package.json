@@ -1,6 +1,7 @@
 { 
   "name": "app", 
   "version":"0.0.0", 
+  "private": true,
   "browserify": { 
     "transform": [
       [ "reactify", { "es6": true } ],

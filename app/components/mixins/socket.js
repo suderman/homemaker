@@ -1,40 +1,40 @@
 var _ = require('underscore');
 module.exports = function(initialState) {
-
-  initialState = initialState || {};
   return {
 
     getInitialState: function() {
+      initialState = initialState || {};
+
+      // Snag global.state (if present) and nullify it
+      if (global.state) {
+        initialState = _.clone(global.state);
+        global.state = null;
+      }
+
       return this.props.state || initialState;
     },
   
     componentWillUnmount: function() {
-      socket.removeAllListeners('json');
+      // app.socket.removeAllListeners('json');
+      app.component = null;
     },
   
     componentDidMount: function() {
-      console.log('component did mount' + router.pathname())
-      var path = router.pathname();
+      console.log('component did mount' + app.pathname())
+      app.component = this;
+
+      var path = app.pathname();
       this.values = {};
 
-      if (path.match('/new$')=='/new') { 
-        this.setState({ isNew: true });
-      } else {
-        this.setState({ isNew: false });
-      }
+      // this.setState({ isNew: (path.match('/new$')=='/new') ? true : false });
 
-      var state = JSON.parse(localStorage.getItem(path));
-      if (state) { 
-        this.setState(state); 
-      }
-      socket.emit('json', path);
-
-      socket.on('json', function(path, state) {
-        if (state) {
-          localStorage.setItem(path, JSON.stringify(state));
-          this.setState(state); 
-        }
-      }.bind(this));
+      // app.getItem(path).then(function(state) {
+      //   console.log('state from localforage for ' + path);
+      //   console.log(state);
+      //   if (state) {
+      //     this.setState(state); 
+      //   }
+      // }.bind(this));
     },
 
     cacheItem: function(event) {
@@ -69,12 +69,12 @@ module.exports = function(initialState) {
       this.values[event.target.name] = event.target.value;
 
       // Send the state item to the server
-      var path = router.pathname();
-      socket.emit('json', path, this.state.item);
+      var path = app.pathname();
+      app.emit('json', path, this.state.item);
 
-      // Also update the localstorage (only if not a new item)
-      if (!path.match('/new$')=='/new') { 
-        localStorage.setItem(path, JSON.stringify(this.state));
+      // Also save to localstorage (only if not a new item)
+      if (!(path.match('/new$')=='/new')) { 
+        app.setItem(path, this.state);
       }
     
     },
@@ -83,11 +83,11 @@ module.exports = function(initialState) {
       console.log('remove item')
       event.preventDefault();
 
-      var path = router.pathname();
+      var path = app.pathname();
       var newPath = event.target.href || '/homemaker';
-      localStorage.removeItem(path);
-      socket.emit('json', path, null);
-      router.go(newPath);
+      app.removeItem(path);
+      app.emit('json', path, null);
+      app.go(newPath);
     }
 
   }

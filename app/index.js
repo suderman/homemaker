@@ -12,11 +12,6 @@ module.exports = function(port, apiPort) {
     console.log('App listening on port ' + port);
   });
 
-  // // Used when calling localhost api routes within app 
-  // app.api = function(path) { 
-  //   return 'http://127.0.0.1:' + apiPort + path; 
-  // } 
-
   // Logging
   app.use(require('morgan')('dev'));
 

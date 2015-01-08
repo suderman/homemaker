@@ -18,10 +18,10 @@ var Navigation = React.createClass({
   render: function() {
 
     function go(selectedKey, href) {
-      global.router.go(href, this.title);
+      app.go(href, this.title);
     }
 
-    var fullRoute = (global.router) ? global.router.pathname() : this.props.route;
+    var fullRoute = (global.app) ? app.pathname() : this.props.route;
 
     // Get only the first part of the route so it matches the top navigation
     for (var route='', parts=fullRoute.split('/'), i=0; i<3; i++) {
