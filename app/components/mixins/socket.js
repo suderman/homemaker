@@ -1,4 +1,4 @@
-var _ = require('underscore');
+var _ = require('lodash/dist/lodash.underscore');
 module.exports = function(initialState) {
   return {
 
@@ -16,14 +16,14 @@ module.exports = function(initialState) {
   
     componentWillUnmount: function() {
       // app.socket.removeAllListeners('json');
-      app.component = null;
+      app.view.component = null;
     },
   
     componentDidMount: function() {
-      console.log('component did mount' + app.pathname())
-      app.component = this;
+      console.log('component did mount' + app.router.path())
+      app.view.component = this;
 
-      var path = app.pathname();
+      var path = app.router.path();
       this.values = {};
 
       // this.setState({ isNew: (path.match('/new$')=='/new') ? true : false });
@@ -69,12 +69,12 @@ module.exports = function(initialState) {
       this.values[event.target.name] = event.target.value;
 
       // Send the state item to the server
-      var path = app.pathname();
-      app.emit('json', path, this.state.item);
+      var path = app.router.path();
+      app.socket.emit('json', path, this.state.item);
 
       // Also save to localstorage (only if not a new item)
       if (!(path.match('/new$')=='/new')) { 
-        app.setItem(path, this.state);
+        app.cache.set(path, this.state);
       }
     
     },
@@ -83,11 +83,12 @@ module.exports = function(initialState) {
       console.log('remove item')
       event.preventDefault();
 
-      var path = app.pathname();
+      var path = app.router.path();
       var newPath = event.target.href || '/homemaker';
-      app.removeItem(path);
-      app.emit('json', path, null);
-      app.go(newPath);
+      app.cache.invalidateAll();
+      app.cache.remove(path);
+      app.socket.emit('json', path, null);
+      app.router.go(newPath);
     }
 
   }

@@ -1,45 +1,45 @@
-var _ = require('underscore');
+var _ = require('lodash/dist/lodash.underscore');
 
 var React = require('react'),
     Layout = require('app/components/Layout'),
     beautifyHTML = require('js-beautify').html;
 
-var Router = function(json) {
-  this.express = new require('express').Router();
+var Html = function(json) {
+  this.router = new require('express').Router();
   this.json = json;
 };
 
 // Error!
-Router.prototype.error = function(res, err) {
+Html.prototype.error = function(res, err) {
   console.log(err)
   res.send(err);
 };
 
 // Normal 404 error page
-Router.prototype.fourOhFour = function(res, err) {
+Html.prototype.fourOhFour = function(res, err) {
   console.log(err)
   res.status(404);
   res.type('txt').send('Not found');
 };
 
-Router.prototype.get = function(path, callback) {
-  return this.express.get(path, callback);
+Html.prototype.get = function(path, callback) {
+  return this.router.get(path, callback);
 }
 
-Router.prototype.post = function(path, callback) {
-  return this.express.post(path, callback);
+Html.prototype.post = function(path, callback) {
+  return this.router.post(path, callback);
 }
 
-Router.prototype.put = function(path, callback) {
-  return this.express.put(path, callback);
+Html.prototype.put = function(path, callback) {
+  return this.router.put(path, callback);
 }
 
-Router.prototype.delete = function(path, callback) {
-  return this.express.delete(path, callback);
+Html.prototype.delete = function(path, callback) {
+  return this.router.delete(path, callback);
 }
 
 // Render React template
-Router.prototype.render = function(req, res, data) {
+Html.prototype.render = function(req, res, data) {
   var state = data.state || {};
   var title = data.title || 'Untitled';
   var route = req.originalUrl;
@@ -55,7 +55,7 @@ Router.prototype.render = function(req, res, data) {
 
 module.exports = function(app) {
   var json = app.get('json');
-  var router = new Router(json);
+  var html = new Html(json);
   var util = require('./util');
 
   // Loop through all the routes
@@ -74,16 +74,16 @@ module.exports = function(app) {
         json(path).then(function(state) {
 
           // Run the html method in the route to render
-          var data = route.html.call(router, util.req(path, 'GET'), state);
-          router.render(req, res, data);
+          var data = route.html.call(html, util.req(path, 'GET'), state);
+          html.render(req, res, data);
 
-        }).catch(router.error.bind(router, res));
+        }).catch(html.error.bind(html, res));
 
       });
     }
   });
 
   // Set and return
-  app.set('html', router);
-  return router;
+  app.set('html', html);
+  return html;
 }

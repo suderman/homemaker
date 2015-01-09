@@ -1,6 +1,3 @@
-var _ = require('underscore');
-var Promise = require('bluebird');
-
 // Adapter Gateway
 var gateway = require('./adapter').addGateway('OS X Remote Mapper', {
   protocol: 'tcp',

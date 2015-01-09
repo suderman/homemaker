@@ -1,4 +1,4 @@
-var _ = require('underscore');
+var _ = require('lodash/dist/lodash.underscore');
 var path = require('path');
 var express = require('express');
 var app = express();
@@ -44,12 +44,12 @@ module.exports = function(port, apiPort) {
   // Allow requiring of jsx
   require('node-jsx').install({harmony:true});
 
-  // Server-side routers
-  require('app/routers/json')(app, 'http://127.0.0.1:' + apiPort);
-  require('app/routers/html')(app);
+  // Server-side controllers
+  require('app/controllers/json')(app, 'http://127.0.0.1:' + apiPort);
+  require('app/controllers/html')(app);
 
   // Socket.io
-  require('./sockets/server')(app, server);
+  require('./events/server')(app, server);
 
   // development error handler
   // will print stacktrace

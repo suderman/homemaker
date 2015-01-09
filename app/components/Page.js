@@ -1,4 +1,4 @@
-var _ = require('underscore');
+var _ = require('lodash/dist/lodash.underscore');
 var React = require('react');
 
 var Page = React.createClass({ 

@@ -1,4 +1,3 @@
-var _ = require('underscore');
 var Promise = require('bluebird');
 
 // Adapter Gateway

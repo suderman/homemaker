@@ -1,15 +1,15 @@
-var _ = require('underscore');
+var _ = require('lodash/dist/lodash.underscore');
 var Promise = require('bluebird');
 var http = new (require('http-transport'))();
 var util = require('./util');
 var cache = {};
 
-var Router = function(localhost) {
+var Json = function(localhost) {
   this.localhost = localhost;
   this.cache = cache;
 };
 
-Router.prototype.parseFields = function(fields) {
+Json.prototype.parseFields = function(fields) {
   _(fields).each(function(value, key) {
     if (!fields[key]) fields[key] = '';
     if (fields[key] === 'null') fields[key] = null;
@@ -17,17 +17,17 @@ Router.prototype.parseFields = function(fields) {
   return fields;
 }
 
-Router.prototype.matchRoute = function(path) {
+Json.prototype.matchRoute = function(path) {
   return _(util.routes).find(function(route) {
     return path.match(util.regex(route.path));
   });
 }
 
-Router.prototype.props = function(props) {
+Json.prototype.props = function(props) {
   return Promise.props(props);
 }
 
-Router.prototype.get = function(path) {
+Json.prototype.get = function(path) {
   // if (path in this.cache) {
   //   console.log('fetched cache for ' + path);
   //   return this.cache[path];
@@ -39,7 +39,7 @@ Router.prototype.get = function(path) {
   return http.get(this.localhost + path).get('body');
 }
 
-Router.prototype.put = function(path, fields) {
+Json.prototype.put = function(path, fields) {
   // if (this.cache[path]) {
   //   console.log('cleared cache for ' + path);
   //   delete this.cache[path];
@@ -47,7 +47,7 @@ Router.prototype.put = function(path, fields) {
   return http.put(this.localhost + path, this.parseFields(fields)).get('body');
 }
 
-Router.prototype.post = function(path, fields) {
+Json.prototype.post = function(path, fields) {
   // if (this.cache[path]) {
   //   console.log('cleared cache for ' + path);
   //   delete this.cache[path];
@@ -55,7 +55,7 @@ Router.prototype.post = function(path, fields) {
   return http.post(this.localhost + path, this.parseFields(fields)).get('body');
 }
 
-Router.prototype.delete = function(path) {
+Json.prototype.delete = function(path) {
   // if (this.cache[path]) {
   //   console.log('cleared cache for ' + path);
   //   delete this.cache[path];
@@ -64,20 +64,20 @@ Router.prototype.delete = function(path) {
 }
 
 module.exports = function(app, localhost) {
-  var router = new Router(localhost);
+  var json = new Json(localhost);
 
-  var json = function(path, state) {
+  var jsonFn = function(path, state) {
     var req = util.req(path, state);
-    var route = router.matchRoute(req.path);
+    var route = json.matchRoute(req.path);
 
     if ((route) && (route.json)) {
-      return route.json.call(router, req, state);
+      return route.json.call(json, req, state);
     } else {
       return Promise.reject(new Error('No matching json route: ' + path));
     }
   }
 
   // Set and return
-  app.set('json', json);
+  app.set('json', jsonFn);
   return json;
 }

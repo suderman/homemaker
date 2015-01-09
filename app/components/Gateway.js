@@ -1,4 +1,4 @@
-var _ = require('underscore');
+var _ = require('lodash/dist/lodash.underscore');
 var React = require('react');
 var InputSelect = require('app/components/InputSelect');
 var ResponderList = require('app/components/ResponderList');

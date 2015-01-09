@@ -1,4 +1,4 @@
-var _ = require('underscore');
+var _ = require('lodash/dist/lodash.underscore');
 var methodFromState = function(state) {
 
   // If state is a string, its value is the method

@@ -1,12 +1,13 @@
 var React = require('react');
 var { Panel, ListGroup, ListGroupItem } = require('react-bootstrap');
+var _ = require('lodash/dist/lodash.underscore');
 var initialState = { devices: [] };
 
 var DeviceList = React.createClass({
   mixins: [require('app/components/mixins/router'), require('app/components/mixins/socket')(initialState)],
 
   render: function() {
-    var devices = this.state.devices;
+    var devices = _(this.state.devices);
     var go = this.go;
 
     var header = (
