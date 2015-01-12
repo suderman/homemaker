@@ -1,9 +1,5 @@
 // Make ES6/JSX work
-// require("6to5/register")({ whitelist: [/app/] });
-require("6to5/register")({ 
-  // only: /^\\.|^app/,
-  experimental: true
-});
+require("6to5/register")({ experimental: true });
 
 var express = require('express');
 var app = express();
@@ -37,9 +33,6 @@ app.use(require('less-middleware')(path.join(__dirname, 'styles'), {
 
 // Static assets
 app.use(express.static(path.join(__dirname, '../public')));
-
-// // Allow requiring of jsx
-// require('node-jsx').install({harmony:true});
 
 // Errors
 var errorValues = { 
