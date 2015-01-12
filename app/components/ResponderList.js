@@ -1,11 +1,12 @@
+var _ = require('lodash');
 var React = require('react');
 var { Panel, ListGroup, ListGroupItem, Button, Glyphicon } = require('react-bootstrap');
 
 var ResponderList = React.createClass({
-  mixins: [require('app/components/mixins/router')],
+  mixins: [require('app/components/mixins/go')],
   
   render: function() {
-    var responders = this.props.responders;
+    var responders = _(this.props.responders);
     var gatewayName = this.props.gatewayName || 'Gateway';
     var newPath = '/homemaker/responders/' + this.props.gateway_id + '/responders/new';
     var go = this.go;

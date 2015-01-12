@@ -2,6 +2,7 @@ var React = require('react');
 var { Navbar, Nav, NavItem } = require('react-bootstrap');
 
 var Navigation = React.createClass({
+  mixins: [require('app/components/mixins/go')],
 
   NavItem: function(title, href, disabled) {
     var first = title.substr(0,title.indexOf(' '));
@@ -16,12 +17,6 @@ var Navigation = React.createClass({
   },
 
   render: function() {
-
-    function go(selectedKey, href) {
-      browser.router.go(href);
-      // browser.router.go(href, this.title);
-    }
-
     var fullRoute = (global.browser) ? browser.router.path() : this.props.route;
 
     // Get only the first part of the route so it matches the top navigation
@@ -33,7 +28,7 @@ var Navigation = React.createClass({
 
     return (
       <Navbar className="nnavbar-fixed-top">
-        <Nav activeKey={route} onSelect={go}>
+        <Nav activeKey={route} onSelect={this.go}>
           {this.NavItem('API',                    '/', true)}
           {this.NavItem('Nodes & Actions',        '/homemaker/nodes')}
           {this.NavItem('Gateways & Responders',  '/homemaker/gateways')}

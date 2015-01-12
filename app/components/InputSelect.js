@@ -1,4 +1,4 @@
-var _ = require('lodash/dist/lodash.underscore');
+var _ = require('lodash');
 var React = require('react');
 var Input = require('react-bootstrap/Input');
 
@@ -10,6 +10,7 @@ var InputSelect = React.createClass({
 
   render: function() {
     var { label, name, value, options, onChange, ...other } = this.props;
+    options = _(options);
 
     return (
       <Input {...other} type="select" ref="input" label={label} name={name} value={value} onChange={onChange}>

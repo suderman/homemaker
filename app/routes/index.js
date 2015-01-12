@@ -8,7 +8,7 @@ routes = routes.concat(require('./home'));
 
 // List all routes in order
 routes.forEach(function(route) {
-  console.log(route.path);
+  console.log('Route: ' + route.path);
 });
 
 module.exports = routes;

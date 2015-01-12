@@ -5,7 +5,7 @@ events = events.concat(require('./redirect'));
 
 // List all events in order
 events.forEach(function(event) {
-  console.log(event.name);
+  console.log('Event: ' + event.name);
 });
 
 module.exports = events;

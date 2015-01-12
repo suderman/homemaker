@@ -1,13 +1,13 @@
 var _ = require('lodash'),
     Promise = require('bluebird');
 
-var Server = function(localhostAPI, httpServer) {
+var Server = function(apihost, http) {
   
   // Create router
-  this.router = require('./router')(this, localhostAPI);
+  this.router = require('./router')(this, apihost);
 
   // Socket.io
-  this.socket = require('./socket')(this, httpServer);
+  this.socket = require('./socket')(this, http);
 
 };
 
@@ -21,6 +21,6 @@ Server.prototype.props = function(props) {
 //   return this.router.json.apply(this.router, arguments);
 // }
 
-module.exports = function(localhostAPI, httpServer) {
-  return new Server(localhostAPI, httpServer);
+module.exports = function(apihost, http) {
+  return new Server(apihost, http);
 }

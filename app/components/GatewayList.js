@@ -1,12 +1,13 @@
+var _ = require('lodash');
 var React = require('react');
 var { Panel, ListGroup, ListGroupItem } = require('react-bootstrap');
 var initialState = { gateways: [] };
 
 var GatewayList = React.createClass({
-  mixins: [require('app/components/mixins/router'), require('app/components/mixins/socket')(initialState)],
+  mixins: [require('app/components/mixins/route')(initialState)],
 
   render: function() {
-    var gateways = this.state.gateways;
+    var gateways = _(this.state.gateways);
     var go = this.go;
 
     var header = (

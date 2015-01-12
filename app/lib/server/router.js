@@ -7,13 +7,13 @@ var React = require('react'),
     beautifyHTML = require('js-beautify').html;
 
 // Router for both JSON and HTML
-var Router = function(server, localhostAPI) {
+var Router = function(server, apihost) {
 
   // Lib reference
   this.server = server;
 
   // Typically http://127.0.0.1:5006
-  this.localhost = localhostAPI;
+  this.apihost = (_.isNumber(apihost)) ? 'http://127.0.0.1:' + apihost : apihost;
 
   // Routes to match against
   this.routes = require('app/routes');
@@ -42,22 +42,22 @@ Router.prototype.matchRoute = function(path) {
 
 // HTTP GET method against API
 Router.prototype.get = function(path) {
-  return http.get(this.localhost + path).get('body');
+  return http.get(this.apihost + path).get('body');
 }
 
 // HTTP PUT method against API
 Router.prototype.put = function(path, fields) {
-  return http.put(this.localhost + path, this.parseFields(fields)).get('body');
+  return http.put(this.apihost + path, this.parseFields(fields)).get('body');
 }
 
 // HTTP POST method against API
 Router.prototype.post = function(path, fields) {
-  return http.post(this.localhost + path, this.parseFields(fields)).get('body');
+  return http.post(this.apihost + path, this.parseFields(fields)).get('body');
 }
 
 // HTTP DELETE method against API
 Router.prototype.delete = function(path) {
-  return http.delete(this.localhost + path);
+  return http.delete(this.apihost + path);
 }
 
 // Send and get JSON from the API
@@ -74,7 +74,6 @@ Router.prototype.json = function(path, state, socket) {
 
 // Error as 404 page
 Router.prototype.error = function(res, err) {
-  console.log('INSIDE ERROR PAGE FUNCTION')
   console.log(err)
   // res.status(404);
   // res.type('txt').send('Not found');
@@ -126,6 +125,6 @@ Router.prototype.render = function(req, res, data) {
     return express;
   }
 
-module.exports = function(server, localhostAPI) {
-  return server.router = new Router(server, localhostAPI);
+module.exports = function(server, apihost) {
+  return server.router = new Router(server, apihost);
 }

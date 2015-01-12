@@ -1,4 +1,4 @@
-var _ = require('lodash/dist/lodash.underscore');
+var _ = require('lodash');
 var React = require('react');
 var InputSelect = require('app/components/InputSelect');
 var { Panel, Input, Label, Button } = require('react-bootstrap');
@@ -6,7 +6,7 @@ var { Panel, Input, Label, Button } = require('react-bootstrap');
 var initialState = { item: {}, devices: [], isNew: true };
 
 var Command = React.createClass({
-  mixins: [require('app/components/mixins/router'), require('app/components/mixins/socket')(initialState)],
+  mixins: [require('app/components/mixins/route')(initialState)],
 
   render: function() {
     var command = this.state.item;

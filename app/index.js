@@ -59,10 +59,11 @@ app.use(function(err, req, res, next) {
 // DEBUG=homemaker npm start
 module.exports = function(port, apiPort) {
 
-  // Server-side libraries
-  var api = 'http://127.0.0.1:' + apiPort;
+  // Create HTTP server from app
   var http = require('http').Server(app);
-  var server = require('app/lib/server')(api, http);
+
+  // Server-side libraries
+  var server = require('app/lib/server')(apiPort, http);
 
   // Mount routes
   app.use(server.router.middleware());

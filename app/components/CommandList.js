@@ -1,11 +1,12 @@
+var _ = require('lodash');
 var React = require('react');
 var { Panel, ListGroup, ListGroupItem } = require('react-bootstrap');
 
 var CommandList = React.createClass({
-  mixins: [require('app/components/mixins/router')],
+  mixins: [require('app/components/mixins/go')],
   
   render: function() {
-    var commands = this.props.commands;
+    var commands = _(this.props.commands);
     var newPath = '/homemaker/devices/' + this.props.deviceId + '/commands/new';
     var go = this.go;
 
