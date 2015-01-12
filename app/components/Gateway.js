@@ -13,14 +13,6 @@ var Device = React.createClass({
     var { types, responders, isNew } = this.state;
     var gateway = this.state.item;
 
-    var header = (
-      <h4>
-        <Button href="/homemaker/gateways" onClick={this.go}>Back to Gateways</Button>
-        <strong>{gateway.name}</strong>
-        <div className="clear"/>
-      </h4>
-    );
-
     var input = {
       onFocus:          this.cacheItem,
       onChange:         this.setItem,
@@ -28,6 +20,14 @@ var Device = React.createClass({
       labelClassName:   "col-sm-2",
       wrapperClassName: "col-sm-10"
     };
+
+    var header = (
+      <h4>
+        <Button href="/homemaker/gateways" onClick={this.go}>Back to Gateways</Button>
+        <strong>{gateway.name}</strong>
+        <div className="clear"/>
+      </h4>
+    );
 
     return (
       <div className="gateway">

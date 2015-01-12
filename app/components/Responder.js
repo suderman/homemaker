@@ -15,6 +15,14 @@ var Responder = React.createClass({
     var isNew   = this.state.isNew;
     var gatewayPath = '/homemaker/gateways/' + this.state.item.gateway_id;
 
+    var input = {
+      onFocus:          this.cacheItem,
+      onChange:         this.setItem,
+      onBlur:           this.saveItem,
+      labelClassName:   "col-sm-2",
+      wrapperClassName: "col-sm-10"
+    };
+
     var header = (
       <h4>
         <Button href={gatewayPath} onClick={this.go}>Back to Gateway</Button>
@@ -27,12 +35,12 @@ var Responder = React.createClass({
     return (
       <div className="responder">
         <Panel header={header}>
-          <form className="form-horizontal" onFocus={this.cacheItem} onChange={this.setItem} onBlur={this.saveItem}>
-            <Input type="text" ref="gateway" name="gateway" label="Gateway" value={gatewayName} disabled={true} labelClassName="col-sm-2" wrapperClassName="col-sm-10" />
-            <Input type="text" ref="name" name="name" label="Name" value={responder.name} disabled={true} labelClassName="col-sm-2" wrapperClassName="col-sm-10" />
-            <Input type="text" ref="address" name="address" label="Address" value={responder.address} disabled={true} labelClassName="col-sm-2" wrapperClassName="col-sm-10" />
-            <Input type="text" ref="type" name="name" label="Type" value={responder.type} disabled={true} labelClassName="col-sm-2" wrapperClassName="col-sm-10" />
-            <Input type="text" ref="status" name="status" label="Status" value={status} disabled={true} labelClassName="col-sm-2" wrapperClassName="col-sm-10" />
+          <form className="form-horizontal">
+            <Input type="text" ref="gateway" name="gateway" label="Gateway" value={gatewayName} disabled={true} {...input}/>
+            <Input type="text" ref="name" name="name" label="Name" value={responder.name} disabled={true} {...input}/>
+            <Input type="text" ref="address" name="address" label="Address" value={responder.address} disabled={true} {...input}/>
+            <Input type="text" ref="type" name="name" label="Type" value={responder.type} disabled={true} {...input}/>
+            <Input type="text" ref="status" name="status" label="Status" value={status} disabled={true} {...input}/>
           </form>
           {(isNew) || <Button bsStyle="danger" href={gatewayPath} onClick={this.removeItem}>{deleteText}</Button>}
         </Panel>

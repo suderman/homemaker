@@ -21,6 +21,14 @@ var Device = React.createClass({
       displayName = device.name || 'New Device';
     }
 
+    var input = {
+      onFocus:          this.cacheItem,
+      onChange:         this.setItem,
+      onBlur:           this.saveItem,
+      labelClassName:   "col-sm-2",
+      wrapperClassName: "col-sm-10"
+    };
+
     var header = (
       <h4>
         <Button href="/homemaker/devices" onClick={this.go}>Back to Devices</Button>
@@ -30,9 +38,9 @@ var Device = React.createClass({
     );
 
     var form = (isAdapter) ? 'Adapter' : (
-      <form className="form-horizontal" onFocus={this.cacheItem} onChange={this.setItem} onBlur={this.saveItem}>
-        <Input type="text" name="name" label="Name" value={device.name} labelClassName="col-sm-2" wrapperClassName="col-sm-10" />
-        <InputSelect name="responder_type" label="Type" value={device.type} options={types} labelClassName="col-sm-2" wrapperClassName="col-sm-10" />
+      <form className="form-horizontal">
+        <Input type="text" name="name" label="Name" value={device.name} {...input}/>
+        <InputSelect name="responder_type" label="Type" value={device.type} options={types} {...input}/>
       </form>
     );
 

@@ -66,7 +66,7 @@ events.push({
           socket.broadcast.emit('json', path, { item: body });
 
           if (!body.id) return;
-          var newPath = redirectFrom(path);
+          var newPath = redirectFrom(path, body.id);
           if (newPath) {
             socket.emit('redirect', newPath);
           }
@@ -89,7 +89,7 @@ events.push({
 });
 
 
-function redirectFrom(path) {
+function redirectFrom(path, id) {
   var pathEndsWith = function(pattern) { return path.match(pattern+'$')==pattern; }
 
   // Only redirect when current only a '/new' path

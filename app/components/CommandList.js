@@ -23,7 +23,7 @@ var CommandList = React.createClass({
             }
 
             return (
-              <ListGroupItem key={command.name} className="command">
+              <ListGroupItem key={command.name + command.id} className="command">
                 <a href={href} onClick={go}>{command.name}</a>
               </ListGroupItem>
             );
