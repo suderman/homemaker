@@ -6,6 +6,7 @@ module.exports = function(browser) {
   // Create Offline.js object
   var network = {
     offline: Offline,
+    check: Offline.check,
     state: 'up'
   };
 
