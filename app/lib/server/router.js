@@ -1,5 +1,5 @@
 var _ = require('lodash'),
-    Promise = require('bluebird');
+    Promise = require('bluebird'),
     http = new (require('http-transport'))();
 
 var React = require('react'),
@@ -15,9 +15,11 @@ var Router = function(server, localhostAPI) {
   // Typically http://127.0.0.1:5006
   this.localhost = localhostAPI;
 
+  // Routes to match against
+  this.routes = require('app/routes');
+
   // Router util (shared with browser)
   var util = require('app/lib/util');
-  this.routes = util.routes;
   this.regex = util.regex;
   this.req = util.req;
 };

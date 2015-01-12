@@ -4,7 +4,7 @@ var current = {};
 
 module.exports = function(browser) {
 
-  return browser.cache = {
+  var cache = {
 
     // localforage
     localforage: localforage,
@@ -13,7 +13,7 @@ module.exports = function(browser) {
     current: current, 
 
     set: function(key) {
-      browser.cache.validate(key);
+      cache.validate(key);
       return localforage.setItem.apply(localforage, arguments);
     },
 
@@ -22,12 +22,12 @@ module.exports = function(browser) {
     },
 
     remove: function(key) {
-      browser.cache.invalidate(key);
+      cache.invalidate(key);
       return localforage.removeItem.apply(localforage, arguments);
     },
 
     merge: function(key, valueUpdate) {
-      browser.cache.validate(key);
+      cache.validate(key);
       return localforage.getItem(key).then(function(value) {
         value = value || {};
         value = _.merge(value, valueUpdate);
@@ -68,11 +68,13 @@ module.exports = function(browser) {
     invalidateAllExcept: function(paths) {
       console.log('invalidate all except ' + paths);
       paths = (_.isArray(paths)) ? paths : [paths];
-      browser.cache.invalidateAll();
+      cache.invalidateAll();
       _(paths).each(function(path) {
         current[path] = true;
       });
     }
 
   };
+
+  return browser.cache = cache;
 }

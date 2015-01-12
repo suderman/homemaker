@@ -28,9 +28,6 @@ function regexParam(path) {
 
 module.exports = {
 
-  events: require('app/events'),
-  routes: require('app/routes'),
-
   // Convert a path into a regex pattern
   regex: function(path) {
     var regex = path.trim();

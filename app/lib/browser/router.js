@@ -1,23 +1,25 @@
-var util = require('../util');
+var util = require('app/lib/util');
 var Director = require('director');
 var director = new Director.Router().configure({ html5history:true });
 
 module.exports = function(browser) {
 
-  return browser.router = {
+  var router = {
 
     // Create new Director router
     director: director,
 
+    // Routes to match against
+    routes: require('app/routes'),
+
     // Pull from common util module
-    routes: util.routes,
     regex: util.regex,
     req: util.req,
   
     // Wrapper around setRoute
     go: function(href) {
       href = href || location.href;
-      director.setRoute(browser.router.path(href));
+      director.setRoute(router.path(href));
     },
 
     // Get pathname from href
@@ -42,7 +44,7 @@ module.exports = function(browser) {
 
       // Set 'on' in director router with regex
       director.on(util.regex(route.path), function() {
-        browser.router.load(route);
+        router.load(route);
       });
     },
 
@@ -50,7 +52,7 @@ module.exports = function(browser) {
     load: function(route) {
 
       // Current path in browser
-      var path = browser.router.path();
+      var path = router.path();
 
       // See if there's any state in localstorage
       browser.cache.get(path).then(function(state) {
@@ -73,4 +75,6 @@ module.exports = function(browser) {
     }
 
   };
+
+  return browser.router = router;
 }

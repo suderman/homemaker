@@ -4,19 +4,19 @@ var _ = require('lodash');
 var Browser = function() {
 
   // Create new Director router
-  require('./router')(this);
+  this.router = require('./router')(this);
 
   // Cache with localforage
-  require('./cache')(this);
+  this.cache = require('./cache')(this);
 
   // Check network with Offline
-  require('./network')(this);
+  this.network = require('./network')(this);
 
   // Socket.io
-  require('./socket')(this);
+  this.socket = require('./socket')(this);
 
   // React.js
-  require('./view')(this);
+  this.view = require('./view')(this);
 
   // Save in-page state into local storage
   this.cache.set(this.router.path(), global.state);

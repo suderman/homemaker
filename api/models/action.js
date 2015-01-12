@@ -73,11 +73,11 @@ module.exports = function(app) {
         return url.destroy();
       });
     },
-    deleteURL: function() {
-      return db.model('URL').find({ action_id: id }).then(function(url) {
-        return url.destroy();
-      });
-    },
+    // deleteURL: function() {
+    //   return db.model('URL').find({ action_id: id }).then(function(url) {
+    //     return url.destroy();
+    //   });
+    // },
 
     updateURL: function() {
 

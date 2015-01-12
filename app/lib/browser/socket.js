@@ -1,11 +1,9 @@
 var _ = require('lodash');
-var util = require('app/lib/util');
-
 module.exports = function(browser) {
 
   var socket = {
     io: require('socket.io-client')(),
-    events: util.events,
+    events: require('app/events'),
     connections: 0,
 
     on: function() {

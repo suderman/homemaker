@@ -7,10 +7,12 @@ require('nodetime').profile({
 });
 
 var memwatch = require('memwatch');
+
 memwatch.on('leak', function(info) {
   console.log('MEMWATCH LEAK:')
   console.log(info);
 });
+
 memwatch.on('stats', function(stats) {
   console.log('MEMWATCH STATS:')
   console.log(stats);
@@ -21,5 +23,5 @@ var appPort = process.env.PORT || 5005;
 var apiPort = process.env.API_PORT || 5006;
 
 // Start App & API
-require('../app')(appPort, apiPort);
-require('../api')(apiPort);
+require('app')(appPort, apiPort);
+require('api')(apiPort);

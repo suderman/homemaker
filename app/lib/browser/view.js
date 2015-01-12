@@ -8,15 +8,15 @@ module.exports = function(browser) {
   React.initializeTouchEvents(true);
 
   // React.js
-  return browser.view = { 
+  var view = { 
 
     // Currently mounted component
     component: null,
 
     // setState for currently mounted component
     setState: function(state) {
-      if ((browser.view.component) && (browser.view.component.setState)) {
-        browser.view.component.setState(state);
+      if ((view.component) && (view.component.setState)) {
+        view.component.setState(state);
       } else {
         console.log('Component is null??')
       }
@@ -44,6 +44,8 @@ module.exports = function(browser) {
     }
 
   }
+
+  return browser.view = view;
 }
 
 
