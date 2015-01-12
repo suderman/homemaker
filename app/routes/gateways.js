@@ -21,14 +21,14 @@ routes.push({
       case 'GET':
         return Promise.props({
           item:       { type: 'HTTP' },
-          types:      this.get('/gateways/types'),
+          types:      this.router.get('/gateways/types'),
           responders: [],
           isNew:      true
         });
         break;
 
       case 'SET':
-        return this.post('/gateways', {
+        return this.router.post('/gateways', {
           name:     state.name,
           type:     state.type,
           host:     state.host,
@@ -60,15 +60,15 @@ routes.push({
 
       case 'GET':
         return Promise.props({
-          item:       this.get('/gateways/' + id),
-          types:      this.get('/gateways/types'),
-          responders: this.get('/gateways/' + id + '/responders/all'),
+          item:       this.router.get('/gateways/' + id),
+          types:      this.router.get('/gateways/types'),
+          responders: this.router.get('/gateways/' + id + '/responders/all'),
           isNew:      false
         });
         break;
 
       case 'SET':
-        return this.put('/gateways/' + id, {
+        return this.router.put('/gateways/' + id, {
           name:     state.name,
           type:     state.type,
           host:     state.host,
@@ -80,7 +80,7 @@ routes.push({
         break;
 
       case 'REMOVE':
-        return this.delete('/gateways/' + id);
+        return this.router.delete('/gateways/' + id);
         break;
     }
   }
@@ -103,7 +103,7 @@ routes.push({
     switch(req.method) {
       case 'GET':
         return Promise.props({
-          gateways: this.get('/gateways/all'),
+          gateways: this.router.get('/gateways/all'),
         });
         break;
     }

@@ -20,8 +20,8 @@ routes.push({
     switch(req.method) {
 
       case 'GET':
-        return this.get('/responders/' + id).then(function(unknownStatusResponder) {
-          return this.get('/gateways/' + unknownStatusResponder.gateway_id + '/responders/all').then(function(responders) {
+        return this.router.get('/responders/' + id).then(function(unknownStatusResponder) {
+          return this.router.get('/gateways/' + unknownStatusResponder.gateway_id + '/responders/all').then(function(responders) {
             return {
               item:  _(responders).find(function(potentialResponder) {
                         return unknownStatusResponder.identity == potentialResponder.identity;
@@ -33,7 +33,7 @@ routes.push({
         break;
 
       case 'SET':
-        return this.put('/responders/' + id, {
+        return this.router.put('/responders/' + id, {
           gateway_id: state.gateway_id,
           name:       state.name,
           address:    state.address,
@@ -42,7 +42,7 @@ routes.push({
         break;
 
       case 'REMOVE':
-        return this.delete('/responders/' + id);
+        return this.router.delete('/responders/' + id);
         break;
     }
   }

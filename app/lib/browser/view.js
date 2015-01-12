@@ -2,21 +2,23 @@
 var React = require('react');
 var Layout = require('app/components/Layout');
 
-module.exports = function(app) {
+module.exports = function(browser) {
 
   // Needed for mobile
   React.initializeTouchEvents(true);
 
   // React.js
-  return app.view = { 
+  return browser.view = { 
 
     // Currently mounted component
     component: null,
 
     // setState for currently mounted component
     setState: function(state) {
-      if ((app.view.component) && (app.view.component.setState)) {
-        app.view.component.setState(state);
+      if ((browser.view.component) && (browser.view.component.setState)) {
+        browser.view.component.setState(state);
+      } else {
+        console.log('Component is null??')
       }
     },
 

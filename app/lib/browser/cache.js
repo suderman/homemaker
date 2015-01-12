@@ -1,10 +1,10 @@
-var _ = require('lodash/dist/lodash.underscore');
+var _ = require('lodash');
 var localforage = require('localforage');
 var current = {};
 
-module.exports = function(app) {
+module.exports = function(browser) {
 
-  return app.cache = {
+  return browser.cache = {
 
     // localforage
     localforage: localforage,
@@ -12,7 +12,8 @@ module.exports = function(app) {
     // List of routes which are current/up-to-date
     current: current, 
 
-    set: function() {
+    set: function(key) {
+      browser.cache.validate(key);
       return localforage.setItem.apply(localforage, arguments);
     },
 
@@ -20,14 +21,17 @@ module.exports = function(app) {
       return localforage.getItem.apply(localforage, arguments);
     },
 
-    remove: function() {
+    remove: function(key) {
+      browser.cache.invalidate(key);
       return localforage.removeItem.apply(localforage, arguments);
     },
 
     merge: function(key, valueUpdate) {
+      browser.cache.validate(key);
       return localforage.getItem(key).then(function(value) {
         value = value || {};
-        return localforage.setItem(key, _(value).merge(valueUpdate));
+        value = _.merge(value, valueUpdate);
+        return localforage.setItem(key, value);
       });
     },
 
@@ -64,7 +68,7 @@ module.exports = function(app) {
     invalidateAllExcept: function(paths) {
       console.log('invalidate all except ' + paths);
       paths = (_.isArray(paths)) ? paths : [paths];
-      app.cache.invalidateAll();
+      browser.cache.invalidateAll();
       _(paths).each(function(path) {
         current[path] = true;
       });

@@ -1,24 +1,30 @@
 var Offline = Offlinejs();
 OfflinejsReconnect(Offline);
 
-module.exports = function(app) {
+module.exports = function(browser) {
 
   // Create Offline.js object
-  var connection = {
+  var network = {
     offline: Offline,
     state: 'up'
   };
 
-  connection.offline.on('down', function() {
-    connection.state = 'down';
-    app.cache.invalidateAll();
+  network.offline.on('down', function() {
+    network.state = 'down';
+    browser.cache.invalidateAll();
+
+    // Add offline class
+    document.body.className = (document.body.className + ' offline').trim();
   });
 
-  connection.offline.on('up', function() {
-    connection.state = 'up';
+  network.offline.on('up', function() {
+    network.state = 'up';
+
+    // Remove offline class
+    document.body.className = document.body.className.replace(/offline/g, '').trim();
   });
 
-  return app.connection = connection;
+  return browser.network = network;
 }
 
 // Offline.js require('offline-js/js/offline')

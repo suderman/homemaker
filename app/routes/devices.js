@@ -21,14 +21,14 @@ routes.push({
       case 'GET':
         return Promise.props({
           item:     { responder_type: 'HTTP Server' },
-          types:    this.get('/responders/types'),
+          types:    this.router.get('/responders/types'),
           commands: [],
           isNew:    true
         });
         break;
 
       case 'SET':
-        return this.post('/devices', {
+        return this.router.post('/devices', {
           name:            state.name,
           responder_type:  state.responder_type
         });
@@ -55,22 +55,22 @@ routes.push({
 
       case 'GET':
         return Promise.props({
-          item:     this.get('/devices/' + id),
-          types:    this.get('/responders/types'),
-          commands: this.get('/devices/' + id + '/commands'),
+          item:     this.router.get('/devices/' + id),
+          types:    this.router.get('/responders/types'),
+          commands: this.router.get('/devices/' + id + '/commands'),
           isNew:    false
         });
         break;
 
       case 'SET':
-        return this.put('/devices/' + id, {
+        return this.router.put('/devices/' + id, {
           name:            state.name,
           responder_type:  state.responder_type
         });
         break;
 
       case 'REMOVE':
-        return this.delete('/devices/' + id);
+        return this.router.delete('/devices/' + id);
         break;
 
     }
@@ -93,7 +93,7 @@ routes.push({
     switch(req.method) {
       case 'GET':
         return Promise.props({
-          devices:  this.get('/devices/all')
+          devices:  this.router.get('/devices/all')
         });
         break;
     }

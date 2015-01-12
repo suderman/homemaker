@@ -4,7 +4,7 @@ module.exports = {
     event.preventDefault();
     if (event.target.href) {
       var name = event.target.name || this.name || undefined;
-      app.router.go(event.target.href, name);
+      browser.router.go(event.target.href, name);
     }
   }
 

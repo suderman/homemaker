@@ -22,13 +22,13 @@ routes.push({
       case 'GET':
         return Promise.props({
           item:     { device_id: id },
-          devices:  this.get('/devices'),
+          devices:  this.router.get('/devices'),
           isNew:    true
         });
         break;
 
       case 'SET':
-        return this.post('/commands', {
+        return this.router.post('/commands', {
           name:       state.name,
           device_id:  state.device_id,
           feedback:   state.feedback,
@@ -57,14 +57,14 @@ routes.push({
 
       case 'GET':
         return Promise.props({
-          item:     this.get('/commands/' + id),
-          devices:  this.get('/devices'),
+          item:     this.router.get('/commands/' + id),
+          devices:  this.router.get('/devices'),
           isNew:    false
         });
         break;
 
       case 'SET':
-        return this.put('/commands/' + id, {
+        return this.router.put('/commands/' + id, {
           device_id: state.device_id,
           name:      state.name,
           feedback:  state.feedback,
@@ -73,7 +73,7 @@ routes.push({
         break;
 
       case 'REMOVE':
-        return this.delete('/commands/' + id);
+        return this.router.delete('/commands/' + id);
         break;
     }
   }

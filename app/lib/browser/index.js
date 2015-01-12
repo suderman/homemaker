@@ -1,4 +1,4 @@
-var _ = require('lodash/dist/lodash.underscore');
+var _ = require('lodash');
 
 // Constructor for brower's router (main global)
 var Browser = function() {
@@ -9,8 +9,8 @@ var Browser = function() {
   // Cache with localforage
   require('./cache')(this);
 
-  // Check network connection with Offline
-  require('./connection')(this);
+  // Check network with Offline
+  require('./network')(this);
 
   // Socket.io
   require('./socket')(this);
@@ -22,7 +22,7 @@ var Browser = function() {
   this.cache.set(this.router.path(), global.state);
 
   // Watch all routes
-  _(this.router.routes).each(function(route) {
+  _(this.router.routes).forEach(function(route) {
     this.router.observe(route);
   }.bind(this));
 

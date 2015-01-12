@@ -1,4 +1,4 @@
-var _ = require('lodash/dist/lodash.underscore');
+var _ = require('lodash');
 var methodFromState = function(state) {
 
   // If state is a string, its value is the method
@@ -28,6 +28,7 @@ function regexParam(path) {
 
 module.exports = {
 
+  events: require('app/events'),
   routes: require('app/routes'),
 
   // Convert a path into a regex pattern
@@ -48,5 +49,7 @@ module.exports = {
       slugs: path.split('/'),
       method: methodFromState(state)
     }
-  }
+  },
+
+  method: methodFromState
 }

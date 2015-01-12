@@ -32,30 +32,28 @@
     "reactify": "^0.17.1",
     "request-promise": "^0.3.2",
     "socket.io": "^1.2.1",
+    "socket.io-client": "^1.2.1",
     "uglify-js": "^2.4.15",
     "underscore": "^1.7.0",
     "underscore-deep-extend": "0.0.5",
     "watchify": "^2.1.1"
   },
   "devDependencies": {
+    "6to5ify": "^3.1.2",
     "aliasify": "^1.5.0",
-    "browserify": "^7.0.0",
+    "browserify": "^8.0.0",
     "express-debug": "^1.1.1",
     "uglifyify": "^2.6.0"
   },
   "browserify": {
     "transform": [
-      [
-        "reactify",
-        {
-          "es6": true
-        }
-      ],
+      "6to5ify",
       "envify"
     ]
   },
   "scripts": {
     "watch": "watchify -o public/script.js -v -d ./app/script.js",
+    "client": "browserify ./app/script.js > public/script.js",
     "build": "browserify ./app/script.js | uglifyjs -cm > public/script.js",
     "dev": "npm run watch & npm run server",
     "symlink": "./bin/symlink",

@@ -2,9 +2,9 @@ var util = require('../util');
 var Director = require('director');
 var director = new Director.Router().configure({ html5history:true });
 
-module.exports = function(app) {
+module.exports = function(browser) {
 
-  return app.router = {
+  return browser.router = {
 
     // Create new Director router
     director: director,
@@ -15,17 +15,9 @@ module.exports = function(app) {
     req: util.req,
   
     // Wrapper around setRoute
-    go: function(href, title) {
+    go: function(href) {
       href = href || location.href;
-      var path = app.router.path(href);
-
-      if (title) app.view.title(title);
-      director.setRoute(path);
-
-      // Request latest state via socket.io
-      if (app.cache.isNotCurrent(path)) {
-        app.socket.emit('json', path);
-      }
+      director.setRoute(browser.router.path(href));
     },
 
     // Get pathname from href
@@ -44,26 +36,41 @@ module.exports = function(app) {
       return director.on.apply(director, arguments);
     },
 
+
     observe: function(route) {
-      if ((!route.html) || (!route.path)) return false;
+      if ((!route.html) || (!route.path)) return;
 
       // Set 'on' in director router with regex
       director.on(util.regex(route.path), function() {
-
-        // See if there's any state in localstorage
-        app.cache.get(app.router.path()).then(function(state) {
-
-          // Call the route's html method
-          var html = route.html.call(app, util.req(route.path, 'GET'), state);
-
-          // Render the body and set the title
-          app.view.body(html.body);
-          app.view.title(html.title);
-
-        });
+        browser.router.load(route);
       });
+    },
 
-      return true;
+    // Load route into body and title
+    load: function(route) {
+
+      // Current path in browser
+      var path = browser.router.path();
+
+      // See if there's any state in localstorage
+      browser.cache.get(path).then(function(state) {
+
+        // Call the route's html method
+        var html = route.html.call(browser, util.req(path, 'GET'), state);
+
+        // Render the body and set the title
+        browser.view.body(html.body);
+        browser.view.title(html.title);
+
+        // Request latest state via socket.io
+        if ((!state) || (browser.cache.isNotCurrent(path)))  {
+          browser.socket.emit('json', path);
+        }
+
+        state = null;
+        html = null;
+      });
     }
+
   };
 }

@@ -1,4 +1,4 @@
-var _ = require('lodash/dist/lodash.underscore');
+var _ = require('lodash');
 module.exports = function(initialState) {
   return {
 
@@ -7,7 +7,7 @@ module.exports = function(initialState) {
 
       // Snag global.state (if present) and nullify it
       if (global.state) {
-        initialState = _.clone(global.state);
+        initialState = _.cloneDeep(global.state);
         global.state = null;
       }
 
@@ -15,26 +15,15 @@ module.exports = function(initialState) {
     },
   
     componentWillUnmount: function() {
-      // app.socket.removeAllListeners('json');
-      app.view.component = null;
+      console.log('Unmounting component')
+      browser.view.component = null;
+      this.values = null;
     },
   
     componentDidMount: function() {
-      console.log('component did mount' + app.router.path())
-      app.view.component = this;
-
-      var path = app.router.path();
+      console.log('Mounted component ' + browser.router.path())
+      browser.view.component = this;
       this.values = {};
-
-      // this.setState({ isNew: (path.match('/new$')=='/new') ? true : false });
-
-      // app.getItem(path).then(function(state) {
-      //   console.log('state from localforage for ' + path);
-      //   console.log(state);
-      //   if (state) {
-      //     this.setState(state); 
-      //   }
-      // }.bind(this));
     },
 
     cacheItem: function(event) {
@@ -46,16 +35,14 @@ module.exports = function(initialState) {
       console.log('set item')
 
       // Set value object with target's value
-      var value = {};
-      value[event.target.name] = event.target.value;
+      var itemUpdate = {};
+      itemUpdate[event.target.name] = event.target.value;
 
-      // Create new state object with item object
-      var state = { item: {} };
-      _(state.item).extend(this.state.item, value);
+      // Create new item object
+      var item = _.merge({}, this.state.item, itemUpdate);
 
       // Set state and trigger re-render
-      this.setState(state);
-
+      this.setState({ item: item });
     },
 
     saveItem: function(event) {
@@ -69,12 +56,12 @@ module.exports = function(initialState) {
       this.values[event.target.name] = event.target.value;
 
       // Send the state item to the server
-      var path = app.router.path();
-      app.socket.emit('json', path, this.state.item);
+      var path = browser.router.path();
+      browser.socket.emit('json', path, this.state.item);
 
       // Also save to localstorage (only if not a new item)
       if (!(path.match('/new$')=='/new')) { 
-        app.cache.set(path, this.state);
+        browser.cache.set(path, this.state);
       }
     
     },
@@ -83,12 +70,12 @@ module.exports = function(initialState) {
       console.log('remove item')
       event.preventDefault();
 
-      var path = app.router.path();
+      var path = browser.router.path();
       var newPath = event.target.href || '/homemaker';
-      app.cache.invalidateAll();
-      app.cache.remove(path);
-      app.socket.emit('json', path, null);
-      app.router.go(newPath);
+      browser.cache.invalidateAll();
+      browser.cache.remove(path);
+      browser.socket.emit('json', path, null);
+      browser.router.go(newPath);
     }
 
   }
