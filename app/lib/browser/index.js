@@ -22,14 +22,14 @@ var Browser = function() {
   this.cache.set(this.router.path(), global.state);
 
   // Watch all routes
-  _(this.router.routes).forEach(function(route) {
+  _(this.router.routes).forEach((route) => {
     this.router.observe(route);
-  }.bind(this));
+  });
 
   // Go to current route on DOM load
-  document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('DOMContentLoaded', () => {
     this.router.init();
-  }.bind(this));
+  });
 };
 
 module.exports = new Browser();

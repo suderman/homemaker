@@ -20,16 +20,16 @@ routes.push({
     switch(req.method) {
 
       case 'GET':
-        return this.router.get('/responders/' + id).then(function(unknownStatusResponder) {
-          return this.router.get('/gateways/' + unknownStatusResponder.gateway_id + '/responders/all').then(function(responders) {
+        return this.router.get('/responders/' + id).then((unknownStatusResponder) => {
+          return this.router.get('/gateways/' + unknownStatusResponder.gateway_id + '/responders/all').then((responders) => {
             return {
-              item:  _(responders).find(function(potentialResponder) {
+              item:  _(responders).find((potentialResponder) => {
                         return unknownStatusResponder.identity == potentialResponder.identity;
                      }),
               isNew: false
             };
           });
-        }.bind(this));
+        });
         break;
 
       case 'SET':

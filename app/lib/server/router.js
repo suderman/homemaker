@@ -35,9 +35,9 @@ Router.prototype.parseFields = function(fields) {
 
 // Match passed path in routes
 Router.prototype.matchRoute = function(path) {
-  return _(this.routes).find(function(route) {
+  return _(this.routes).find((route) => {
     return path.match(this.regex(route.path));
-  }.bind(this));
+  });
 }
 
 // HTTP GET method against API
@@ -100,27 +100,27 @@ Router.prototype.render = function(req, res, data) {
     var express = new require('express').Router();
 
     // Loop through all the routes
-    _(this.routes).forEach(function(route) {
+    _(this.routes).forEach((route) => {
 
       // Make sure the route is valid
       if ((!route.html) || (!route.path)) return;
 
       // Add route to app (all html routes are GET requests)
-      express.use(route.path, function(req, res, next) {
+      express.use(route.path, (req, res, next) => {
 
         // Get path from express' req 
         var path = req.originalUrl;
 
         // Call the json API to get the state for this route
-        this.json(path).then(function(state) {
+        this.json(path).then((state) => {
 
           // Run the html method in the route to render
           var data = route.html.call(this.server, this.req(path, 'GET'), state);
           this.render(req, res, data);
 
-        }.bind(this)).catch(this.error.bind(this, res));
-      }.bind(this));
-    }.bind(this));
+        }).catch(this.error.bind(this, res));
+      });
+    });
 
     return express;
   }

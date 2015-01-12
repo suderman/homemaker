@@ -2,4 +2,3 @@
 
 ln -sf ../app ./node_modules/app
 ln -sf ../api ./node_modules/api
-ln -sf ../lib ./node_modules/lib

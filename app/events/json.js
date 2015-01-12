@@ -49,14 +49,14 @@ events.push({
 
       // Get method, send the new state back to the client
       case 'GET':
-        this.router.json(path).then(function(stateForClient) {
+        this.router.json(path).then((stateForClient) => {
           socket.emit('json', path, stateForClient);
         }).catch(function(error) { console.log(error); });
         break;
 
       // Set method, send the new state back to the client
       case 'SET':
-        this.router.json(path, state).then(function(stateForClient) {
+        this.router.json(path, state).then((stateForClient) => {
 
           // TODO: emit state for all other paths changed by this update
           // For now just invalidating all routes
@@ -71,7 +71,7 @@ events.push({
             socket.emit('redirect', newPath);
           }
 
-        }.bind(this)).catch(function(error) { console.log(error); });
+        }).catch(function(error) { console.log(error); });
         break;
 
       // Remove method
