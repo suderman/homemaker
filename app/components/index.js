@@ -1,6 +1,8 @@
 module.exports = {
   route:         require('./mixins/route'),
   go:            require('./mixins/go'),
+  N0deList:      require('./NodeList'),
+  N0de:          require('./Node'),
   DeviceList:    require('./DeviceList'),
   Device:        require('./Device'),
   CommandList:   require('./CommandList'),
