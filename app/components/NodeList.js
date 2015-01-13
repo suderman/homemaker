@@ -7,7 +7,7 @@ var N0deList = React.createClass({
   mixins: [require('app/components/mixins/route')(initialState)],
 
   render: function() {
-    var nodes = _(this.state.nodes);
+    var nodes = _(this.props.nodes || this.state.nodes);
     var go = this.go;
 
     var header = (

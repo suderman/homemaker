@@ -21,8 +21,9 @@ routes.push({
 
       case 'GET':
         return Promise.props({
-          item:       { node_id: 0 },
-          nodes:      this.router.get('/nodes/all'),
+          item:       {},
+          nodes:      [],
+          allNodes:   this.router.get('/nodes/all'),
           actions:    this.router.get('/actions'),
           responders: this.router.get('/responders'),
           isNew:      true
@@ -61,7 +62,7 @@ routes.push({
       case 'GET':
         return Promise.props({
           item:       this.router.get('/nodes/' + id),
-          nodes:      this.router.get('/nodes/' + id + '/all'),
+          nodes:      this.router.get('/nodes/' + id + '/nodes'),
           allNodes:   this.router.get('/nodes/all'),
           actions:    this.router.get('/actions'),
           responders: this.router.get('/responders'),
