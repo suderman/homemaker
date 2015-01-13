@@ -65,6 +65,9 @@ events.push({
           var body = JSON.parse(stateForClient);
           socket.broadcast.emit('json', path, { item: body });
 
+          // All chance to alter path this json was sent "from"
+          path = (state._redirectFrom) ? state._redirectFrom : path;
+
           if (!body.id) return;
           var newPath = redirectFrom(path, body.id);
           if (newPath) {

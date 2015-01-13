@@ -1,6 +1,6 @@
 var _ = require('lodash');
 var React = require('react');
-var { Panel, ListGroup, ListGroupItem } = require('react-bootstrap');
+var { Panel, ListGroup, ListGroupItem, Glyphicon } = require('react-bootstrap');
 
 var CommandList = React.createClass({
   mixins: [require('app/components/mixins/go')],
@@ -24,7 +24,10 @@ var CommandList = React.createClass({
 
             return (
               <ListGroupItem key={command.name + command.id} className="command">
-                <a href={href} onClick={go}>{command.name}</a>
+                <a href={href} onClick={go}>
+                  <Glyphicon glyph="comment"/>
+                  <span>{command.name}</span>
+                </a>
               </ListGroupItem>
             );
               
@@ -32,7 +35,10 @@ var CommandList = React.createClass({
 
           {(this.props.isAdapter) || (
             <ListGroupItem key='new' className="command new">
-              <a href={newPath} onClick={go}>Add New Command</a>
+              <a href={newPath} onClick={go}>
+                <Glyphicon glyph="plus"/>
+                <span>Add New Command</span>
+              </a>
             </ListGroupItem>
           )}
 

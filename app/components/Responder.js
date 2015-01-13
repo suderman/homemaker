@@ -1,6 +1,6 @@
 var React = require('react');
 var InputSelect = require('app/components/InputSelect');
-var { Panel, Input, Label, Button } = require('react-bootstrap');
+var { Panel, Input, Label, Button, Glyphicon } = require('react-bootstrap');
 
 var initialState = { item: { status: 'unknown' }, isNew: false };
 
@@ -26,7 +26,7 @@ var Responder = React.createClass({
     var header = (
       <h4>
         <Button href={gatewayPath} onClick={this.go}>Back to Gateway</Button>
-        <strong>{(responder.name == 'default') ? gatewayName : responder.name}</strong>
+        <strong><Glyphicon glyph="star"/>{(responder.name == 'default') ? gatewayName : responder.name}</strong>
         <div className="clear"/>
       </h4>
     );

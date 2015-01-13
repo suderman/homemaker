@@ -1,7 +1,7 @@
 var React = require('react');
 var InputSelect = require('app/components/InputSelect');
 var ResponderList = require('app/components/ResponderList');
-var { Panel, Input, Label, Button } = require('react-bootstrap');
+var { Panel, Input, Label, Button, Glyphicon } = require('react-bootstrap');
 
 var initialState = { item: {}, types: [], responders: [] };
 
@@ -24,7 +24,7 @@ var Device = React.createClass({
     var header = (
       <h4>
         <Button href="/homemaker/gateways" onClick={this.go}>Back to Gateways</Button>
-        <strong>{gateway.name}</strong>
+        <strong><Glyphicon glyph="cloud"/>{gateway.name}</strong>
         <div className="clear"/>
       </h4>
     );

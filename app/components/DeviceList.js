@@ -1,6 +1,6 @@
 var _ = require('lodash');
 var React = require('react');
-var { Panel, ListGroup, ListGroupItem } = require('react-bootstrap');
+var { Panel, ListGroup, ListGroupItem, Glyphicon } = require('react-bootstrap');
 var initialState = { devices: [] };
 
 var DeviceList = React.createClass({
@@ -24,13 +24,19 @@ var DeviceList = React.createClass({
           {devices.map(function(device) {
             return (
               <ListGroupItem key={device.name + device.id} className="device">
-                <a href={'/homemaker/devices/' + device.id} onClick={go}>{device.name}</a>
+                <a href={'/homemaker/devices/' + device.id} onClick={go}>
+                  <Glyphicon glyph="phone"/>
+                  <span>{device.name}</span>
+                </a>
               </ListGroupItem>
             );
           })}
 
           <ListGroupItem key='new' className="device new">
-            <a href='/homemaker/devices/new' onClick={go}>Add New Device</a>
+            <a href='/homemaker/devices/new' onClick={go}>
+              <Glyphicon glyph="plus"/>
+              <span>Add New Device</span>
+            </a>
           </ListGroupItem>
 
         </ListGroup>

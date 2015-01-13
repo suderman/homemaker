@@ -1,7 +1,7 @@
 var _ = require('lodash');
 var React = require('react');
 var InputSelect = require('app/components/InputSelect');
-var { Panel, Input, Label, Button } = require('react-bootstrap');
+var { Panel, Input, Label, Button, Glyphicon } = require('react-bootstrap');
 
 var initialState = { item: {}, devices: [], isNew: true };
 
@@ -25,7 +25,7 @@ var Command = React.createClass({
     var header = (
       <h4>
         <Button href={devicePath} onClick={this.go}>Back to Device</Button>
-        <strong>{command.name}</strong>
+        <strong><Glyphicon glyph="comment"/>{command.name}</strong>
         <div className="clear"/>
       </h4>
     );

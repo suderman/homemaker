@@ -2,7 +2,7 @@ var _ = require('lodash');
 var React = require('react');
 var InputSelect = require('app/components/InputSelect');
 var CommandList = require('app/components/CommandList');
-var { Panel, Input, Label, Button } = require('react-bootstrap');
+var { Panel, Input, Label, Button, Glyphicon } = require('react-bootstrap');
 
 var initialState = { item: {}, types: [], commands: [] };
 
@@ -32,7 +32,7 @@ var Device = React.createClass({
     var header = (
       <h4>
         <Button href="/homemaker/devices" onClick={this.go}>Back to Devices</Button>
-        <strong>{displayName}</strong>
+        <strong><Glyphicon glyph="phone"/>{displayName}</strong>
         <div className="clear"/>
       </h4>
     );

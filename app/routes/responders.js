@@ -1,8 +1,28 @@
-var _ = require('lodash/dist/lodash.underscore');
+var _ = require('lodash');
 var React = require('react');
 var { Responder } = require('app/components');
 
 var routes = [];
+
+routes.push({
+  path: '/homemaker/responders/new',
+
+  json: function(req, state) {
+    switch(req.method) {
+
+      case 'SET':
+        return this.router.post('/responders', {
+          gateway_id:           state.gateway_id,
+          address:              state.address,
+          name:                 state.name,
+          type:                 state.type,
+          custom_status_lookup: state.custom_status_lookup
+        });
+        break;
+    }
+  }
+});
+
 
 routes.push({
   path: '/homemaker/responders/:id',

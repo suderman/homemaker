@@ -21,15 +21,31 @@ var ResponderList = React.createClass({
             var name = (responder.name == 'default') ? gatewayName : responder.name;
 
             var href = '';
+            var clickEvent = function(event) {
+              event.preventDefault();
+              browser.socket.emit('json', '/homemaker/responders/new', {
+                _redirectFrom:        '/homemaker/responders/new',
+                gateway_id:           responder.gateway_id,
+                address:              responder.address,
+                name:                 responder.name,
+                type:                 responder.type,
+                custom_status_lookup: responder.custom_status_lookup
+              });
+            }
             var status = <Glyphicon glyph="star-empty"/>;
-            if (parseInt(responder.id, 10) > 0) {
+
+            if (_.parseInt(responder.id) > 0) {
               href='/homemaker/responders/' + responder.id
+              clickEvent = go;
               status = <Glyphicon glyph="star"/>;
             }
 
             return (
               <ListGroupItem key={responder.name + responder.id} className="responder">
-                <a href={href} onClick={go}>{status}&nbsp;&nbsp;{name}</a>
+                <a href={href} onClick={clickEvent}>
+                  {status}
+                  <span>{name}</span>
+                </a>
               </ListGroupItem>
             );
               
