@@ -3,10 +3,12 @@ var InputSelect = require('app/components/InputSelect');
 var ResponderList = require('app/components/ResponderList');
 var { Panel, Input, Label, Button, Glyphicon } = require('react-bootstrap');
 
-var initialState = { item: {}, types: [], responders: [] };
-
 var Device = React.createClass({
-  mixins: [require('app/components/mixins/route')(initialState)],
+  mixins: [require('app/components/mixins/route')],
+
+  getInitialState: function() {
+    return this.props.state || { item: {}, types: [], responders: [] };
+  },
 
   render: function() {
 

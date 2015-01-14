@@ -4,15 +4,24 @@ var InputSelect = require('app/components/InputSelect');
 var CommandList = require('app/components/CommandList');
 var { Panel, Input, Label, Button, Glyphicon } = require('react-bootstrap');
 
-var initialState = { item: {}, types: [], commands: [] };
-
 var Device = React.createClass({
-  mixins: [require('app/components/mixins/route')(initialState)],
+  mixins: [require('app/components/mixins/route')],
+
+  getInitialState: function() {
+    return this.props.state || { item: {}, types: [], commands: [] };
+  },
 
   render: function() {
 
-    var { types, commands, isNew } = this.state;
-    var device = this.state.item;
+    console.log('rendering Device')
+    // var { types, commands, isNew } = this.state;
+    var types = this.state.types || [], 
+        commands = this.state.commands || [], 
+        isNew = this.state.isNew || false,
+        device = this.state.item || {};
+
+    console.log('rendering Device B')
+
     device.type = device.responder_type || 'Adapter';
     var isAdapter = (device.responder_type) ? false : true;
     // var displayName = device.name || '(Unnamed Device #' + device.id + ')';
@@ -29,6 +38,8 @@ var Device = React.createClass({
       wrapperClassName: "col-sm-10"
     };
 
+    console.log('rendering Device C')
+
     var header = (
       <h4>
         <Button href="/homemaker/devices" onClick={this.go}>Back to Devices</Button>
@@ -43,6 +54,8 @@ var Device = React.createClass({
         <InputSelect name="responder_type" label="Type" value={device.type} options={types} {...input}/>
       </form>
     );
+
+    console.log('rendering Device D')
 
     return (
       <div className="device">

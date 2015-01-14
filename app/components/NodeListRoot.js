@@ -2,12 +2,15 @@ var _ = require('lodash');
 var React = require('react');
 var { Panel, ListGroup, ListGroupItem, Glyphicon } = require('react-bootstrap');
 
-var N0deList = React.createClass({
-  mixins: [require('app/components/mixins/go')],
+var N0deListRoot = React.createClass({
+  mixins: [require('app/components/mixins/route')],
+
+  getInitialState: function() {
+    return this.props.state || { nodes: [] };
+  },
 
   render: function() {
-    var nodes = _(this.props.nodes);
-    var newPath = '/homemaker/nodes/' + this.props.nodeId + '/nodes/new';
+    var nodes = _(this.state.nodes);
     var go = this.go;
 
     var header = (
@@ -33,7 +36,7 @@ var N0deList = React.createClass({
           })}
 
           <ListGroupItem key='new' className="node new">
-            <a href={newPath} onClick={go}>
+            <a href='/homemaker/nodes/new' onClick={go}>
               <Glyphicon glyph="plus"/>
               <span>Add New Node</span>
             </a>
@@ -46,4 +49,4 @@ var N0deList = React.createClass({
   }
 });
 
-module.exports = N0deList;
+module.exports = N0deListRoot;

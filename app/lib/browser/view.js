@@ -15,11 +15,11 @@ module.exports = function(browser) {
 
     // setState for currently mounted component
     setState: function(state) {
-      if ((view.component) && (view.component.setState)) {
-        view.component.setState(state);
-      } else {
-        console.log('Component is null??')
-      }
+      return state && view.mounted && view.component.setState(state);
+    },
+
+    mounted: function() {
+      return ((view.component) && (view.component.setState)) ? true : false; 
     },
 
     // Render page overtop

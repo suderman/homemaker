@@ -18,18 +18,20 @@ var Browser = function() {
   // React.js
   this.view = require('./view')(this);
 
-  // Save in-page state into local storage
-  this.cache.set(this.router.path(), global.state);
-
   // Watch all routes
   _(this.router.routes).forEach((route) => {
     this.router.observe(route);
   });
 
-  // Go to current route on DOM load
+  // Save in-page state into local storage
   document.addEventListener('DOMContentLoaded', () => {
-    this.router.init();
+    this.cache.set(this.router.path(), global.state, () => this.router.init());
   });
+
+  // // Go to current route on DOM load
+  // document.addEventListener('DOMContentLoaded', () => {
+  //   this.router.init();
+  // });
 };
 
 module.exports = new Browser();

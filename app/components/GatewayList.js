@@ -1,10 +1,13 @@
 var _ = require('lodash');
 var React = require('react');
-var { Panel, ListGroup, ListGroupItem, Glyphicon } = require('react-bootstrap');
-var initialState = { gateways: [] };
+var { Panel, ListGroup, ListGroupItem, Button, Glyphicon } = require('react-bootstrap');
 
 var GatewayList = React.createClass({
-  mixins: [require('app/components/mixins/route')(initialState)],
+  mixins: [require('app/components/mixins/route')],
+
+  getInitialState: function() {
+    return this.props.state || { gateways: [] };
+  },
 
   render: function() {
     var gateways = _(this.state.gateways);

@@ -3,16 +3,23 @@ var React = require('react');
 var InputSelect = require('app/components/InputSelect');
 var { Panel, Input, Label, Button, Glyphicon } = require('react-bootstrap');
 
-var initialState = { item: {}, devices: [], isNew: true };
-
 var Command = React.createClass({
-  mixins: [require('app/components/mixins/route')(initialState)],
+  mixins: [require('app/components/mixins/route')],
+
+  getInitialState: function() {
+    return this.props.state || { item: {}, devices: [], isNew: false };
+  },
 
   render: function() {
+    // var command = this.state.item || {};
+    // var devices = this.state.devices || [];
+    // var isNew   = this.state.isNew || false;
+    
     var command = this.state.item;
     var devices = this.state.devices;
     var isNew   = this.state.isNew;
-    var devicePath = '/homemaker/devices/' + this.state.item.device_id;
+    // var { command, devices, isNew } = this.state;
+    var devicePath = `/homemaker/devices/${command.device_id}`;
 
     var input = {
       onFocus:          this.cacheItem,

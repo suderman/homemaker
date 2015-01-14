@@ -1,6 +1,6 @@
 var Promise = require('bluebird');
 var React = require('react');
-var N0deList = require('app/components/NodeList'),
+var N0deListRoot = require('app/components/NodeListRoot'),
     N0de = require('app/components/Node');
 
 var routes = [];
@@ -96,7 +96,7 @@ routes.push({
     return {
       title: 'Nodes & Actions', 
       state: state,
-      body: <N0deList state={state}/>
+      body: <N0deListRoot state={state}/>
     };
   },
 

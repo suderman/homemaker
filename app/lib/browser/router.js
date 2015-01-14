@@ -57,20 +57,32 @@ module.exports = function(browser) {
       // See if there's any state in localstorage
       browser.cache.get(path).then(function(state) {
 
-        // Call the route's html method
-        var html = route.html.call(browser, util.req(path, 'GET'), state);
+        // If this is a new route, or there's isn't a mounted component
+        if ((router.last != route.path) || (!browser.view.mounted)) {
 
-        // Render the body and set the title
-        browser.view.body(html.body);
-        browser.view.title(html.title);
+          // Call the route's html method
+          var html = route.html.call(browser, util.req(path, 'GET'), state);
+
+          // Render the body and set the title
+          browser.view.body(html.body);
+          browser.view.title(html.title);
+        
+        // Same route, so just setState
+        } else {
+          browser.view.setState(state);
+        }
 
         // Request latest state via socket.io
         if ((!state) || (browser.cache.isNotCurrent(path)))  {
           browser.socket.emit('json', path);
         }
 
+        // Free up some memory
         state = null;
         html = null;
+
+        // Save last route loaded
+        router.last = route.path;
       });
     }
 

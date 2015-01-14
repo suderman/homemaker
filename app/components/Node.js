@@ -4,15 +4,17 @@ var InputSelect = require('app/components/InputSelect');
 var N0deList = require('app/components/NodeList');
 var { Panel, Input, Label, Button, Glyphicon } = require('react-bootstrap');
 
-var initialState = { item: {}, nodes: [], actions: [], responders: [] };
-
 var N0de = React.createClass({
-  mixins: [require('app/components/mixins/route')(initialState)],
+  mixins: [require('app/components/mixins/route')],
+
+  getInitialState: function() {
+    return this.props.state || { item: {}, nodes: [], allNodes: [], actions: [], responders: [] };
+  },
 
   render: function() {
 
     var { nodes, allNodes, actions, responders, isNew } = this.state;
-    allNodes.unshift({ id: 0, name: '/' });
+    allNodes.unshift({ id: 0, name: '(none)' });
     var node = this.state.item;
     console.log(nodes)
 
@@ -24,9 +26,14 @@ var N0de = React.createClass({
       wrapperClassName: "col-sm-10"
     };
 
+    var backHref = (node.node_id) ? `/homemaker/nodes/${node.node_id}` : '/homemaker/nodes';
+    var backText = (node.node_id) ? 'Back to Node' : 'Back to Nodes';
+    var backButton = <Button href={backHref} onClick={this.go}>{backText}</Button>;
+
+    // <Glyphicon glyph="folder-cog"/>
     var header = (
       <h4>
-        <Button href="/homemaker/nodes" onClick={this.go}>Back to Nodes</Button>
+        {backButton}
         <strong><Glyphicon glyph="folder-open"/>{node.name}</strong>
         <div className="clear"/>
       </h4>

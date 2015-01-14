@@ -2,10 +2,12 @@ var React = require('react');
 var InputSelect = require('app/components/InputSelect');
 var { Panel, Input, Label, Button, Glyphicon } = require('react-bootstrap');
 
-var initialState = { item: { status: 'unknown' }, isNew: false };
-
 var Responder = React.createClass({
-  mixins: [require('app/components/mixins/route')(initialState)],
+  mixins: [require('app/components/mixins/route')],
+
+  getInitialState: function() {
+    return this.props.state || { item: { status: 'unknown' }, isNew: false };
+  },
 
   render: function() {
     var responder = this.state.item;
