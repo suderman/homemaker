@@ -37,6 +37,8 @@ routes.push({
           status:              state.status,
           status_responder_id: state.status_responder_id,
           last_action_id:      state.last_action_id
+        },{
+          _redirect: '/homemaker/nodes/:id'
         });
         break;
     }

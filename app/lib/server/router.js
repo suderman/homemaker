@@ -42,30 +42,40 @@ Router.prototype.matchRoute = function(path) {
 
 // HTTP GET method against API
 Router.prototype.get = function(path) {
-  return http.get(this.apihost + path).get('body');
+  return http.get(this.apihost + path)
+    .then((resp) => parseJSON(resp.body))
+    .catch((err) => console.log(err));
 }
 
 // HTTP PUT method against API
-Router.prototype.put = function(path, fields) {
-  return http.put(this.apihost + path, this.parseFields(fields)).get('body');
+Router.prototype.put = function(path, fields, extra = {}) {
+  return http.put(this.apihost + path, this.parseFields(fields))
+    .then((resp) => parseJSON(resp.body))
+    .then((item) => _.merge(item, extra))
+    .catch((err) => console.log(err));
 }
 
 // HTTP POST method against API
-Router.prototype.post = function(path, fields) {
-  return http.post(this.apihost + path, this.parseFields(fields)).get('body');
+Router.prototype.post = function(path, fields, extra = {}) {
+  return http.post(this.apihost + path, this.parseFields(fields))
+    .then((resp) => parseJSON(resp.body))
+    .then((item) => _.merge(item, extra))
+    .catch((err) => console.log(err));
 }
 
 // HTTP DELETE method against API
 Router.prototype.delete = function(path) {
-  return http.delete(this.apihost + path);
+  return http.delete(this.apihost + path)
+    .catch((err) => console.log(err));
 }
 
 // Send and get JSON from the API
-Router.prototype.json = function(path, state, socket) {
+Router.prototype.json = function(path, state) {
   var req = this.req(path, state);
   var route = this.matchRoute(req.path);
 
   if ((route) && (route.json)) {
+    // GET returns state, SET returns item 
     return route.json.call(this.server, req, state);
   } else {
     return Promise.reject(new Error('No matching json route: ' + path));
@@ -127,4 +137,17 @@ Router.prototype.render = function(req, res, data) {
 
 module.exports = function(server, apihost) {
   return server.router = new Router(server, apihost);
+}
+
+function parseJSON(string) {
+  if (_.isObject(string)) return string;
+  try { 
+    return JSON.parse(string);
+  }
+  catch(error) { 
+    return { 
+      error: error,
+      invalidJSON: string
+    } 
+  }
 }

@@ -24,7 +24,6 @@ var ResponderList = React.createClass({
             var clickEvent = function(event) {
               event.preventDefault();
               browser.socket.emit('json', '/homemaker/responders/new', {
-                _redirectFrom:        '/homemaker/responders/new',
                 gateway_id:           responder.gateway_id,
                 address:              responder.address,
                 name:                 responder.name,

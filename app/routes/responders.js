@@ -17,6 +17,8 @@ routes.push({
           name:                 state.name,
           type:                 state.type,
           custom_status_lookup: state.custom_status_lookup
+        },{
+          _redirect: '/homemaker/responders/:id'
         });
         break;
     }

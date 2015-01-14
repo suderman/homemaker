@@ -31,6 +31,8 @@ routes.push({
         return this.router.post('/devices', {
           name:            state.name,
           responder_type:  state.responder_type
+        },{
+          _redirect: '/homemaker/devices/:id'
         });
         break;
     }

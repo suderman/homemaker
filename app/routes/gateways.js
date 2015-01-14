@@ -1,4 +1,5 @@
 var Promise = require('bluebird');
+var _ = require('lodash');
 var React = require('react');
 var { GatewayList, Gateway } = require('app/components');
 
@@ -29,13 +30,15 @@ routes.push({
 
       case 'SET':
         return this.router.post('/gateways', {
-          name:     state.name,
-          type:     state.type,
-          host:     state.host,
-          port:     state.port,
-          username: state.username,
-          password: state.password,
-          active:   state.active
+          name:      state.name,
+          type:      state.type,
+          host:      state.host,
+          port:      state.port,
+          username:  state.username,
+          password:  state.password,
+          active:    state.active
+        },{
+          _redirect: '/homemaker/gateways/:id'
         });
         break;
     }

@@ -13,14 +13,11 @@ var Device = React.createClass({
 
   render: function() {
 
-    console.log('rendering Device')
     // var { types, commands, isNew } = this.state;
     var types = this.state.types || [], 
         commands = this.state.commands || [], 
         isNew = this.state.isNew || false,
         device = this.state.item || {};
-
-    console.log('rendering Device B')
 
     device.type = device.responder_type || 'Adapter';
     var isAdapter = (device.responder_type) ? false : true;
@@ -38,8 +35,6 @@ var Device = React.createClass({
       wrapperClassName: "col-sm-10"
     };
 
-    console.log('rendering Device C')
-
     var header = (
       <h4>
         <Button href="/homemaker/devices" onClick={this.go}>Back to Devices</Button>
@@ -54,8 +49,6 @@ var Device = React.createClass({
         <InputSelect name="responder_type" label="Type" value={device.type} options={types} {...input}/>
       </form>
     );
-
-    console.log('rendering Device D')
 
     return (
       <div className="device">

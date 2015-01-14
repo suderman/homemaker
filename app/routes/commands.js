@@ -33,6 +33,8 @@ routes.push({
           device_id:  state.device_id,
           feedback:   state.feedback,
           command:    state.command
+        },{
+          _redirect: '/homemaker/commands/:id'
         });
         break;
     }

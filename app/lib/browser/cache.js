@@ -32,7 +32,7 @@ module.exports = function(browser) {
         value = value || {};
         value = _.merge(value, valueUpdate);
         return localforage.setItem(key, value);
-      });
+      }).catch((err) => console.log(err));
     },
 
     isCurrent: function(path) {

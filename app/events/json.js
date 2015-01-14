@@ -8,10 +8,7 @@ events.push({
 
     // Deal with GET requests, where the state is undefined, 
     // which puts the socket in the second argument position
-    if (!socket) {
-      socket = state;
-      state = undefined;
-    }
+    if (!socket) [socket, state] = [state, undefined];
 
     console.log('json received for ' + path);
     console.log(state)
@@ -40,10 +37,7 @@ events.push({
 
     // Deal with GET requests, where the state is undefined, 
     // which puts the socket in the second argument position
-    if (!socket) {
-      socket = state;
-      state = undefined;
-    }
+    if (!socket) [socket, state] = [state, undefined];
 
     switch (require('app/lib/util').method(state)) {
 
@@ -51,30 +45,38 @@ events.push({
       case 'GET':
         this.router.json(path).then((stateForClient) => {
           socket.emit('json', path, stateForClient);
-        }).catch(function(error) { console.log(error); });
+        }).catch((err) => console.log(err));
         break;
 
       // Set method, send the new state back to the client
       case 'SET':
-        this.router.json(path, state).then((stateForClient) => {
+        this.router.json(path, state).then((item) => {
 
           // TODO: emit state for all other paths changed by this update
           // For now just invalidating all routes
           this.socket.io.emit('invalidateAllExcept', [path]);
 
-          var body = JSON.parse(stateForClient);
-          socket.broadcast.emit('json', path, { item: body });
+          // Remove redirect from item
+          var redirect = item._redirect;
+          delete item._redirect;
 
-          // All chance to alter path this json was sent "from"
-          path = (state._redirectFrom) ? state._redirectFrom : path;
+          // Update everybody's localstorage
+          socket.broadcast.emit('json', path, { item: item });
 
-          if (!body.id) return;
-          var newPath = redirectFrom(path, body.id);
-          if (newPath) {
-            socket.emit('redirect', newPath);
+          // Check for _redirect instructions
+          if (_.isString(redirect)) {
+
+            // Replace all :colon slugs with value in item
+            redirect = redirect.split('/').map((slug) => {
+              let [ colon, key ] = slug.split(':');
+              return item[key] || slug;
+            }).join('/');
+
+            // Send redirect to client
+            socket.emit('redirect', redirect);
           }
 
-        }).catch(function(error) { console.log(error); });
+        }).catch((err) => console.log(err));
         break;
 
       // Remove method
@@ -85,33 +87,10 @@ events.push({
         this.socket.io.emit('invalidateAll');
 
         // Remove on client-side
-        this.router.json(path, null).catch(function(error) { console.log(error); });
+        this.router.json(path, null).catch((err) => console.log(err));
         break;
     }
   }
 });
-
-
-function redirectFrom(path, id) {
-  var pathEndsWith = function(pattern) { return path.match(pattern+'$')==pattern; }
-
-  // Only redirect when current only a '/new' path
-  if (!pathEndsWith('/new')) return;
-
-  // Every path starts with this
-  var newPath = '/homemaker';
-
-  if      (pathEndsWith('/commands/new'))   newPath += '/commands/'   + id; 
-  else if (pathEndsWith('/devices/new'))    newPath += '/devices/'    + id; 
-  else if (pathEndsWith('/gateways/new'))   newPath += '/gateways/'   + id; 
-  else if (pathEndsWith('/responders/new')) newPath += '/responders/' + id; 
-  else if (pathEndsWith('/nodes/new'))      newPath += '/nodes/'      + id; 
-  else if (pathEndsWith('/actions/new'))    newPath += '/actions/'    + id; 
-  else if (pathEndsWith('/urls/new'))       newPath += '/urls/'       + id; 
-  else if (pathEndsWith('/new'))            newPath = [path.split('/new')[0], id].join('/');
-
-  return newPath;
-}
-
 
 module.exports = events;

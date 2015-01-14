@@ -83,7 +83,8 @@ module.exports = function(browser) {
 
         // Save last route loaded
         router.last = route.path;
-      });
+
+      }).catch(function(err) { console.log(err); });
     }
 
   };
