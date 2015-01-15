@@ -15,14 +15,14 @@ module.exports = function(browser) {
     browser.cache.invalidateAll();
 
     // Add offline class
-    document.body.className = (document.body.className + ' offline').trim();
+    document.body.addClass('offline');
   });
 
   network.offline.on('up', function() {
     network.state = 'up';
 
     // Remove offline class
-    document.body.className = document.body.className.replace(/offline/g, '').trim();
+    document.body.removeClass('offline');
   });
 
   return browser.network = network;

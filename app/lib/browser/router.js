@@ -50,6 +50,7 @@ module.exports = function(browser) {
 
     // Load route into body and title
     load: function(route) {
+      document.body.addClass('loading');
 
       // Current path in browser
       var path = router.path();
@@ -75,6 +76,7 @@ module.exports = function(browser) {
         // Request latest state via socket.io
         if ((!state) || (browser.cache.isNotCurrent(path)))  {
           browser.socket.emit('json', path);
+          document.body.addClass('json');
         }
 
         // Free up some memory
@@ -83,8 +85,10 @@ module.exports = function(browser) {
 
         // Save last route loaded
         router.last = route.path;
-
-      }).catch(function(err) { console.log(err); });
+        document.body.removeClass('loading');
+        // }).catch((err) => console.log(err)).finally(() => util.removeClass('loading'));
+        
+      }).catch((err) => console.log(err));
     }
 
   };

@@ -1,4 +1,5 @@
 var _ = require('lodash');
+require('./dom'); // extend dom
 
 // Constructor for brower's router (main global)
 var Browser = function() {

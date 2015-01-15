@@ -5,6 +5,7 @@ events.push({
   name: 'json',
 
   browser: function(path, state, socket) {
+    document.body.removeClass('json');
 
     // Deal with GET requests, where the state is undefined, 
     // which puts the socket in the second argument position
