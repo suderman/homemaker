@@ -5,7 +5,14 @@ body {
   &.offline { background-color: gray; }
   &.loading { background-color: lightgray; }
   &.json    { background-color: lightblue; }
+
+  -webkit-transition: background-color 0.5s ease-in-out 0.5s;
+     -moz-transition: background-color 0.5s ease-in-out 0.5s;
+      -ms-transition: background-color 0.5s ease-in-out 0.5s;
+       -o-transition: background-color 0.5s ease-in-out 0.5s;
+          transition: background-color 0.5s ease-in-out 0.5s;
 }
+
 
 #app { 
   max-width: 750px; 
