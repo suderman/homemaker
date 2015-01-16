@@ -23,7 +23,8 @@ routes.push({
         return Promise.props({
           item:       {},
           nodes:      [],
-          allNodes:   this.router.get('/nodes/tree'),
+          nodeTree:   this.router.get('/nodes/tree'),
+          allNodes:   this.router.get('/nodes/all'),
           actions:    this.router.get('/actions'),
           responders: this.router.get('/responders'),
           isNew:      true
@@ -65,7 +66,8 @@ routes.push({
         return Promise.props({
           item:       this.router.get('/nodes/' + id),
           nodes:      this.router.get('/nodes/' + id + '/nodes'),
-          allNodes:   this.router.get('/nodes/tree'),
+          nodeTree:   this.router.get('/nodes/tree'),
+          allNodes:   this.router.get('/nodes/all'),
           actions:    this.router.get('/actions'),
           responders: this.router.get('/responders'),
           isNew:      false
