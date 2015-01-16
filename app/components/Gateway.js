@@ -15,6 +15,9 @@ var Device = React.createClass({
     var { types, responders, isNew } = this.state;
     var gateway = this.state.item;
 
+    var go = { onClick: this.go, onTouchStart: this.go }
+    var removeItem = { onClick: this.removeItem, onTouchStart: this.removeItem }
+
     var input = {
       onFocus:          this.cacheItem,
       onChange:         this.setItem,
@@ -23,9 +26,10 @@ var Device = React.createClass({
       wrapperClassName: "col-sm-10"
     };
 
+
     var header = (
       <h4>
-        <Button href="/homemaker/gateways" onClick={this.go}>Back to Gateways</Button>
+        <Button href="/homemaker/gateways" {...go}>Back to Gateways</Button>
         <strong><Glyphicon glyph="cloud"/>{gateway.name}</strong>
         <div className="clear"/>
       </h4>
@@ -43,7 +47,7 @@ var Device = React.createClass({
             <Input type="text" name="password" label="Password" value={gateway.password} {...input}/>
             <InputSelect name="type" label="Type" value={gateway.type} options={types} {...input}/>
           </form>
-          {(isNew) || <Button bsStyle="danger" href="/homemaker/gateways" onClick={this.removeItem}>Delete</Button>}
+          {(isNew) || <Button bsStyle="danger" href="/homemaker/gateways" {...removeItem}>Delete</Button>}
         </Panel>
         {(isNew) || <ResponderList gateway_id={gateway.id} gatewayName={gateway.name} responders={responders} />}
       </div>

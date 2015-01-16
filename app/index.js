@@ -5,6 +5,9 @@ var express = require('express');
 var app = express();
 var path = require('path');
 
+// var cssgrace = require('cssgrace');
+// var autoprefixer = require('autoprefixer-core')
+
 // Load environment variables
 require('dotenv').load();
 
@@ -27,6 +30,19 @@ app.set('views', path.join(__dirname));
 app.set('view engine', 'hjs');
 
 // LESS compiler
+// .use(autoprefixer({ browsers: 'last 2 versions', cascade: false }))
+// var less = require('less-middleware');
+// var stylesInput = path.join(__dirname, 'styles');
+// var stylesOutput = path.join(__dirname, '../public');
+
+// app.use(less(stylesInput, { 
+//   dest: stylesOutput, 
+//   'postprocess.css': function(css, req) {
+//     console.log(css)
+//     console.log(req)
+//   }
+// }));
+
 app.use(require('less-middleware')(path.join(__dirname, 'styles'), {
   dest: path.join(__dirname, '../public')
 }));

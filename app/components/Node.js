@@ -4,19 +4,23 @@ var InputSelect = require('app/components/InputSelect');
 var N0deList = require('app/components/NodeList');
 var { Panel, Input, Label, Button, Glyphicon } = require('react-bootstrap');
 
+var init = { item: {}, nodes: [], allNodes: [], actions: [], responders: [], isNew: false };
+
 var N0de = React.createClass({
   mixins: [require('app/components/mixins/route')],
 
   getInitialState: function() {
-    return this.props.state || { item: {}, nodes: [], allNodes: [], actions: [], responders: [] };
+    return this.props.state || init;
   },
 
   render: function() {
 
-    var { nodes, allNodes, actions, responders, isNew } = this.state;
-    allNodes.unshift({ id: 0, name: '(none)' });
-    var node = this.state.item;
-    console.log(nodes)
+    var node = this.state.item || init.item,
+        nodes = this.state.nodes || init.nodes,
+        actions = this.state.actions || init.actions,
+        responders = this.state.responders || init.responders,
+        allNodes = this.state.allNodes || init.allNodes;
+    var isNew = this.state.isNew || init.isNew;
 
     var input = {
       onFocus:          this.cacheItem,
@@ -43,7 +47,7 @@ var N0de = React.createClass({
       <div className="node">
         <Panel header={header}>
           <form className="form-horizontal">
-            <InputSelect name="node_id" label="Parent Node" value={node.node} options={allNodes} {...input}/>
+            <InputSelect name="node_id" label="Parent" value={node.node_id} options={allNodes} children="nodes" disabled={node.id} {...input}/>
             <Input type="text" name="name" label="Name" value={node.name} {...input}/>
             <Input type="text" name="status" label="Status" value={node.status} {...input}/>
             // <InputSelect name="status_responder_id" label="Status Responder" value={node.status_responder_id} options={responders} {...input}/>

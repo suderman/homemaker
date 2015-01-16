@@ -2,11 +2,13 @@
  * -----------------------------
    /api/nodes
    /api/nodes/all
+   /api/nodes/tree
    /api/nodes/1
    /api/nodes/1/nodes
    /api/nodes/1/actions
    /api/nodes/1/urls
 */
+var _ = require('lodash');
 module.exports = function(app) {
 
   // Models used
@@ -26,7 +28,7 @@ module.exports = function(app) {
 
   // Index
   .get('/', function(req, res) {
-    Node.findAll({ node_id: null }).then(function(collection){ 
+    Node.findAll({ node_id: 0 }).then(function(collection){ 
       res.send(collection.toJSON({shallow: true})); 
     }).catch(router.error.bind(router, res));
   })
@@ -38,6 +40,26 @@ module.exports = function(app) {
     }).catch(router.error.bind(router, res));
   })
 
+  // Index tree
+  .get('/tree', function(req, res) {
+    return Node.findAll().then(function(collection) {
+
+      var allNodes = collection.toJSON({shallow: true}) || [];
+
+      function findNodes(parentNodeId) {
+        var nodes = _.where(allNodes, { node_id: parentNodeId });
+        nodes.forEach((node) => node.nodes = findNodes(node.id));
+        return nodes;
+      }
+
+      res.send([{ 
+        id: 0, 
+        name: '/', 
+        nodes: findNodes(0) 
+      }]); 
+
+    }).catch(router.error.bind(router, res));
+  })
 
   .get('/:id/update', function(req, res) {
 

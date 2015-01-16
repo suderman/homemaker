@@ -9,19 +9,42 @@ var InputSelect = React.createClass({
   },
 
   render: function() {
-    var { label, name, value, options, onChange, ...other } = this.props;
-    options = _(options);
+
+    var { label, name, value, options, disabled, onChange, children, ...other } = this.props;
+    disabled = (!disabled) ? [] : (!_.isArray(disabled)) ? [disabled] : disabled;
+    children = children || null;
+    var allOptions = [];
+
+    function makeOptions(options, prefix = '', disableChildren = false) {
+
+      _(options).forEach(function(type) {
+        var optionName = type, optionValue = type;
+
+        if (_.isObject(type)) {
+          [optionName, optionValue] = [type.name, type.id];
+          var childOptions = ((type[children]) && (type[children].length)) ? type[children] : false;
+        }
+        
+        if ((prefix) && (prefix != '/')) optionName = `${prefix} / ${optionName}`;
+        var optionDisabled = (disableChildren) ? true : _.contains(disabled, optionValue) ? true : false;
+
+        var attributes = {
+          key: optionValue,
+          value: optionValue,
+          selected: (value == optionValue),
+          disabled: optionDisabled
+        }
+
+        allOptions.push(<option {...attributes}>{optionName}</option>)
+
+        if (childOptions) makeOptions(childOptions, optionName, optionDisabled);
+      });
+    }
+    makeOptions(options);
 
     return (
       <Input {...other} type="select" ref="input" label={label} name={name} value={value} onChange={onChange}>
-        {options.map(function(type) {
-          var optionName = type, optionValue = type;
-          if (_.isObject(type)) {
-            optionName = type.name;
-            optionValue = type.id;
-          }
-          return <option key={optionValue} value={optionValue} selected={value == optionValue}>{optionName}</option>
-        })}
+        {allOptions}
       </Input>
     );
   }

@@ -11,7 +11,7 @@ var GatewayList = React.createClass({
 
   render: function() {
     var gateways = _(this.state.gateways);
-    var go = this.go;
+    var go = { onClick: this.go, onTouchStart: this.go }
 
     var header = (
       <h4>
@@ -27,7 +27,7 @@ var GatewayList = React.createClass({
         {gateways.map(function(gateway) {
           return (
             <ListGroupItem key={gateway.name} className="gateway">
-              <a href={'/homemaker/gateways/' + gateway.id} onClick={go}>
+              <a href={'/homemaker/gateways/' + gateway.id} {...go}>
                 <Glyphicon glyph="cloud"/>
                 <span>{gateway.name}</span>
               </a>
@@ -36,7 +36,7 @@ var GatewayList = React.createClass({
         })}
 
         <ListGroupItem key='new' className="gateway new">
-          <a href='/homemaker/gateways/new' onClick={go}>
+          <a href='/homemaker/gateways/new' {...go}>
             <Glyphicon glyph="plus"/>
             <span>Add New Gateway</span>
           </a>

@@ -86,7 +86,6 @@ module.exports = function(browser) {
         // Save last route loaded
         router.last = route.path;
         document.body.removeClass('loading');
-        // }).catch((err) => console.log(err)).finally(() => util.removeClass('loading'));
         
       }).catch((err) => console.log(err));
     }

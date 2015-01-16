@@ -18,7 +18,7 @@ module.exports = function(browser) {
     },
 
     get: function() {
-      return localforage.getItem.apply(localforage, arguments);
+      return localforage.getItem.apply(localforage, arguments).catch((e) => null);
     },
 
     remove: function(key) {
