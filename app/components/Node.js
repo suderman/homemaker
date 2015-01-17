@@ -2,6 +2,7 @@ var _ = require('lodash');
 var React = require('react');
 var InputSelect = require('app/components/InputSelect');
 var N0deList = require('app/components/NodeList');
+var ButtonConfirm = require('app/components/ButtonConfirm');
 var { Panel, Input, Label, Button, Glyphicon } = require('react-bootstrap');
 
 var init = { item: { id: 0, name: '/', node_id: 0 }, nodes: [], nodeTree: [], allNodes: [], actions: [], responders: [], isNew: false };
@@ -61,7 +62,7 @@ var N0de = React.createClass({
             // <InputSelect name="status_responder_id" label="Status Responder" value={node.status_responder_id} options={responders} {...input}/>
             // <InputSelect name="last_action_id" label="Last Action" value={node.last_action_id} options={actions} {...input}/>
           </form>
-          {(isNew) || <Button bsStyle="danger" href="/homemaker/node" onClick={this.removeItem}>Delete</Button>}
+          {(isNew) || <ButtonConfirm href={backHref} onClick={this.removeItem} confirm="Confirm Delete">Delete</ButtonConfirm>}
         </Panel>
         {(isNew) || <N0deList nodeId={node.id} nodes={nodes} />}
       </div>

@@ -1,5 +1,6 @@
 var React = require('react');
 var InputSelect = require('app/components/InputSelect');
+var ButtonConfirm = require('app/components/ButtonConfirm');
 var { Panel, Input, Label, Button, Glyphicon } = require('react-bootstrap');
 
 var Responder = React.createClass({
@@ -44,7 +45,7 @@ var Responder = React.createClass({
             <Input type="text" ref="type" name="name" label="Type" value={responder.type} disabled={true} {...input}/>
             <Input type="text" ref="status" name="status" label="Status" value={status} disabled={true} {...input}/>
           </form>
-          {(isNew) || <Button bsStyle="danger" href={gatewayPath} onClick={this.removeItem}>{deleteText}</Button>}
+          {(isNew) || <ButtonConfirm href={gatewayPath} onClick={this.removeItem} confirm={'Confirm ' + deleteText}>{deleteText}</ButtonConfirm>}
         </Panel>
       </div>
     );

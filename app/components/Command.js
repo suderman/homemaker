@@ -1,6 +1,7 @@
 var _ = require('lodash');
 var React = require('react');
 var InputSelect = require('app/components/InputSelect');
+var ButtonConfirm = require('app/components/ButtonConfirm');
 var { Panel, Input, Label, Button, Glyphicon } = require('react-bootstrap');
 
 var Command = React.createClass({
@@ -46,7 +47,7 @@ var Command = React.createClass({
             <Input type="text" ref="feedback" name="feedback" label="Feedback" value={command.feedback} {...input}/>
             <Input type="textarea" ref="command" name="command" label="Command" value={command.command} {...input}/>
           </form>
-          {(isNew) || <Button bsStyle="danger" href={devicePath} onClick={this.removeItem}>Delete</Button>}
+          {(isNew) || <ButtonConfirm href={devicePath} onClick={this.removeItem} confirm="Confirm Delete">Delete</ButtonConfirm>}
         </Panel>
       </div>
     );

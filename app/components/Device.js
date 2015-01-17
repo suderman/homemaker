@@ -1,6 +1,7 @@
 var _ = require('lodash');
 var React = require('react');
 var InputSelect = require('app/components/InputSelect');
+var ButtonConfirm = require('app/components/ButtonConfirm');
 var CommandList = require('app/components/CommandList');
 var { Panel, Input, Label, Button, Glyphicon } = require('react-bootstrap');
 
@@ -54,7 +55,7 @@ var Device = React.createClass({
       <div className="device">
         <Panel header={header}>
           {form}
-          {((isNew) || (isAdapter)) || <Button bsStyle="danger" href="/homemaker/devices" onClick={this.removeItem}>Delete</Button>}
+          {((isNew) || (isAdapter)) || <ButtonConfirm href="/homemaker/devices" onClick={this.removeItem} confirm="Confirm Delete">Delete</ButtonConfirm>}
         </Panel>
         {(isNew) || <CommandList deviceId={device.id} isAdapter={isAdapter} commands={commands} />}
       </div>

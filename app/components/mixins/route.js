@@ -76,32 +76,3 @@ var mixin = {
 // Include go method
 mixin = _.assign(mixin, require('./go'));
 module.exports = mixin;
-
-// module.exports = function(initialState) {
-//
-//   // mixin.getInitialState = function() {
-//   //   // initialState = initialState || {};
-//   //   //
-//   //   // // Snag global.state (if present) and nullify it
-//   //   // if (global.state) {
-//   //   //   initialState = _.cloneDeep(global.state);
-//   //   //   global.state = null;
-//   //   // }
-//   //   //
-//   //   // return this.props.state || initialState;
-//   //
-//   //   // // Snag global.state (if present) and nullify it
-//   //   // if (global.state) {
-//   //   //   var globalState = _.cloneDeep(global.state);
-//   //   //   delete global.state;
-//   //   // }
-//   //   console.log('this.props')
-//   //   console.log(this.props)
-//   //
-//   //   return this.props.state || {};
-//   // }
-//
-//   // Include go method
-//   mixin = _.assign(mixin, require('./go'));
-//   return mixin;
-// }

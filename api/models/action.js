@@ -69,15 +69,13 @@ module.exports = function(app) {
     },
 
     deleteURL: function() {
-      return db.model('URL').find({ node_id: id }).then(function(url) {
+      var id = this.get('id');
+      if (id < 1) return;
+
+      return db.model('URL').find({ action_id: id }).then(function(url) {
         return url.destroy();
       });
     },
-    // deleteURL: function() {
-    //   return db.model('URL').find({ action_id: id }).then(function(url) {
-    //     return url.destroy();
-    //   });
-    // },
 
     updateURL: function() {
 

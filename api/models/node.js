@@ -60,6 +60,8 @@ module.exports = function(app) {
     },
 
     deleteURL: function() {
+      var id = this.get('id');
+      if (id < 1) return;
       return db.model('URL').find({ node_id: id }).then(function(url) {
         return url.destroy();
       });

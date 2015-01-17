@@ -20,9 +20,9 @@ module.exports = function(app) {
   router
   
   // Everything but index
-  .getResource(Node)   
-  .postResource(Node)  
-  .putResource(Node)   
+  .getResource(Node)
+  .postResource(Node)
+  .putResource(Node)
   .deleteResource(Node)
   .nestedResource(Node)
 

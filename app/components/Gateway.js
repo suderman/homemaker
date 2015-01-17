@@ -1,5 +1,6 @@
 var React = require('react');
 var InputSelect = require('app/components/InputSelect');
+var ButtonConfirm = require('app/components/ButtonConfirm');
 var ResponderList = require('app/components/ResponderList');
 var { Panel, Input, Label, Button, Glyphicon } = require('react-bootstrap');
 
@@ -47,7 +48,7 @@ var Device = React.createClass({
             <Input type="text" name="password" label="Password" value={gateway.password} {...input}/>
             <InputSelect name="type" label="Type" value={gateway.type} options={types} {...input}/>
           </form>
-          {(isNew) || <Button bsStyle="danger" href="/homemaker/gateways" {...removeItem}>Delete</Button>}
+          {(isNew) || <ButtonConfirm href="/homemaker/gateways" onClick={this.removeItem} confirm="Confirm Delete">Delete</ButtonConfirm>}
         </Panel>
         {(isNew) || <ResponderList gateway_id={gateway.id} gatewayName={gateway.name} responders={responders} />}
       </div>
