@@ -6,6 +6,48 @@ var N0deListRoot = require('app/components/NodeListRoot'),
 var routes = [];
 
 routes.push({
+  path: '/homemaker/nodes/:id/nodes/new',
+
+  html: function(req, state) {
+    return {
+      title: 'New Node', 
+      state: state,
+      body: <N0de state={state}/>
+    };
+  },
+
+  json: function(req, state) {
+    var id = req.slugs[3];
+    switch(req.method) {
+
+      case 'GET':
+        return Promise.props({
+          item:       { node_id: id },
+          nodes:      [],
+          nodeTree:   this.router.get('/nodes/tree'),
+          allNodes:   this.router.get('/nodes/all'),
+          actions:    this.router.get('/actions'),
+          responders: this.router.get('/responders'),
+          isNew:      true
+        });
+        break;
+
+      case 'SET':
+        return this.router.post('/nodes', {
+          node_id:             state.node_id,
+          name:                state.name,
+          status:              state.status,
+          status_responder_id: state.status_responder_id,
+          last_action_id:      state.last_action_id
+        },{
+          _redirect: '/homemaker/nodes/:id'
+        });
+        break;
+    }
+  }
+});
+
+routes.push({
   path: '/homemaker/nodes/new',
 
   html: function(req, state) {
@@ -45,6 +87,8 @@ routes.push({
     }
   }
 });
+
+
 
 
 routes.push({
