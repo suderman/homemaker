@@ -46,11 +46,21 @@ var mixin = {
     var path = browser.router.path();
     browser.socket.emit('json', path, this.state.item);
 
+    // // Call for an update if data-attribute is set
+    // if (event.target.getAttribute('data-update')) {
+    //   browser.cache.invalidate(path);
+    //   browser.socket.emit('json', path);
+    //
+    // // Also save to localstorage (only if not a new item)
+    // } else if (!(path.match('/new$')=='/new')) {
+    //   browser.cache.set(path, this.state);
+    // }
+
     // Also save to localstorage (only if not a new item)
-    if (!(path.match('/new$')=='/new')) { 
+    if (!(path.match('/new$')=='/new')) {
       browser.cache.set(path, this.state);
     }
-  
+
   },
 
   removeItem: function(event) {

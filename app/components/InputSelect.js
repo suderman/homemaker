@@ -40,7 +40,23 @@ var InputSelect = React.createClass({
         if (childOptions) makeOptions(childOptions, optionName, optionDisabled);
       });
     }
-    makeOptions(options);
+
+    // If options is object with keys, make optgroups
+    if (_.isPlainObject(options)){
+      var optGroups = [];
+
+      _(options).forEach((value, key) => {
+        allOptions = [];
+        makeOptions(value);
+        optGroups.push(<optgroup key={key} label={key}>{_.clone(allOptions)}</optgroup>);
+      });
+
+      allOptions = optGroups;
+
+    // If it's an array, skip making optgroups
+    } else {
+      makeOptions(options);
+    }
 
     return (
       <Input {...other} type="select" ref="input" label={label} name={name} value={value} onChange={onChange}>

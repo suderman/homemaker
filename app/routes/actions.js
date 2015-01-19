@@ -25,14 +25,19 @@ routes.push({
           item:       { node_id: id },
           nodeTree:   this.router.get('/nodes/tree'),
           allNodes:   this.router.get('/nodes/all'),
-          responders: this.router.get('/responders'),
-          commands:   [],
+          responders: this.router.get('/responders').then((responders) => {
+                        return _(responders).map((responder) => {
+                          responder.name = responder.title;
+                          return responder;
+                        }).sortBy((responder) => responder.name.toLowerCase()).value();
+                      }),
+          commands:   { 'Custom Command': [{ id: 0, name: 'Custom Command' }]},
           isNew:      true
         });
         break;
 
       case 'SET':
-        return this.router.post('/action', {
+        return this.router.post('/actions', {
           node_id:             state.node_id,
           name:                state.name,
           responder_id:        state.responder_id,
@@ -65,7 +70,7 @@ routes.push({
 
       case 'GET':
         return Promise.props({
-          item:       { node_id: id },
+          item:       this.router.get('/actions/' + id),
           nodeTree:   this.router.get('/nodes/tree'),
           allNodes:   this.router.get('/nodes/all'),
           responders: this.router.get('/responders').then((responders) => {
@@ -76,13 +81,13 @@ routes.push({
                       }),
           commands:   this.router.get('/actions/' + id).then((action) => {
                         return (!action.responder_id) ? [] : this.router.get('/responders/' + action.responder_id + '/commands');
-                      }),
+                      }).then((commands) => _.merge({ 'Custom Command': [{ id: 0, name: 'Custom Command' }]}, commands)),
           isNew:      false
         });
         break;
 
       case 'SET':
-        return this.router.put('/action/' + id, {
+        return this.router.put('/actions/' + id, {
           node_id:             state.node_id,
           name:                state.name,
           responder_id:        state.responder_id,
