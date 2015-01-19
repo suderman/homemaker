@@ -23,9 +23,9 @@ module.exports = function(app) {
       // Gateway Name + ResponderType + Responder Name
       title: function() {
         return [
-          this.get('gatewayName') || this.related('gateway').get('name'), ' ',
+          this.get('gatewayName') || this.related('gateway').get('name'), ' - ',
           this.get('type'),
-          this.get('name') != 'default' ? ': ' + this.get('name') : ''
+          this.get('name') != 'default' ? ' - ' + this.get('name') : '',
         ].join('');
       },
 

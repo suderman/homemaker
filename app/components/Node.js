@@ -2,6 +2,7 @@ var _ = require('lodash');
 var React = require('react');
 var InputSelect = require('app/components/InputSelect');
 var N0deList = require('app/components/NodeList');
+var ActionList = require('app/components/ActionList');
 var ButtonConfirm = require('app/components/ButtonConfirm');
 var { Panel, Input, Label, Button, Glyphicon } = require('react-bootstrap');
 
@@ -43,7 +44,6 @@ var N0de = React.createClass({
     var backText = (node.node_id) ? 'Back to Node' : 'Back to Nodes';
     var backButton = <Button href={backHref} onClick={this.go}>{backText}</Button>;
 
-    // <Glyphicon glyph="folder-cog"/>
     var header = (
       <h4>
         {backButton}
@@ -51,6 +51,9 @@ var N0de = React.createClass({
         <div className="clear"/>
       </h4>
     );
+
+    var nodeList = (isNew) ? ''   : <N0deList nodeId={node.id} nodes={nodes}/>;
+    var actionList = (isNew) ? '' : <ActionList nodeId={node.id} actions={actions}/>;
 
     return (
       <div className="node">
@@ -64,7 +67,8 @@ var N0de = React.createClass({
           </form>
           {(isNew) || <ButtonConfirm href={backHref} onClick={this.removeItem} confirm="Confirm Delete">Delete</ButtonConfirm>}
         </Panel>
-        {(isNew) || <N0deList nodeId={node.id} nodes={nodes} />}
+        {(actions.length > nodes.length) ? actionList : nodeList}
+        {(actions.length > nodes.length) ? nodeList : actionList}
       </div>
     );
 

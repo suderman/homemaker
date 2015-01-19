@@ -26,7 +26,7 @@ routes.push({
           nodes:      [],
           nodeTree:   this.router.get('/nodes/tree'),
           allNodes:   this.router.get('/nodes/all'),
-          actions:    this.router.get('/actions'),
+          actions:    [],
           responders: this.router.get('/responders'),
           isNew:      true
         });
@@ -67,7 +67,7 @@ routes.push({
           nodes:      [],
           nodeTree:   this.router.get('/nodes/tree'),
           allNodes:   this.router.get('/nodes/all'),
-          actions:    this.router.get('/actions'),
+          actions:    [],
           responders: this.router.get('/responders'),
           isNew:      true
         });
@@ -112,7 +112,7 @@ routes.push({
           nodes:      this.router.get('/nodes/' + id + '/nodes'),
           nodeTree:   this.router.get('/nodes/tree'),
           allNodes:   this.router.get('/nodes/all'),
-          actions:    this.router.get('/actions'),
+          actions:    this.router.get('/nodes/' + id + '/actions'),
           responders: this.router.get('/responders'),
           isNew:      false
         });
