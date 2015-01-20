@@ -56,6 +56,11 @@ var Action = React.createClass({
       onBlur:   this.saveItem
     };
 
+    this.run = function(event) {
+      event.preventDefault();
+      if (action.id) browser.socket.emit('run', action.id);
+    }
+
     var path = [action.name || ''];
     var foundNode = { node_id: _.parseInt(action.node_id) };
     while(foundNode.node_id != 0) {
@@ -87,6 +92,7 @@ var Action = React.createClass({
             <Input type="text" name="feedback" label="Feedback" value={action.feedback} {...input}/>
           </form>
           {(isNew) || <ButtonConfirm href={backHref} onClick={this.removeItem} confirm="Confirm Delete">Delete</ButtonConfirm>}
+          {(isNew) || <Button href='#' onClick={this.run}>Run</Button>}
         </Panel>
       </div>
     );
