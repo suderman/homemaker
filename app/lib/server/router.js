@@ -145,9 +145,6 @@ function parseJSON(string) {
     return JSON.parse(string);
   }
   catch(error) { 
-    return { 
-      error: error,
-      invalidJSON: string
-    } 
+    return { error: error, string: string } 
   }
 }

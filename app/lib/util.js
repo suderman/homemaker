@@ -48,6 +48,17 @@ module.exports = {
     }
   },
 
-  method: methodFromState
+  method: methodFromState,
+
+  parseJSON: function(string) {
+    if (_.isObject(string)) return string;
+    try { 
+      return JSON.parse(string);
+    }
+    catch(error) { 
+      return { error: error, string: string }
+    }
+  }
+
 }
 

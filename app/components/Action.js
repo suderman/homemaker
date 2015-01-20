@@ -1,10 +1,11 @@
 var _ = require('lodash');
+var util = require('app/lib/util');
 var React = require('react');
 var InputSelect = require('app/components/InputSelect');
 var ButtonConfirm = require('app/components/ButtonConfirm');
 var { Panel, Input, Label, Button, Glyphicon } = require('react-bootstrap');
 
-var init = { item: { id: 0, name: '/', node_id: 0, node: {} }, nodeTree: [], allNodes: [], commands: [], responders: [], isNew: false };
+var init = { item: { id: 0, name: '/', node_id: 0, node: {}, command: '', feedback: ''  }, nodeTree: [], allNodes: [], commands: [], responders: [], isNew: false };
 
 var Action = React.createClass({
   mixins: [require('app/components/mixins/route')],
@@ -14,10 +15,10 @@ var Action = React.createClass({
   },
 
   render: function() {
+    var component = this;
 
     var action = this.state.item || init.item,
         node = this.state.item.node || init.item.node,
-        command = this.state.item.command || { command: '', feedback: ''},
         commands = this.state.commands || init.commands,
         responders = this.state.responders || init.responders,
         nodeTree = this.state.nodeTree || init.nodeTree,
@@ -30,6 +31,29 @@ var Action = React.createClass({
       onBlur:           this.saveItem,
       labelClassName:   "col-sm-2",
       wrapperClassName: "col-sm-10"
+    };
+
+    var chooser = {
+      labelClassName:   "col-sm-2",
+      wrapperClassName: "col-sm-10",
+
+      options: commands,
+      defaultValue: 'chooser',
+
+      onChange: function(event) {
+        var command = util.parseJSON(event.target.value);
+        console.log(command);
+        if (!command.error) {
+          var item = _.clone(component.state.item);
+          item.command = command.command;
+          item.feedback = command.feedback;
+          component.setState({ item:item });
+          item = null;
+        }
+      },
+
+      onFocus:  this.cacheItem,
+      onBlur:   this.saveItem
     };
 
     var path = [action.name || ''];
@@ -58,9 +82,9 @@ var Action = React.createClass({
             <InputSelect name="node_id" label="Parent" value={action.node_id} options={nodeTree} children="nodes" disabled={action.id} {...input}/>
             <Input type="text" name="name" label="Name" value={action.name} {...input}/>
             <InputSelect name="responder_id" label="Responder" data-update="true" value={action.responder_id} options={responders} {...input}/>
-            <InputSelect name="command_id" label="Command" data-update="true" value={action.command_id} options={commands} {...input}/>
-            <Input type="textarea" name="custom_command" label="Code" value={action.custom_command} placeholder={command.command} {...input}/>
-            <Input type="text" name="custom_feedback" label="Feedback" value={action.custom_feedback} placeholder={command.feedback} {...input}/>
+            <InputSelect name="chooser" label="Chooser" data-update="true" {...chooser}/>
+            <Input type="textarea" name="command" label="Command" value={action.command} {...input}/>
+            <Input type="text" name="feedback" label="Feedback" value={action.feedback} {...input}/>
           </form>
           {(isNew) || <ButtonConfirm href={backHref} onClick={this.removeItem} confirm="Confirm Delete">Delete</ButtonConfirm>}
         </Panel>

@@ -8,15 +8,14 @@ module.exports = function(app) {
       }
     });
   };
-
+  
   createTable('action', function(t) {
     t.increments('id').primary(),
     t.integer('node_id'),
     t.integer('responder_id'),
     t.string('name', 255);
-    t.integer('command_id'),
-    t.text('custom_command'),
-    t.string('custom_feedback', 255);
+    t.text('command'),
+    t.string('feedback', 255);
   });
 
   createTable('command', function(t) {

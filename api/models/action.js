@@ -31,27 +31,12 @@ module.exports = function(app) {
       return this.belongsTo('Gateway').through('Responder');
     },
 
-    command: function() {
-      return this.belongsTo('Command');
-    }, 
-
     urls: function() {
       return this.hasMany('URL');
     },
 
-    virtuals: {
-
-      message: function() {
-        return this.get('custom_command') || this.related('command').get('command') || null;
-      },
-
-      feedback: function() {
-        return this.get('custom_feedback') || this.related('command').get('feedback') || null;
-      }
-    },
-
     run: function() {
-      return this.related('responder').send(this.get('message'));
+      return this.related('responder').send(this.get('command'));
     },
 
     path: function(path) {
@@ -93,7 +78,7 @@ module.exports = function(app) {
     }
 
   },{
-    related: ['node', 'responder.gateway', 'gateway', 'command'],
+    related: ['node', 'responder.gateway', 'gateway'],
     nested: ['urls']
   });
 
