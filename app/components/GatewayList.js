@@ -11,7 +11,8 @@ var GatewayList = React.createClass({
 
   render: function() {
     var gateways = _(this.state.gateways);
-    var go = { onClick: this.go, onTouchStart: this.go }
+    // var go = { onClick: this.go, onTouchStart: this.go }
+    var go = { onClick: this.go }
 
     var header = (
       <h4>

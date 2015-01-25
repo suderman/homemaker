@@ -10,6 +10,13 @@ var Responder = React.createClass({
     return this.props.state || { item: { status: 'unknown' }, isNew: false };
   },
 
+  // Save this responder when loading in case the name had changed on the adapter side
+  componentDidMount: function() {
+    if (this.state.item.id) {
+      browser.socket.emit('json', browser.router.path(), this.state.item);
+    }
+  },
+
   render: function() {
     var responder = this.state.item;
     var gateway = this.state.item.gateway;

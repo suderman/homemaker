@@ -77,3 +77,44 @@ ResponderType.prototype.message = function(command, address) {
   return [address, command].join();
 }
 
+ResponderType.prototype.parseStatus = function(nodeStatus='') {
+  var number = parseFloat(nodeStatus);
+  if (_.isNaN(number)) {
+    return nodeStatus;
+  } else {
+    return number;
+  }
+}
+
+ResponderType.prototype.getStatus = function(feedback, nodeStatus) {
+
+  var prevStatus = this.parseStatus(nodeStatus);
+  if (_.isString(prevStatus)) return feedback;
+
+  // Add value
+  if (/^\+/.test(feedback)) {
+    return prevStatus + parseFloat(feedback.split('+')[1]);
+  
+  // Subtract value
+  } else if (/^\-/.test(feedback)) {
+    return prevStatus - parseFloat(feedback.split('-')[1]);
+  
+  // Set value
+  } else {
+    return this.parseStatus(feedback);
+  }
+
+}
+
+// Stub for how to parse feedback sent from a responder
+ResponderType.prototype.feedback = function(feedback, actionFeedback, nodeStatus) {
+
+  return Promise.resolve({
+    success: true,
+    status: this.getStatus(actionFeedback, nodeStatus) || feedback,
+    prevStatus: this.parseStatus(nodeStatus),
+    feedback: feedback
+  });
+}
+
+

@@ -22,6 +22,7 @@ var Router = function(server, apihost) {
   var util = require('app/lib/util');
   this.regex = util.regex;
   this.req = util.req;
+  this.parseJSON = util.parseJSON;
 };
 
 // Make changes to data before posting to API
@@ -43,14 +44,14 @@ Router.prototype.matchRoute = function(path) {
 // HTTP GET method against API
 Router.prototype.get = function(path) {
   return http.get(this.apihost + path)
-    .then((resp) => parseJSON(resp.body))
+    .then((resp) => this.parseJSON(resp.body))
     .catch((err) => console.log(err));
 }
 
 // HTTP PUT method against API
 Router.prototype.put = function(path, fields, extra = {}) {
   return http.put(this.apihost + path, this.parseFields(fields))
-    .then((resp) => parseJSON(resp.body))
+    .then((resp) => this.parseJSON(resp.body))
     .then((item) => _.merge(item, extra))
     .catch((err) => console.log(err));
 }
@@ -58,7 +59,7 @@ Router.prototype.put = function(path, fields, extra = {}) {
 // HTTP POST method against API
 Router.prototype.post = function(path, fields, extra = {}) {
   return http.post(this.apihost + path, this.parseFields(fields))
-    .then((resp) => parseJSON(resp.body))
+    .then((resp) => this.parseJSON(resp.body))
     .then((item) => _.merge(item, extra))
     .catch((err) => console.log(err));
 }
@@ -104,47 +105,89 @@ Router.prototype.render = function(req, res, data) {
   });
 }
 
-  // Loop routes to build middleware for Express (all html routes are GET requests)
-  Router.prototype.middleware = function() {
 
-    var express = new require('express').Router();
+Router.prototype.getURL = function(req, res, next) {
 
-    // Loop through all the routes
-    _(this.routes).forEach((route) => {
+  // Strip trailing slash off path
+  var path = req.path.replace(/\/$/, '');
 
-      // Make sure the route is valid
-      if ((!route.html) || (!route.path)) return;
+  // If root, list node and actions and return status
+  if (!path) return this.get('/nodes/api').then(body => res.send(body)); 
 
-      // Add route to app (all html routes are GET requests)
-      express.use(route.path, (req, res, next) => {
+  // Ignore any png requests
+  if (/\.png$/.test(path)) return;
 
-        // Get path from express' req 
-        var path = req.originalUrl;
+  // Find matching URL record
+  this.get('/urls' + path).then((body) => {
+    switch (body.type) {
 
-        // Call the json API to get the state for this route
-        this.json(path).then((state) => {
+      // List node and actions and return status
+      case 'node':
+        this.get(`/nodes/${body.node_id}/api`).then(json => res.send(json));
+        break;
 
-          // Run the html method in the route to render
-          var data = route.html.call(this.server, this.req(path, 'GET'), state);
-          this.render(req, res, data);
+      // Run action and return status
+      case 'action':
+        this.get(`/actions/${body.action_id}/api`).then(json => res.send(json));
+        break;
 
-        }).catch(this.error.bind(this, res));
-      });
+      // Shouldn't get here
+      default:
+        res.send({
+          path: path,
+          error: 'Path not found'
+        });
+        break;
+    }
+  });
+}
+
+
+// Loop routes to build middleware for Express (all html routes are GET requests)
+Router.prototype.middleware = function() {
+
+  var express = new require('express').Router();
+
+  // Loop through all the routes
+  _(this.routes).forEach((route) => {
+
+    // Make sure the route is valid
+    if ((!route.html) || (!route.path)) return;
+
+    // Add route to app (all html routes are GET requests)
+    express.use(route.path, (req, res, next) => {
+
+      // Get path from express' req 
+      var path = req.originalUrl;
+
+      // Call the json API to get the state for this route
+      this.json(path).then((state) => {
+
+        // Run the html method in the route to render
+        var data = route.html.call(this.server, this.req(path, 'GET'), state);
+        this.render(req, res, data);
+
+      }).catch(this.error.bind(this, res));
     });
+  });
 
-    return express;
-  }
+  // Any route that doesn't match above must be a URL route
+  express.get(/^\/(.*)/, this.getURL.bind(this));
+
+  // Return router
+  return express;
+}
 
 module.exports = function(server, apihost) {
   return server.router = new Router(server, apihost);
 }
 
-function parseJSON(string) {
-  if (_.isObject(string)) return string;
-  try { 
-    return JSON.parse(string);
-  }
-  catch(error) { 
-    return { error: error, string: string } 
-  }
-}
+// function parseJSON(string) {
+//   if (_.isObject(string)) return string;
+//   try { 
+//     return JSON.parse(string);
+//   }
+//   catch(error) { 
+//     return { error: error, string: string } 
+//   }
+// }

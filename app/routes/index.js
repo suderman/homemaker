@@ -6,7 +6,6 @@ routes = routes.concat(require('./devices'));
 routes = routes.concat(require('./actions'));
 routes = routes.concat(require('./nodes'));
 routes = routes.concat(require('./home'));
-routes = routes.concat(require('./api'));
 
 // List all routes in order
 routes.forEach(function(route) {

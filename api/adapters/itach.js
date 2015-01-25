@@ -23,7 +23,21 @@ gateway.addResponder('Infrared Port', {
 
   message: function(command, address) {
     return "sendir,1:" + address + "," + command.split('sendir,1:')[1].substr(2);
+  },
+
+  feedback: function(feedback, actionFeedback='', nodeStatus='') {
+
+    var response = feedback.toString('utf8');
+    var success = (/^completeir/.test(response)) ? true : false;
+
+    return Promise.resolve({
+      success: success,
+      status: this.getStatus(actionFeedback, nodeStatus),
+      prevStatus: this.parseStatus(nodeStatus),
+      feedback: response
+    });
   }
+
 });
 
 // Export adapter

@@ -27,7 +27,7 @@ gateway.addResponder('Insteon Scene', {
 
     }).then(function(window) {
       return _.object(_.map(window.document.querySelectorAll('group'), function (group) {
-        return [group.querySelector('address').innerHTML, group.querySelector('name').innerHTML]
+        return [group.querySelector('address').innerHTML, 's: ' + group.querySelector('name').innerHTML]
       })); 
 
     }).catch(function(error) {
@@ -96,7 +96,21 @@ gateway.addResponder('Insteon Scene', {
 
   message: function(command, address) {
     return "/rest/nodes/" + address.replace(/\./g, '%20') + "/cmd/" + command;
+  },
+
+  feedback: function(feedback, actionFeedback='', nodeStatus='') {
+
+    var statusCode = parseInt(feedback.statusCode, 10);
+    var success = (statusCode == 200) ?  true : false;
+
+    return Promise.resolve({
+      success: success,
+      status: this.getStatus(actionFeedback, nodeStatus),
+      prevStatus: this.parseStatus(nodeStatus),
+      feedback: statusCode
+    });
   }
+
 });
 
 // Adapter Responder
@@ -112,7 +126,7 @@ gateway.addResponder('Insteon Device', {
 
     }).then(function(window) {
       return _.object(_.map(window.document.querySelectorAll('node'), function (node) {
-        return [node.querySelector('address').innerHTML.replace(/ /g, '.'), node.querySelector('name').innerHTML]
+        return [node.querySelector('address').innerHTML.replace(/ /g, '.'), 'd: ' + node.querySelector('name').innerHTML]
       })); 
 
     }).catch(function(error) {
@@ -181,7 +195,21 @@ gateway.addResponder('Insteon Device', {
 
   message: function(command, address) {
     return "/rest/nodes/" + address.replace(/\./g, '%20') + "/cmd/" + command;
+  },
+
+  feedback: function(feedback, actionFeedback='', nodeStatus='') {
+
+    var statusCode = parseInt(feedback.statusCode, 10);
+    var success = (statusCode == 200) ?  true : false;
+
+    return Promise.resolve({
+      success: success,
+      status: this.getStatus(actionFeedback, nodeStatus),
+      prevStatus: this.parseStatus(nodeStatus),
+      feedback: statusCode
+    });
   }
+
 });
 
 // Adapter Responder
@@ -197,7 +225,7 @@ gateway.addResponder('Program', {
 
     }).then(function(window) {
       return _.object(_.map(window.document.querySelectorAll('program'), function (program) {
-        return [program.getAttribute('id'), program.querySelector('name').innerHTML]
+        return [program.getAttribute('id'), 'p: ' + program.querySelector('name').innerHTML]
       })); 
 
     }).catch(function(error) {
@@ -250,8 +278,8 @@ gateway.addResponder('Networking', {
 
   addresses: function(gateway) {
     return Promise.resolve({
-      'wol': 'Wake-on-LAN', 
-      'resources': 'Network Resource' 
+      'wol': 'n: Wake-on-LAN', 
+      'resources': 'n: Network Resource' 
     });
   },
 

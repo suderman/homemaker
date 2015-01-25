@@ -36,7 +36,24 @@ module.exports = function(app) {
     },
 
     run: function() {
-      return this.related('responder').send(this.get('command'));
+      var responder = this.related('responder'),
+          node = this.related('node'),
+          actionFeedback = this.get('feedback'),
+          nodeStatus = this.related('node').get('status');
+
+      // Send the command
+      return responder.send(this.get('command'))
+
+         // Format feedback accordingly (use adapter feedback method)
+        .then((feedback) => responder.feedback(feedback, actionFeedback, nodeStatus))
+
+         // Only update node if feedback is successful and not an empty string
+        .then((feedback) => {
+          if ((feedback.success) && (feedback.status)!='') {
+            node.save({ status: feedback.status }, { patch: true });
+          } 
+          return feedback;
+        });
     },
 
     path: function(path) {

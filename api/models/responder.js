@@ -23,8 +23,9 @@ module.exports = function(app) {
       // Gateway Name + ResponderType + Responder Name
       title: function() {
         return [
-          this.get('gatewayName') || this.related('gateway').get('name'), ' - ',
-          this.get('type'),
+          this.get('gatewayName') || this.related('gateway').get('name'), 
+          // ' - ',
+          // this.get('type'),
           this.get('name') != 'default' ? ' - ' + this.get('name') : '',
         ].join('');
       },
@@ -122,6 +123,13 @@ module.exports = function(app) {
 
     send: function(command) {
       return this.related('gateway').send(this.message(command));
+      // return this.related('gateway').send(this.message(command)).then((feedback) => {
+      //   return this.adapter().feedback(feedback);
+      // });
+    },
+
+    feedback: function(feedback, actionFeedback, nodeStatus) {
+      return this.adapter().feedback(feedback, actionFeedback, nodeStatus);
     }
 
   },{
@@ -188,6 +196,7 @@ module.exports = function(app) {
         savedCollection.remove(matched);
 
         matched.set('status', 'valid');
+        matched.set('name', valid.get('name'));
         collection.add(matched);
       });
 
@@ -196,7 +205,7 @@ module.exports = function(app) {
         collection.add(saved);
       });
 
-      return Promise.resolve(collection);
+      return Promise.resolve(collection.sortBy(r => r.get('name').toLowerCase()));
     }
 
   });

@@ -9,11 +9,14 @@
    /api/nodes/1/urls
 */
 var _ = require('lodash');
+var Promise = require('bluebird');
 module.exports = function(app) {
 
   // Models used
   var Node = app.get('db').model('Node'),
+      Action = app.get('db').model('Action'),
       URL = app.get('db').model('URL');
+
 
   // Define routes
   var router = require('api/routes')();
@@ -39,6 +42,10 @@ module.exports = function(app) {
       res.send(collection.toJSON({shallow: true})); 
     }).catch(router.error.bind(router, res));
   })
+
+  // Index tree
+  .get('/api', API)
+  .get('/:id/api', API)
 
   // Index tree
   .get('/tree', function(req, res) {
@@ -74,4 +81,59 @@ module.exports = function(app) {
   });
 
   return router.express;
+
+
+  function API(req, res) {
+    var id = _.parseInt(req.params.id) || 0;
+
+    return Promise.props({
+      nodes: Node.findAll().then(collection => collection.toJSON({shallow: true}) || []),
+      actions: Action.findAll().then(collection => collection.toJSON({shallow: true}) || []),
+
+    }).then(function(all) {
+
+      function parseStatus(status='') {
+        var number = parseFloat(status);
+        return (_.isNaN(number)) ? status : number;
+      }
+
+      function findActions(id) {
+        var actions = _.where(all.actions, { node_id: id });
+        return actions.map((action) => {
+          return {
+            name: action.name,
+            path: action.name
+          }
+        });
+      }
+
+      function findNodes(id) {
+        var nodes = _.where(all.nodes, { node_id: id });
+        return nodes.map((node) => {
+
+          return {
+            name: node.name,
+            path: node.name,
+            status: parseStatus(node.status),
+            actions: findActions(node.id),
+            nodes: findNodes(node.id)
+          }
+        });
+      }
+
+      var root = _.find(all.nodes, {id: id});
+      var name = (root) ? root.name : '/', 
+          path = (root) ? root.path : '/',
+          status = (root) ? root.status : '';
+
+      res.send({ 
+        name:    name, 
+        path:    path, 
+        status:  parseStatus(status),
+        actions: findActions(id),
+        nodes:   findNodes(id)
+      }); 
+
+    }).catch(router.error.bind(router, res));
+  }
 };
