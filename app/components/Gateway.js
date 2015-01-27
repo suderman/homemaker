@@ -8,13 +8,15 @@ var Device = React.createClass({
   mixins: [require('app/components/mixins/route')],
 
   getInitialState: function() {
-    return this.props.state || { item: {}, types: [], responders: [] };
+    return this.props.state || { item: {}, types: [], responders: [], connected: false };
   },
 
   render: function() {
 
     var { types, responders, isNew } = this.state;
     var gateway = this.state.item;
+    var component = this;
+    var isActive = (gateway.active == 1) ? true: false;
 
     var go = { onClick: this.go, onTouchStart: this.go }
     var removeItem = { onClick: this.removeItem, onTouchStart: this.removeItem }
@@ -26,6 +28,19 @@ var Device = React.createClass({
       labelClassName:   "col-sm-2",
       wrapperClassName: "col-sm-10"
     };
+
+    var toggle = function(event) {
+      event.preventDefault();
+
+      var action = event.currentTarget.getAttribute('data-action'),
+          id = event.currentTarget.getAttribute('data-id'),
+          state = _.clone(component.state);
+
+      browser.socket.emit(`gateway-${action}`, id);
+
+      state.item.active = (action=='connect') ? 1 : 0;
+      component.setState(state);
+    }
 
 
     var header = (
@@ -48,7 +63,9 @@ var Device = React.createClass({
             <Input type="text" name="password" label="Password" value={gateway.password} {...input}/>
             <InputSelect name="type" label="Type" value={gateway.type} options={types} {...input}/>
           </form>
-          {(isNew) || <ButtonConfirm href="/homemaker/gateways" onClick={this.removeItem} confirm="Confirm Delete">Delete</ButtonConfirm>}
+          {(isNew || isActive) || <ButtonConfirm href="/homemaker/gateways" onClick={this.removeItem} confirm="Confirm Delete">Delete</ButtonConfirm>}
+          {(isActive) &&          <Button href="#" data-action="disconnect" data-id={gateway.id} onClick={toggle}>Deactivate</Button>}
+          {(isNew || isActive) || <Button href="#" data-action="connect" data-id={gateway.id} onClick={toggle}>Activate</Button>}
         </Panel>
         {(isNew) || <ResponderList gateway_id={gateway.id} gatewayName={gateway.name} responders={responders} />}
       </div>

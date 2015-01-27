@@ -35,8 +35,7 @@ routes.push({
           host:      state.host,
           port:      state.port,
           username:  state.username,
-          password:  state.password,
-          active:    state.active
+          password:  state.password
         },{
           _redirect: '/homemaker/gateways/:id'
         });
@@ -77,8 +76,7 @@ routes.push({
           host:     state.host,
           port:     state.port,
           username: state.username,
-          password: state.password,
-          active:   state.active
+          password: state.password
         });
         break;
 

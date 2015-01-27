@@ -60,7 +60,12 @@ module.exports = function(app) {
       title: function() {
         var type = this.get('protocol').toUpperCase() + ' Gateway ';
         return "[" + type + this.get('address') + "] " + this.get('name');
+      },
+
+      connected: function() {
+        return this.connection().connected;
       }
+
     },
 
     responders: function() {
@@ -81,7 +86,7 @@ module.exports = function(app) {
       if (!Gateway.connections(id)) {
         var Connection = app.get('protocols')(this.adapter().protocol);
         Gateway.connections(id, new Connection(this));
-        console.log('Connection count: ' + _(_connections).keys().length);
+        // console.log('Connection count: ' + _(_connections).keys().length);
       } 
 
       return Gateway.connections(id);
@@ -89,6 +94,12 @@ module.exports = function(app) {
 
     connect: function() {
       return this.connection().connect();
+    },
+
+    disconnect: function() {
+      if (this.connection()) {
+        return this.connection().disconnect();
+      }
     },
 
     send: function(message) {
@@ -118,7 +129,7 @@ module.exports = function(app) {
     connections: function(key, value) {
       if (!key) { return false; } 
       if (value) { 
-        console.log('Setting connection ' + key + ' with value: ' + value.title);
+        // console.log('Setting connection ' + key + ' with value: ' + value.title);
         return _connections[key] = value; 
       } 
       if (_connections[key]) { return _connections[key]; }

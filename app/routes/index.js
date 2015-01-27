@@ -7,9 +7,9 @@ routes = routes.concat(require('./actions'));
 routes = routes.concat(require('./nodes'));
 routes = routes.concat(require('./home'));
 
-// List all routes in order
-routes.forEach(function(route) {
-  console.log('Route: ' + route.path);
-});
+// // List all routes in order
+// routes.forEach(function(route) {
+//   console.log('Route: ' + route.path);
+// });
 
 module.exports = routes;

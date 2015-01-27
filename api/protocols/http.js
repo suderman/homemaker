@@ -6,6 +6,8 @@ var Connection = function(gateway) {
 
   this.client = require('request-promise') // http or https
   this.connected = false;
+  this.intervalID = false;
+  this.interval = _.random(50000, 70000); // somewhere between 50-70 seconds
   this.error = false;
   this.title = gateway.get('title');
   this.gateway = gateway;
@@ -21,10 +23,30 @@ var Connection = function(gateway) {
 } 
 
 Connection.prototype.connect = function() {
-  console.log('Connection connect setInterval for ' + this.title)
-  var interval = _.random(50000, 70000); // somewhere between 50-70 seconds
-  setInterval(this.heartbeat.bind(this), interval);  
-  return this.heartbeat(); // Begin
+
+  if (this.intervalID) {
+    console.log(this.gateway.get('title') + ' is already attempting this connection');
+    return false;
+
+  } else {
+    console.log(this.gateway.get('title') + ' will attempt this connection every ' + Math.round(this.interval/1000) + ' seconds');
+    this.intervalID = setInterval(this.heartbeat.bind(this), this.interval);  
+    return this.heartbeat(); // Begin
+  }
+}
+
+Connection.prototype.disconnect = function() {
+
+  if (this.intervalID) {
+    console.log(this.gateway.get('title') + ' is now disconnected');
+    clearInterval(this.intervalID);
+    this.intervalID = false;
+    return true;
+
+  } else {
+    console.log(this.gateway.get('title') + ' was already disconnected.');
+    return false;
+  }
 }
 
 Connection.prototype.send = function(message) {
@@ -52,7 +74,7 @@ Connection.prototype.get = function(payload) {
 
 // Connect to trigger keep-alive
 Connection.prototype.heartbeat = function() {
-  console.log('*heartbeat* ' + this.title);
+  // console.log('*heartbeat* ' + this.title);
   var connection = this;
   var promise = this.get();
 

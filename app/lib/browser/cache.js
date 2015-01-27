@@ -21,6 +21,10 @@ module.exports = function(browser) {
       return localforage.getItem.apply(localforage, arguments).catch((e) => null);
     },
 
+    clear: function() {
+      return localforage.clear();
+    },
+
     remove: function(key) {
       cache.invalidate(key);
       return localforage.removeItem.apply(localforage, arguments);

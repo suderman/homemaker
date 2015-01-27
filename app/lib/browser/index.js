@@ -24,6 +24,11 @@ var Browser = function() {
     this.router.observe(route);
   });
 
+  // Clear cache
+  if (this.network.state == 'up') {
+    this.cache.clear();
+  }
+
   // Save in-page state into local storage
   document.addEventListener('DOMContentLoaded', () => {
     this.cache.set(this.router.path(), global.state, () => this.router.init());

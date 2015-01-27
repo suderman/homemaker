@@ -48,6 +48,26 @@ module.exports = function(app) {
     }).catch(router.error.bind(router, res));
   })
 
+  // GET attempt connection
+  .get('/:id/connect', function(req, res) {
+    Gateway.find(req.params.id).then(function(gateway){ 
+      gateway.connect();
+      var json = gateway.toJSON(); 
+      json.connected = 'Connecting...'; 
+      res.send(json);
+    }).catch(router.error.bind(router, res));
+  })
+
+  // GET attempt disconnection
+  .get('/:id/disconnect', function(req, res) {
+    Gateway.find(req.params.id).then(function(gateway){ 
+      gateway.disconnect();
+      var json = gateway.toJSON(); 
+      json.connected = 'Disconnecting...'; 
+      res.send(json);
+    }).catch(router.error.bind(router, res));
+  })
+
   // GET all possible responders
   .get('/:id/responders/all', function(req, res) {
     var gatewayId = parseInt(req.params.id, 10);

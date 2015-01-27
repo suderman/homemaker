@@ -122,10 +122,7 @@ module.exports = function(app) {
     },
 
     send: function(command) {
-      return this.related('gateway').send(this.message(command));
-      // return this.related('gateway').send(this.message(command)).then((feedback) => {
-      //   return this.adapter().feedback(feedback);
-      // });
+      return this.related('gateway').send(this.message(command)).catch(e => console.log(e));
     },
 
     feedback: function(feedback, actionFeedback, nodeStatus) {
