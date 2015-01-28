@@ -15,9 +15,6 @@ module.exports = function(port) {
   // Logging
   app.use(require('morgan')('dev'));
 
-  // Load environment variables
-  require('dotenv').load();
-
   // parse application/x-www-form-urlencoded and application/json
   var bodyParser = require('body-parser');
   app.use(bodyParser.urlencoded({ extended: true }));

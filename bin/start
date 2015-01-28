@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+/*
+
 // npm install nodetime
 require('nodetime').profile({
   accountKey: '27fb8b951cce7c959fb70095ea264c00a9399462', 
@@ -18,9 +20,14 @@ memwatch.on('stats', function(stats) {
   console.log(stats);
 });
 
+*/
+
+// Load environment variables
+require('dotenv').load();
+
 // Port numbers
-var appPort = process.env.PORT || 5005;
-var apiPort = process.env.API_PORT || 5006;
+var appPort = process.env.PORT || 7000;
+var apiPort = process.env.API_PORT || 7001;
 
 // Start App & API
 require('app')(appPort, apiPort);
