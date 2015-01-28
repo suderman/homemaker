@@ -12,8 +12,8 @@ var Router = function(server, apihost) {
   // Lib reference
   this.server = server;
 
-  // Typically http://127.0.0.1:5006
-  this.apihost = (_.isNumber(apihost)) ? 'http://127.0.0.1:' + apihost : apihost;
+  // Typically http://127.0.0.1:7001
+  this.apihost = (_.parseInt(apihost) > 0) ? 'http://127.0.0.1:' + apihost : apihost;
 
   // Routes to match against
   this.routes = require('app/routes');
