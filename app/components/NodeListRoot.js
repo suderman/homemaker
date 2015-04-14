@@ -33,7 +33,7 @@ var N0deListRoot = React.createClass({
                 </a>
               </ListGroupItem>
             );
-          })}
+          }).value()}
 
           <ListGroupItem key='new' className="node new">
             <a href='/homemaker/nodes/new' onClick={go}>

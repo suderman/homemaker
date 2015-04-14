@@ -62,8 +62,10 @@ var N0de = React.createClass({
             <InputSelect name="node_id" label="Parent" value={node.node_id} options={nodeTree} children="nodes" disabled={node.id} {...input}/>
             <Input type="text" name="name" label="Name" value={node.name} {...input}/>
             <Input type="text" name="status" label="Status" value={node.status} {...input}/>
-            // <InputSelect name="status_responder_id" label="Status Responder" value={node.status_responder_id} options={responders} {...input}/>
-            // <InputSelect name="last_action_id" label="Last Action" value={node.last_action_id} options={actions} {...input}/>
+            {/* 
+             <InputSelect name="status_responder_id" label="Status Responder" value={node.status_responder_id} options={responders} {...input}/>
+            <InputSelect name="last_action_id" label="Last Action" value={node.last_action_id} options={actions} {...input}/>
+            */}
           </form>
           {(isNew) || <ButtonConfirm href={backHref} onClick={this.removeItem} confirm="Confirm Delete">Delete</ButtonConfirm>}
         </Panel>

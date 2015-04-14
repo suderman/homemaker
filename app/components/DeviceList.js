@@ -33,7 +33,7 @@ var DeviceList = React.createClass({
                 </a>
               </ListGroupItem>
             );
-          })}
+          }).value()}
 
           <ListGroupItem key='new' className="device new">
             <a href='/homemaker/devices/new' onClick={go}>

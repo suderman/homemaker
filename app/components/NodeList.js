@@ -30,7 +30,7 @@ var N0deList = React.createClass({
                 </a>
               </ListGroupItem>
             );
-          })}
+          }).value()}
 
           <ListGroupItem key='new' className="node new">
             <a href={newPath} onClick={go}>

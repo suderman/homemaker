@@ -97,7 +97,7 @@ routes.push({
                             var id = JSON.stringify({name: command.name, command: command.command, feedback: command.feedback });
                             return { id: id, name: command.name };
                           });
-                        });
+                        }).value();
 
                         return obj;
                       }),

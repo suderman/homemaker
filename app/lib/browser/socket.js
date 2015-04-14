@@ -39,7 +39,7 @@ module.exports = function(browser) {
       event.browser.apply(browser, args);
     
     });
-  });
+  }).value();
 
   return browser.socket = socket;
 }

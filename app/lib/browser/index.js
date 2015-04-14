@@ -22,7 +22,7 @@ var Browser = function() {
   // Watch all routes
   _(this.router.routes).forEach((route) => {
     this.router.observe(route);
-  });
+  }).value();
 
   // Clear cache
   if (this.network.state == 'up') {

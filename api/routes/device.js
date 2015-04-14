@@ -7,7 +7,7 @@
    /api/devices/adapter-device-name[1]
    /api/devices/adapter-device-name[1]/commands
 */
-var _ = require('lodash/dist/lodash.underscore');
+var _ = require('underscore');
 module.exports = function(app) {
 
   // Models

@@ -2,7 +2,7 @@ module.exports = function(app) {
   var db = app.get('db');
 
   var Promise  = require('bluebird');
-  var _ = require('lodash/dist/lodash.underscore');
+  var _ = require('underscore');
 
   var Model = db.Model.extend({
     // Instance properties

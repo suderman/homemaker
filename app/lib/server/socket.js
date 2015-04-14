@@ -37,7 +37,7 @@ module.exports = function(server, http) {
 
       });
     
-    });
+    }).value();
   });
 
   return server.socket = socket;

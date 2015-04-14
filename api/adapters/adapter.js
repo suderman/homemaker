@@ -1,4 +1,4 @@
-var _ = require('lodash/dist/lodash.underscore');
+var _ = require('underscore');
 var Promise = require('bluebird');
 
 // GatewayTypes have many ResponderTypes

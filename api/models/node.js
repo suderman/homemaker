@@ -1,7 +1,7 @@
 module.exports = function(app) {
   var db = app.get('db');
 
-  var _ = require('lodash/dist/lodash.underscore');
+  var _ = require('underscore');
   var Promise = require('bluebird');
 
   var Node = db.model('Model').extend({

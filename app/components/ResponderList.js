@@ -87,7 +87,7 @@ var ResponderList = React.createClass({
               </ListGroupItem>
             );
               
-          })}
+          }).value()}
 
         </ListGroup>
         </Panel>

@@ -30,7 +30,7 @@ Router.prototype.parseFields = function(fields) {
   _(fields).forEach(function(value, key) {
     if (!fields[key]) fields[key] = '';
     if (fields[key] === 'null') fields[key] = null;
-  });
+  }).value();
   return fields;
 }
 
@@ -147,9 +147,10 @@ Router.prototype.getURL = function(req, res, next) {
 Router.prototype.middleware = function() {
 
   var express = new require('express').Router();
+  console.log('routes:')
 
   // Loop through all the routes
-  _(this.routes).forEach((route) => {
+  _.forEach(this.routes, (route) => {
 
     // Make sure the route is valid
     if ((!route.html) || (!route.path)) return;

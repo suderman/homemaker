@@ -34,7 +34,7 @@ var GatewayList = React.createClass({
               </a>
             </ListGroupItem>
           );
-        })}
+        }).value()}
 
         <ListGroupItem key='new' className="gateway new">
           <a href='/homemaker/gateways/new' {...go}>

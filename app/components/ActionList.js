@@ -39,7 +39,7 @@ var ActionList = React.createClass({
                 </a>
               </ListGroupItem>
             );
-          })}
+          }).value()}
 
           <ListGroupItem key='new' className="cog new">
             <a href={newPath} onClick={go}>

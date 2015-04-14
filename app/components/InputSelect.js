@@ -1,6 +1,6 @@
 var _ = require('lodash');
 var React = require('react');
-var Input = require('react-bootstrap/Input');
+var Input = require('react-bootstrap').Input;
 
 var InputSelect = React.createClass({
 
@@ -38,7 +38,7 @@ var InputSelect = React.createClass({
         allOptions.push(<option {...attributes}>{optionName}</option>)
 
         if (childOptions) makeOptions(childOptions, optionName, optionDisabled);
-      });
+      }).value();
     }
 
     // If options is object with keys, make optgroups
@@ -49,7 +49,7 @@ var InputSelect = React.createClass({
         allOptions = [];
         makeOptions(value);
         optGroups.push(<optgroup key={key} label={key}>{_.clone(allOptions)}</optgroup>);
-      });
+      }).value();
 
       allOptions = optGroups;
 

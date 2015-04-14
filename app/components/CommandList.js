@@ -31,7 +31,7 @@ var CommandList = React.createClass({
               </ListGroupItem>
             );
               
-          })}
+          }).value()}
 
           {(this.props.isAdapter) || (
             <ListGroupItem key='new' className="command new">
