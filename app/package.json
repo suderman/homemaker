@@ -4,7 +4,7 @@
   "private": true,
   "browserify": { 
     "transform": [
-      [ "6to5ify", { "experimental": true } ],
+      [ "babelify", { "stage": "0" } ],
       "envify"
     ]
   }, 

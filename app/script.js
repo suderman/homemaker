@@ -1,5 +1,5 @@
 // Fill in ES6 features
-require("6to5/polyfill");
+require("babel/polyfill");
 
 // Make browser app available everywhere
 global.browser = require('app/lib/browser');

@@ -4,7 +4,7 @@
   "private": true,
   "main": "server.js",
   "dependencies": {
-    "6to5": "^3.0.4",
+    "babel": "^5.1.9",
     "bluebird": "^2.3.6",
     "body-parser": "~1.8.1",
     "bookshelf": "^0.7.7",
@@ -32,23 +32,23 @@
     "request-promise": "^0.3.2",
     "socket.io": "^1.2.1",
     "socket.io-client": "^1.2.1",
-    "uglify-js": "^2.4.15",
+    "uglify-js": "^2.4.20",
     "underscore": "^1.7.0"
   },
   "devDependencies": {
-    "6to5ify": "^3.1.2",
+    "babelify": "^6.0.2",
     "browserify": "^8.0.0",
     "envify": "^3.2.0",
     "express-debug": "^1.1.1",
     "watchify": "^2.1.1",
-    "uglifyify": "^2.6.0"
+    "uglifyify": "^3.0.1"
   },
   "browserify": {
     "transform": [
       [
-        "6to5ify",
+        "babelify",
         {
-          "experimental": true
+          "stage": "0"
         }
       ],
       "envify"

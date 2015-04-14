@@ -1,5 +1,5 @@
 // Make ES6/JSX work
-require("6to5/register")({ experimental: true });
+require("babel/register")({ stage: 0 });
 
 var express = require('express');
 var app = express();
